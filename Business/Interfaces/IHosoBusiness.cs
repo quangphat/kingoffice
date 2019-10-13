@@ -17,5 +17,6 @@ namespace Business.Interfaces
             string freetext = null,
             int page = 1, int limit = 10,
             int maThanhVien = 0);
+        Task<List<HosoDuyet>> GetHosoNotApprove();
     }
 }

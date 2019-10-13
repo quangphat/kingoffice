@@ -1,47 +1,85 @@
 ﻿
-@*<div id="sidebar" class="sidebar responsive">
-    <div class="sidebar-toggle sidebar-collapse my-nav-sidebar" id="sidebar-collapse">
-        <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
-    </div>
-    @Html.Raw(Menu.ReturnMenu())    
-</div>*@
 <div id="sidebar" class="sidebar h-sidebar  navbar-collapse collapse">
+    <ul class='nav nav-list' id="menu"></ul>
     <script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+            
+        @*document.account =  @Html.Raw(Model != null ? Model.ToJson : "null");*@
+    </script>
+    <script type="text/javascript">
+                    try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
     </script>
 
-    @*<div class="sidebar-shortcuts" id="sidebar-shortcuts">
-        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-            <button class="btn btn-success">
-                <i class="ace-icon fa fa-signal"></i>
-            </button>
-
-            <button class="btn btn-info">
-                <i class="ace-icon fa fa-pencil"></i>
-            </button>
-
-            <button class="btn btn-warning">
-                <i class="ace-icon fa fa-users"></i>
-            </button>
-
-            <button class="btn btn-danger">
-                <i class="ace-icon fa fa-cogs"></i>
-            </button>
-        </div>
-
-        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-            <span class="btn btn-success"></span>
-
-            <span class="btn btn-info"></span>
-
-            <span class="btn btn-warning"></span>
-
-            <span class="btn btn-danger"></span>
-        </div>
-    </div>*@<!-- /.sidebar-shortcuts -->
-    @*@Html.Raw(Menu.ReturnMenu())*@
 
     <script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+        try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
+    </script>
+    <script type="text/javascript">
+        var account = null
+        $.ajax({
+            type: "GET",
+            datatype: "JSON",
+            url: '@Url.Action("GetAccount", "Account", new { area="" })',
+             success: function (data) {
+                 if (data.success == true && !isNullOrNoItem(data.data)) {
+                     account = JSON.parse(data.data.ToJson)
+                     document.account = account
+                     renderMenu(account)
+                 }
+                },
+                error: function (jqXHR, exception) { if (jqXHR.status != 0) document.account = null; }
+        });
+        function renderMenu(account) {
+            var menus = [
+                { id: 1, parentId: 0, text: "Trang chủ", icon: "menu-icon home", index: "0", href: "#" },
+                { id: 2, parentId: 1, text: "Giới thiệu", icon: "", index: "0_1", href: "/Home/Index" },
+                { id: 3, parentId: 1, text: "Phiên bản", icon: "", index: "0_2", href: "/Home/PhienBan" },
+                { id: 4, parentId: 0, text: "Tạo hồ sơ", icon: "menu-icon hs", index: "1", href: "/HoSo/AddNew" },
+                { id: 5, parentId: 0, text: "Quản lý hồ sơ", icon: "menu-icon qlhs", index: "2", href: "#" },
+                { id: 6, parentId: 5, text: "Danh sách hồ sơ", icon: "", index: "2_2", href: "/QuanLyHoSo/DanhSachHoSo" },
+                { id: 7, parentId: 5, text: "Duyệt hồ sơ", icon: "", index: "2_3", href: "/DuyetHoSo/Index" },
+            ]
+            let content = '';
+            $.each(menus, function (index, item) {
+                let accountMenus = account.menuIds
+                if (accountMenus == null || accountMenus.length <= 0)
+                    return
+                if (accountMenus.indexOf(item.id) < 0)
+                    return
+                if (item.parentId == 0) {
+                    let subMenucontent = '';
+                    let subMenus = menus.filter(p => p.parentId == item.id)
+                    if (subMenus != null && subMenus.length > 0) {
+                        subMenucontent = '<ul class="submenu can-scroll ace-scroll scroll-disabled" >';
+                        let subMenuItemcontent = '';
+                        $.each(subMenus, function (index, sub) {
+                            if (accountMenus.indexOf(sub.id) < 0)
+                                return
+                            subMenuItemcontent += '<li class="hover" id="' + sub.index + '">'
+                                + '<a href="' + sub.href + '">'
+                                + '<i class="menu-icon fa fa-caret-right" ></i > '
+                                + sub.text
+                                + '</a><b class="arrow"></b>'
+                                + '</li>'
+                        });
+                        subMenucontent += subMenuItemcontent
+                            + '</ul>'
+                    }
+                    let canClick = ''
+                    if (item.href == "#")
+                        canClick = "dropdown-toggle"
+                    content += '<li class="hover">'
+                        + '<a href="' + item.href + '" class="' + canClick + '" >'
+                        + '<i class="menu-icon home" ></i > '
+                        + '<span class="menu-text">' + item.text + '</span>'
+                        + '<b class="arrow  fa fa-angle-down"></b>'
+                        + '</a><b class="arrow"></b>'
+                        + subMenucontent
+                        + '</li>'
+                }
+
+            });
+            $("#menu").append(content)
+        }
+        
     </script>
 </div>

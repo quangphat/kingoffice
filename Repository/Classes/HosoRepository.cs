@@ -86,5 +86,32 @@ namespace Repository.Classes
                 commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
+        public async Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
+            int maNhom,
+            int maThanhvien,
+            DateTime fromDate,
+            DateTime toDate,
+            string maHs,
+            string cmnd,
+            int dateType,
+            string status
+            )
+        {
+            var result = await connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyetChuaXem",
+                new
+                {
+                    @MaNVDangNhap = userId,
+                    @MaNhom = maNhom,
+                    @MaThanhVien = maThanhvien,
+                    @TuNgay = fromDate,
+                    @DenNgay = toDate,
+                    @MaHS = maHs,
+                    @CMND = cmnd,
+                    @LoaiNgay = dateType,
+                    @TrangThai = status
+                },
+                commandType: CommandType.StoredProcedure);
+            return result.ToList();
+        }
     }
 }

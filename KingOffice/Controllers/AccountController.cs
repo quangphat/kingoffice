@@ -22,6 +22,15 @@ namespace KingOffice.Controllers
         {
             _bizAccount = accountBusiness;
         }
+        public IActionResult GetAccount()
+        {
+            if(_process==null || _process.User==null)
+            {
+                return null;
+            }
+            var account = new AccountJson(_process.User);
+            return ToResponse(account);
+        }
         public ActionResult Login()
         {
             if (_process.User != null)
@@ -41,12 +50,17 @@ namespace KingOffice.Controllers
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim("Id", account.Id.ToString()));
             claims.Add(new Claim("UserName", account.UserName));
+            if (!string.IsNullOrWhiteSpace(account.Fullname))
+                claims.Add(new Claim("Fullname", account.Fullname));
             if (!string.IsNullOrWhiteSpace(account.Email))
                 claims.Add(new Claim("Email", account.Email));
             if (!string.IsNullOrWhiteSpace(account.Code))
                 claims.Add(new Claim("Code", account.Code));
             if (!string.IsNullOrWhiteSpace(account.Role))
                 claims.Add(new Claim("Role", account.Role));
+            var menusStr = string.Join(",", account.MenuIds.ToArray());
+            if (account.MenuIds!=null && account.MenuIds.Any())
+                claims.Add(new Claim("MenuIds", menusStr));
             if (!string.IsNullOrWhiteSpace(account.Scope))
             {
                 claims.Add(new Claim("Scope", String.Join(",", account.Scope)));
@@ -61,6 +75,11 @@ namespace KingOffice.Controllers
             await HttpContext.SignInAsync(principal, authProperties);
             ViewBag.Account = account;
             return ToResponse(account);
+        }
+        public async Task<IActionResult> DangXuat()
+        {
+            HttpContext.Session.Clear();
+            return new SignOutResult(new[] { "Cookies" });
         }
         private bool isValidAccount(Account account)
         {

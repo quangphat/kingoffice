@@ -51,6 +51,23 @@ namespace Business.Classes
                 dtFromDate, dtToDate, maHS, cmnd, loaiNgay, status, page, limit, freetext);
             return (datas, totalRecord);
         }
+        public async Task<List<HosoDuyet>> GetHosoNotApprove()
+        {
+            DateTime tuNgay = DateTime.Now.AddDays(-50);
+            DateTime denNgay = DateTime.Now.AddDays(10);
+            string trangthai = "";
+            trangthai += ((int)TrangThaiHoSo.TuChoi).ToString() + "," 
+                + ((int)TrangThaiHoSo.NhapLieu).ToString() + "," 
+                + ((int)TrangThaiHoSo.ThamDinh).ToString() + "," 
+                + ((int)TrangThaiHoSo.BoSungHoSo).ToString() + "," 
+                + ((int)TrangThaiHoSo.GiaiNgan).ToString();
+            var result = await _rpHoso.GetHosoNotApprove(_process.User.Id,
+                0,
+                0,
+                tuNgay,
+                denNgay, string.Empty, string.Empty, 1, trangthai);
+            return result;
+        }
         private async Task<int> CountHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,

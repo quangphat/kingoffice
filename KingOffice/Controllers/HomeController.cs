@@ -34,11 +34,11 @@ namespace KingOffice.Controllers
             }
 
         }
-        [Authorize(Policy ="admin")]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var account = new AccountJson(_process.User);
-            return View(account);
+            //var account = new AccountJson(_process.User);
+            return View();
         }
 
         public IActionResult Privacy()

@@ -142,14 +142,16 @@
     </script>
 </head>
 <body class="no-skin">
-
+    
+    @Html.Partial("_NavBar")
     <div class="main-container" id="main-container">
 
+        @Html.Partial("_Menu")
         <div class="main-content">
             @RenderBody()
         </div>
         <!-- /.main-content -->
-
+        @Html.Partial("_Footer")
     </div>
     <!-- /.main-container -->
     <script type="text/javascript">

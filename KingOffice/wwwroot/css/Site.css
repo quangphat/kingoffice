@@ -72,7 +72,7 @@
         /*width: auto; /* Generic width */
         height: 22px;
         width: 28px;
-        background: url('/Content/images/iconmenu/House-icon.png') no-repeat;
+        background: url('/images/iconmenu/House-icon.png') no-repeat;
         background-size: auto 100%;
     }
 
@@ -81,7 +81,7 @@
         /*width: auto; /* Generic width */
         height: 24px;
         width: 24px;
-        background: url('/Content/images/iconmenu/Internet-Explorer-icon.png') no-repeat;
+        background: url('/images/iconmenu/Internet-Explorer-icon.png') no-repeat;
         background-size: auto 100%;
     }
      .menu-icon.qlhs {
@@ -89,7 +89,7 @@
         /*width: auto; /* Generic width */
         height: 22px;
         width: 28px;
-        background: url('/Content/images/iconmenu/info.png') no-repeat;
+        background: url('/images/iconmenu/info.png') no-repeat;
         background-size: auto 100%;
     }
 
@@ -98,7 +98,7 @@
         /*width: auto; /* Generic width */
         height: 24px;
         width: 24px;
-        background: url('/Content/images/iconmenu/Group.png') no-repeat;
+        background: url('/images/iconmenu/Group.png') no-repeat;
         background-size: auto 100%;
     }
 
@@ -107,7 +107,7 @@
         /*width: auto; /* Generic width */
         height: 24px;
         width: 24px;
-        background: url('/Content/images/iconmenu/sanpham.png') no-repeat;
+        background: url('/images/iconmenu/sanpham.png') no-repeat;
         background-size: auto 100%;
     }
 
@@ -128,7 +128,7 @@
         /*width: auto; /* Generic width */
         height: 24px;
         width: 24px;
-        background: url('/Content/images/trippurpose/meeting.png') no-repeat;
+        background: url('/images/trippurpose/meeting.png') no-repeat;
         background-size: auto 100%;
     }
 
@@ -137,7 +137,7 @@
         /*width: auto; /* Generic width */
         height: 24px;
         width: 24px;
-        background: url('/Content/images/trippurpose/training.png') no-repeat;
+        background: url('/images/trippurpose/training.png') no-repeat;
         background-size: auto 100%;
     }
 
@@ -146,7 +146,7 @@
         /*width: auto; /* Generic width */
         height: 24px;
         width: 24px;
-        background: url('/Content/images/trippurpose/meeting.png') no-repeat;
+        background: url('/images/trippurpose/meeting.png') no-repeat;
         background-size: auto 100%;
     }
 
@@ -155,7 +155,7 @@
         /*width: auto; /* Generic width */
         height: 24px;
         width: 24px;
-        background: url('/Content/images/trippurpose/performclientengagement.png') no-repeat;
+        background: url('/images/trippurpose/performclientengagement.png') no-repeat;
         background-size: auto 100%;
     }
 /*.trippurpose.meeting:before {
@@ -163,6 +163,6 @@
             display: block;
           
             height: 24px;
-            background: url('/Content/images/trippurpose/meeting.png') no-repeat;
+            background: url('/images/trippurpose/meeting.png') no-repeat;
             background-size: auto 100%;
         }*/

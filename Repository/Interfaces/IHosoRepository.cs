@@ -33,5 +33,15 @@ namespace Repository.Interfaces
             int offset,
             int limit,
             bool isDowload = false);
+        Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
+            int maNhom,
+            int maThanhvien,
+            DateTime fromDate,
+            DateTime toDate,
+            string maHs,
+            string cmnd,
+            int dateType,
+            string status
+            );
     }
 }

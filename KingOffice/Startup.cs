@@ -45,6 +45,7 @@ namespace KingOffice
             services.AddSession();
             services.AddSingleton<IHosoRepository, HosoRepository>();
             services.AddSingleton<IAccountRepository, AccountRepository>();
+            services.AddSingleton<IUserRoleMenuRepository, UserRoleMenuRepository>();
             //AppendMongoDI
 
             services.AddScoped<IHosoBusiness, HosoBusiness>();
@@ -86,7 +87,7 @@ namespace KingOffice
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseSession();
-            //app.UseMiddleware<SessionHandler>();
+            app.UseMiddleware<SessionHandler>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

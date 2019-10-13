@@ -1,1 +1,135 @@
-﻿
+﻿@using KingOffice.Resources;
+<div id="navbar" style="background:#0D622F" class="navbar navbar-default">
+    <div class="navbar-container" id="navbar-container">
+        @*<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                <span class="sr-only">Toggle sidebar</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>*@
+        <button data-target="#sidebar" data-toggle="collapse" type="button" class="pull-left navbar-toggle" aria-expanded="true">
+            <span class="sr-only">Toggle sidebar</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <div class="navbar-header pull-left">
+            <a href="http://www.vietbankfc.com" target="_blank" class="navbar-brand">
+                <small>
+                    @*<i class="fa fa-leaf"></i>*@
+                    <img alt="" class="logo_kpmg" src="~/images/logo.png">
+                    <strong class="hidden-xs" style="text-transform:uppercase">HỆ THỐNG KIỂM DUYỆT HỒ SƠ</strong>
+                </small>
+            </a>
+        </div>
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav" id="notification" style="text-align: right;">
+                
+                <li class="light-blue" id="user-info">
+                    <a data-toggle="dropdown" href="#" style="background:#0D622F" class="dropdown-toggle">
+                        @*<img class="nav-user-photo" src="~/Content/ace-master/assets/avatars/avatar2.png" alt="Jason's Photo" />*@
+                        <span class="user-info">
+                            <small></small>
+                            <span id="fullname"></span>
+                        </span>
+                        <i class="ace-icon fa fa-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <li>
+                            <a href="@Url.Action("UserProfile", "NhanVien")">
+                                <i class="ace-icon fa fa-user"></i>
+                                @Global.NavBar_TTCN@*Thông tin cá nhân*@
+                            </a>
+                        </li>
+
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:void(0);" onclick="doLogout()">
+                                <i class="ace-icon fa fa-power-off"></i>
+                                @Global.NavBar_DX@*Đăng xuất*@
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+    <!-- /.navbar-container -->
+    <script type="text/javascript">
+         $.ajax({
+            type: "GET",
+            datatype: "JSON",
+            url: '@Url.Action("GetNotificationHosoNotApprove", "Hoso", new { area="" })',
+             success: function (data) {
+                 if (data.success == true && !isNullOrNoItem(data.data)) {
+                     renderNotificationHosoNotApprove(data.data)
+                 }
+            },
+            error: function (jqXHR, exception) { if (jqXHR.status != 0) alert('Error'); }
+         });
+        function renderNotificationHosoNotApprove(datas) {
+            let text = "Thông báo chưa xem";
+            let icon = "fa fa-bell";
+            let animate = "icon-animated-vertical";
+            let href = "/QuanLyHoSo/DanhSachHoSo";
+            let mainContent = "<li class='green'>"
+                + "<a title='" + text + "' data-toggle='dropdown' class='dropdown-toggle' href='#'>"
+                + "<i class='ace-icon " + icon + " " + animate + "'></i>"
+                + "<span class='badge badge-warning'>" + datas.length + "</span>"
+                + "</a>"
+                + "<ul class='dropdown-menu-right dropdown-navbar navbar-green dropdown-menu dropdown-caret dropdown-close'>"
+                + "<li class='dropdown-header'>"
+                + "<i class='ace-icon " + icon + "'></i>"
+                + datas.length + " " + text
+                + "</li>"
+                + "<li class='dropdown-content'>"
+                + "<ul class='dropdown-menu dropdown-navbar'>"
+            let itemContent = '';
+            let itemHref = "/QuanLyHoSo/XemHSByID/";
+
+            $.each(datas, function (index, item) {
+                itemContent += "<li>"
+                    + "<a href='" + itemHref + item.ID + "' class='clearfix'>"
+                    + "<span class='msg-body' style='margin-left:0px;>"
+                    + "<span class='msg-title'>"
+                    + "[" + item.MaHoSo + "] " + item.TenKH
+                    +"</span>"
+                    + "</span>"
+                +"</a></li>"
+
+            });
+            mainContent += itemContent
+                + "</ul>"
+                + "</li>"
+                + "<li class='dropdown-footer'>"
+                + "<a href='" + href + "'>"
+                + "View all"
+                + "<i class='ace-icon fa fa-arrow-right'></i>"
+                + "</a>"
+                + "</li>"
+                + "</ul>"
+                + "</li>"
+            $("#notification").prepend(mainContent)
+            $("#fullname").text(document["account"].fullname)
+           
+        }
+
+    </script>
+</div>
+
+<script type="text/javascript">
+    function doLogout() {
+        $.ajax({
+            type: "POST",
+            datatype: "JSON",
+            url: '@Url.Action("DangXuat", "Account", new { area="" })',
+            success: function (data) {
+                window.location = "/Account/Login";
+            },
+            error: function (jqXHR, exception) { if (jqXHR.status != 0) alert('Error'); }
+        });
+    };
+</script>

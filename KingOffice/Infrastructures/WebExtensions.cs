@@ -27,7 +27,7 @@ namespace KingOffice.Infrastructures
                     option.SlidingExpiration = true;
                     option.Cookie.Name = applicationName;
                     option.LoginPath = "/Account/Login";
-
+                   
                 });
         }
         public static void AddMyAuthorization(this IServiceCollection services)
@@ -69,10 +69,16 @@ namespace KingOffice.Infrastructures
                     account.Id = Convert.ToInt32(list.FirstOrDefault((Claim a) => a.Type == "Id")?.Value);
                     account.Email = list.FirstOrDefault((Claim a) => a.Type == "Email")?.Value;
                     account.Role = list.FirstOrDefault((Claim a) => a.Type == "Role")?.Value;
+                    account.Fullname = list.FirstOrDefault((Claim a) => a.Type == "Fullname")?.Value;
                     string scopeStr = list.FirstOrDefault((Claim a) => a.Type == "Scope")?.Value;
                     if (!string.IsNullOrWhiteSpace(scopeStr))
                     {
                         account.Scope = scopeStr;
+                    }
+                    string menuStr = list.FirstOrDefault((Claim a) => a.Type == "MenuIds")?.Value;
+                    if (!string.IsNullOrWhiteSpace(menuStr))
+                    {
+                        account.MenuIds = menuStr.Split(',').Select(p=>Convert.ToInt32(p)).ToList();
                     }
                     return account;
                 }

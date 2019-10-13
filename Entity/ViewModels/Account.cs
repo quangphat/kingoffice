@@ -16,6 +16,7 @@ namespace Entity.ViewModels
         public string Email { get; set; }
         public string Fullname { get; set; }
         public string Scope { get; set; }
+        public List<int> MenuIds { get; set; }
     }
     
 }
