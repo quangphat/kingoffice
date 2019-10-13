@@ -1,0 +1,17 @@
+using Business.Interfaces;
+using Repository.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+
+namespace Business.Classes
+{
+    public class {ModelName}Business : I{ModelName}Business
+    {
+        public {ModelName}Business()
+        {
+
+        }
+    }
+}

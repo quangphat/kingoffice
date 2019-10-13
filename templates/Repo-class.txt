@@ -1,0 +1,20 @@
+using Dapper;
+using Microsoft.Extensions.Configuration;
+using Repository.Entities;
+using Repository.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repository.Classes
+{
+    public class {ModelName}Repository : BaseRepository, I{ModelName}Repository
+    {
+        public {ModelName}Repository(IConfiguration configuration) : base(configuration)
+        {
+
+        }
+    }
+}
