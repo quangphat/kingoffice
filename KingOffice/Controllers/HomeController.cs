@@ -51,5 +51,12 @@ namespace KingOffice.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [Authorize]
+        public ActionResult PhienBan()
+        {
+            ViewBag.formindex = LstRole[RouteData.Values["action"].ToString()]._formindex;
+            return View();
+        }
+
     }
 }

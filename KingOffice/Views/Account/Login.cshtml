@@ -180,13 +180,13 @@
         $('#btn_login').click(function (evt) {
             DoLogint(evt);
         });
-        function addAlert(message) {
-            $('#login_alert').empty();
-            $('#login_alert').append(
-                '<div class="alert alert-danger">' +
-                '<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>' +
-                '<strong><i class="ace-icon fa fa-exclamation-triangle bigger-120"></i></strong>' + message + '</div>');
-        }
+        //function addAlert(message) {
+        //    $('#login_alert').empty();
+        //    $('#login_alert').append(
+        //        '<div class="alert alert-danger">' +
+        //        '<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>' +
+        //        '<strong><i class="ace-icon fa fa-exclamation-triangle bigger-120"></i></strong>' + message + '</div>');
+        //}
 
         function DoLogint(event) {
             if ($("#form_login").validate()) {
@@ -197,8 +197,8 @@
                     url: '/Account/DangNhap',
                     data: $('#form_login').serialize(),
                     success: function (data) {
-                        if (data.Message !=null && data.Message.Result == false) {
-                            addAlert(data.Message.ErrorMessage);
+                        if (data != null && data.error != null) {
+                            addAlert('login_alert', data.error.code);
                             $("#userName").focus();
                         }
                         else {

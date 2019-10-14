@@ -44,8 +44,8 @@ namespace KingOffice.Controllers
         {
             var account = await _bizAccount.Login(userName,password);
             if (account == null)
-                return ToFailResponse();
-            if (!isValidAccount(account)) return ToFailResponse();
+                return ToResponse();
+            if (!isValidAccount(account)) return ToResponse();
 
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim("Id", account.Id.ToString()));

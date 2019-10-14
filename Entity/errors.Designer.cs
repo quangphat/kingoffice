@@ -68,5 +68,23 @@ namespace Entity {
                 return ResourceManager.GetString("error_login_expected", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to invalid_username_or_pass.
+        /// </summary>
+        public static string invalid_username_or_pass {
+            get {
+                return ResourceManager.GetString("invalid_username_or_pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to username_or_password_must_not_be_empty.
+        /// </summary>
+        public static string username_or_password_must_not_be_empty {
+            get {
+                return ResourceManager.GetString("username_or_password_must_not_be_empty", resourceCulture);
+            }
+        }
     }
 }

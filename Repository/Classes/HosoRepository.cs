@@ -32,11 +32,10 @@ namespace Repository.Classes
             string cmnd,
             int loaiNgay,
             string trangThai,
-            string freeText = null)
+            string freeText = "")
         {
-            string query = string.IsNullOrWhiteSpace(freeText) ? string.Empty : freeText;
-            int totalRecord = 0;
-            totalRecord = await connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
+
+            return  await connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
                 new
                 {
                     @MaNVDangNhap = maNVDangNhap,
@@ -48,10 +47,9 @@ namespace Repository.Classes
                     @CMND = cmnd,
                     @LoaiNgay = loaiNgay,
                     @TrangThai = trangThai,
-                    @freeText = query
+                    @freeText = freeText
                 },
                 commandType: CommandType.StoredProcedure);
-            return totalRecord;
         }
         public async Task<List<HosoDuyet>> GetHosoDuyet(int maNVDangNhap,
             int maNhom,

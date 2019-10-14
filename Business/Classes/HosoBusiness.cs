@@ -25,11 +25,11 @@ namespace Business.Classes
         }
         public async Task<(List<HosoDuyet> datas, int TotalRecord)> GetHosoDuyet(string fromDate,
             string toDate,
-            string maHS,
-            string cmnd,
-            int loaiNgay,
+            string maHS= "",
+            string cmnd ="",
+            int loaiNgay = 1,
             int maNhom = 0,
-            string freetext = null,
+            string freetext = "",
             int page = 1, int limit = 10,
             int maThanhVien = 0)
         {
@@ -44,9 +44,11 @@ namespace Business.Classes
                 dtFromDate = fromDate.ConvertddMMyyyyToDateTime();
             if (toDate != "")
                 dtToDate = toDate.ConvertddMMyyyyToDateTime();
+            maHS = string.IsNullOrWhiteSpace(maHS) ? "" : maHS;
+            cmnd = string.IsNullOrWhiteSpace(cmnd) ? "" : cmnd;
             string status = BusinessExtension.JoinTrangThai();
             totalRecord = await CountHosoDuyet(_process.User.Id, maNhom,
-                maThanhVien, dtFromDate, dtToDate, maHS, cmnd, loaiNgay, status, freetext);
+                maThanhVien, dtFromDate, dtToDate, maHS,cmnd, loaiNgay, status, freetext);
             var datas = await GetHosoDuyet(_process.User.Id, maNhom, maThanhVien,
                 dtFromDate, dtToDate, maHS, cmnd, loaiNgay, status, page, limit, freetext);
             return (datas, totalRecord);
@@ -77,7 +79,7 @@ namespace Business.Classes
             string cmnd,
             int loaiNgay,
             string trangThai,
-            string freeText = null)
+            string freeText)
         {
             var result = 0;
             string query = string.IsNullOrWhiteSpace(freeText) ? string.Empty : freeText;

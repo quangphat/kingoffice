@@ -13,10 +13,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Business.Infrastructures;
 using System.Linq;
+using Entity;
 
 namespace Business.Classes
 {
-    public class AccountBusiness :BaseBusiness, IAccountBusiness
+    public class AccountBusiness : BaseBusiness, IAccountBusiness
     {
         protected readonly IAccountRepository _rpAccount;
         protected readonly IUserRoleMenuRepository _rpUserRoleMenu;
@@ -24,7 +25,7 @@ namespace Business.Classes
         public AccountBusiness(IAccountRepository accountRepository,
             IUserRoleMenuRepository userRoleMenuRepository,
             IOptions<AppSettings> appSettings,
-            CurrentProcess process, IMapper mapper):base(mapper,process)
+            CurrentProcess process, IMapper mapper) : base(mapper, process)
         {
             _rpAccount = accountRepository;
             _rpUserRoleMenu = userRoleMenuRepository;
@@ -33,16 +34,24 @@ namespace Business.Classes
         public async Task<Account> Login(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                AddError(errors.username_or_password_must_not_be_empty);
                 return null;
+            }
+
             var nhanvien = await _rpAccount.Login(username);
             if (nhanvien == null)
+            {
+                AddError(nameof(errors.invalid_username_or_pass));
                 return null;
+            }
+
             if (nhanvien.Mat_Khau != Utils.getMD5(password))
                 return null;
 
             var account = _mapper.Map<Account>(nhanvien);
             var menus = await _rpUserRoleMenu.GetMenuByUserRole(account.Role);
-            if(menus!=null)
+            if (menus != null)
             {
                 account.MenuIds = menus.Select(p => p.MenuId).ToList();
             }

@@ -29,7 +29,7 @@ namespace KingOffice.Controllers
             bool hasError = _checkHasError(model);
             return Json(model, _jsonSerializerSettings);
         }
-        public IActionResult ToResponse<T>(T data) where T : class
+        public IActionResult ToResponse<T>(T data) 
         {
             var model = new ResponseJsonModel<T>();
             if (!_checkHasError(model))
@@ -46,17 +46,6 @@ namespace KingOffice.Controllers
 
             return Json(model, _jsonSerializerSettings);
         }
-        public IActionResult ToFailResponse(string message = null)
-        {
-            var errorMessage = _process.ToError();
-            var model = new ErrorRMessage()
-            {
-                Result = false,
-                ErrorMessage = message,
-                Code = errorMessage?.Message
-            };
-            return Json(new { Message = model, newurl = string.Empty }, _jsonSerializerSettings);
-        }
         private bool _checkHasError(ResponseJsonModel model)
         {
             var hasError = _process.HasError;
@@ -68,7 +57,6 @@ namespace KingOffice.Controllers
                 {
                     Result = false,
                     code = errorMessage.Message,
-                    ErrorMessage = errorMessage.Message,
                     trace_keys = errorMessage.TraceKeys
                 };
             }
@@ -83,7 +71,7 @@ namespace KingOffice.Controllers
         public bool success { get; set; }
     }
 
-    public class ResponseJsonModel<T> : ResponseJsonModel where T : class
+    public class ResponseJsonModel<T> : ResponseJsonModel 
     {
         public T data { get; set; }
     }
@@ -92,16 +80,6 @@ namespace KingOffice.Controllers
         public string code { get; set; }
         public List<object> trace_keys { get; set; }
         public bool Result { get; set; }
-        public string MessageId { get; set; }
-        public string ErrorMessage { get; set; }
-        public string SystemMessage { get; set; }
     }
-    public class ErrorRMessage
-    {
-        public bool Result { get; set; }
-        public string MessageId { get; set; }
-        public string ErrorMessage { get; set; }
-        public string SystemMessage { get; set; }
-        public string Code { get; set; }
-    }
+
 }

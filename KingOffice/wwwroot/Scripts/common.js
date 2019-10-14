@@ -28,7 +28,7 @@ function isNullOrNoItem(arr) {
     return false;
 }
 function isNullOrUndefined(value) {
-    if (value === null || value === undefined || isNaN(value))
+    if (value === null || value === undefined)
         return true;
     return false;
 }
@@ -49,7 +49,7 @@ function showBlock(div, text) {
             opacity: 1,
             //color: '#fff'
         },
-        message: '<img src="/Content/images/busy.gif" />' + text
+        message: '<img src="/images/busy.gif" />' + text
     });
 }
 
@@ -64,7 +64,7 @@ function showBlockUI(text) {
             opacity: 1,
             //color: '#fff'
         },
-        message: '<img src="/Content/images/busy.gif" />' + text
+        message: '<img src="/images/busy.gif" />' + text
     });
 }
 
@@ -148,17 +148,18 @@ function FormatString(alias) {
     return str;
 }
 
-function addAlert(elementId, message, success) {
+function addAlert(elementId, message, success = false) {
     $('#' + elementId).empty();
-    if (success == true) {
+    var mess = messages.find(p => p.code === message)
+    if (success === true) {
         $('#' + elementId).append(
-          '<div class="alert alert-block alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
-          + '<p><strong><i class="ace-icon fa fa-check"></i></strong> ' + message + '</p>'
+            '<div class="alert alert-block alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
+            + '<p><strong><i class="ace-icon fa fa-check"></i></strong> ' + mess.value_vi + '</p>'
           + '</div>');
     } else {
         $('#' + elementId).append(
-           '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
-           + '<p><strong><i class="ace-icon fa fa-times"></i></strong> ' + message + '</p>'
+            '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
+            + '<p><strong><i class="ace-icon fa fa-times"></i></strong> ' + mess.value_vi + '</p>'
            + '</div>');
     }
 }
@@ -179,15 +180,17 @@ function FormatDateTimeDMYHM(datetime) {
 }
 function FormatDateTimeDMY(datetime) {
     try {
-        var valueDate = parseInt(datetime.substr(6));
-        if (valueDate < 0)
-            return "";
-        else {
-            var dateObj = new Date(valueDate);
-            var dateStr = ('00' + dateObj.getDate()).slice(-2) + "/" + ('00' + (dateObj.getMonth() + 1)).slice(-2) + "/" + dateObj.getFullYear();
-            return dateStr;
-        }
-        return dateStr;
+        var d = new Date(datetime);
+        return d.toLocaleDateString();
+        //var valueDate = parseInt(datetime.substr(6));
+        //if (valueDate < 0)
+        //    return "";
+        //else {
+        //    var dateObj = new Date(valueDate);
+        //    var dateStr = ('00' + dateObj.getDate()).slice(-2) + "/" + ('00' + (dateObj.getMonth() + 1)).slice(-2) + "/" + dateObj.getFullYear();
+        //    return dateStr;
+        //}
+        //return dateStr;
     } catch (e) {
         return "";
     }
@@ -269,3 +272,8 @@ function isExtension(ext, extnArray) {
     }
     return result;
 }
+
+const messages = [
+    { code: "invalid_username_or_pass", value_vi: "Tên đăng nhập hoặc mật khẫu không đúng" },
+    { code: "", value_vi: "" },
+]
