@@ -43,5 +43,6 @@ namespace Repository.Interfaces
             int dateType,
             string status
             );
+        Task<AutoIDModel> GetAutoId();
     }
 }

@@ -16,4 +16,8 @@ namespace Entity.Enums
         Cancel = 7,
         PCB = 8
     }
+    public enum AutoID
+    {
+        HoSo = 1
+    }
 }

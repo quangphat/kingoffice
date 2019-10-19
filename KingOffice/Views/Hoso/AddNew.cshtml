@@ -80,7 +80,7 @@
                             <textarea type="text" id="txtDiaChi" placeholder="Nhập địa chỉ" class="form-control"></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
+                    @*<div class="form-group">
                         <label class="col-sm-2 control-label no-padding-right">Sale Code</label>
                         <div class="col-sm-4">
                             <select id="ddlInternalCode" class="chosen-select form-control" data-placeholder="Chọn Sale Code">
@@ -91,7 +91,7 @@
                         <div class="col-sm-4">
                             <input type="text" id="txtTenNV" data-toggle-tt="tooltip" placeholder="Tên nhân viên" class="form-control" />
                         </div>
-                    </div>
+                    </div>*@
                     <div class="form-group">
                         <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Courier Code</label>
                         <div class="col-sm-4">
@@ -236,12 +236,12 @@ function () {
 <script>
     $(document).ready(function () {
         LayDSTaiLieu();
-        LayDSNganHang();
+        getPartners();
         LayDSTinh();
         LayDSCourier();
-        LayDSale('@ViewBag.MaNV');
+        @*LayDSale('@ViewBag.MaNV');*@
         $('#ddlDoiTac').on('change', function () {
-            LayDSSanPham(this.value);
+            getProductByPartnetId(this.value);
         });
         $('#ddlTinh').on('change', function () {
             LayDSHuyen(this.value);
@@ -331,11 +331,10 @@ function () {
     }
 </script>
 <script>
-    function LayDSNganHang() {
+    function getPartners() {
         $.ajax({
-            type: "POST",
-            url: '@Url.Action("LayDSDoiTac", "HoSo")',
-            data: {},
+            type: "GET",
+            url: '/partners',
             success: function (data) {
                 $('#ddlDoiTac').empty();
                 $('#ddlDoiTac').append("<option value='0'></option>");
@@ -356,6 +355,59 @@ function () {
 </script>
 
 <script>
+    
+    function getProductByPartnetId(maDoiTac) {
+        debugger
+        let doitacId = parseInt(maDoiTac)
+        $.ajax({
+            type: "GET",
+            url: `/products/${doitacId}`,
+            success: function (data) {
+                $('#ddlSanPhamVay').empty();
+                $('#ddlSanPhamVay').append("<option value='0'></option>");
+                if (data != null) {
+                    $.each(data.data, function (index, optionData) {
+                        $('#ddlSanPhamVay').append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
+                    });
+                }
+                $('#ddlSanPhamVay').chosen().trigger("chosen:updated");
+
+            },
+            complete: function () {
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+
+    function LayDSale(maNV) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LayDSSale", "HoSo")',
+            data: { },
+            success: function (data) {
+                $('#ddlInternalCode').empty();
+                $('#ddlInternalCode').append("<option value='0'></option>");
+                var ten = '';
+                if (data != null) {
+                    $.each(data.data, function (index, optionData) {
+                        $('#ddlInternalCode').append("<option  ten='" + optionData.FullName + "' value='" + optionData.IDUser + "'>" + optionData.Code + "</option>");
+                    });
+                }
+                $('#ddlInternalCode').val(maNV);
+                $('#ddlInternalCode').trigger("change");
+                $('#ddlInternalCode').chosen().trigger("chosen:updated");
+
+            },
+            complete: function () {
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+    let filesUpload = [];
     function LayDSTaiLieu() {
         $.ajax({
             type: "POST",
@@ -418,7 +470,8 @@ function () {
                             //layoutTemplates: { footer: '' },
 
                         }).on("filebatchselected", function (event, files) {
-                            $(option).fileinput("upload");
+                            filesUpload = option.files;
+                            //$(option).fileinput("upload");
                         });
                         $(option).on('filesuccessremove', function (event, key, jqXHR, data) {
                             console.log('Key = ' + key);
@@ -437,63 +490,9 @@ function () {
             }
         });
     }
-</script>
-<script>
-    function LayDSSanPham(maDoiTac) {
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("LayDSSanPham", "HoSo")',
-            data: { 'maDoiTac': maDoiTac },
-            success: function (data) {
-                $('#ddlSanPhamVay').empty();
-                $('#ddlSanPhamVay').append("<option value='0'></option>");
-                if (data != null) {
-                    $.each(data.DSSanPham, function (index, optionData) {
-                        $('#ddlSanPhamVay').append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
-                    });
-                }
-                $('#ddlSanPhamVay').chosen().trigger("chosen:updated");
 
-            },
-            complete: function () {
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            }
-        });
-    }
-</script>
-<script>
-    function LayDSale(maNV) {
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("LayDSSale", "HoSo")',
-            data: { },
-            success: function (data) {
-                $('#ddlInternalCode').empty();
-                $('#ddlInternalCode').append("<option value='0'></option>");
-                var ten = '';
-                if (data != null) {
-                    $.each(data.data, function (index, optionData) {
-                        $('#ddlInternalCode').append("<option  ten='" + optionData.FullName + "' value='" + optionData.IDUser + "'>" + optionData.Code + "</option>");
-                    });
-                }
-                $('#ddlInternalCode').val(maNV);
-                $('#ddlInternalCode').trigger("change");
-                $('#ddlInternalCode').chosen().trigger("chosen:updated");
-
-            },
-            complete: function () {
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            }
-        });
-    }
-</script>
-<script>
     $('#btn_Temp').click(function (e) {
-        if ($('#txtHoTen').val() == "" || $('#txtHoTen').val() == undefined) {
+        @*if ($('#txtHoTen').val() == "" || $('#txtHoTen').val() == undefined) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng nhập tên",
@@ -512,8 +511,8 @@ function () {
                 showConfirmButton: true,
             });
             return;
-        }
-        if ($('#ddlSanPhamVay').val() == "0" || $('#ddlSanPhamVay').val() == undefined) {
+        }*@
+        @*if ($('#ddlSanPhamVay').val() == "0" || $('#ddlSanPhamVay').val() == undefined) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -522,7 +521,7 @@ function () {
                 showConfirmButton: true,
             });
             return;
-        }
+        }*@
         var objectSend = JSON.stringify({
             'hoten': $('#txtHoTen').val(), 'phone': $('#txtDienThoai').val(),
             'phone2': $('#txtDienThoai2').val(), 'ngayNhanDon': $('#txtToDate').val(),
@@ -539,6 +538,51 @@ function () {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             data: objectSend,
+            success: function (data) {
+                @*if (data.Message.Result == true) {
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: data.Message.ErrorMessage,
+                        type: "success",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    }, function () {
+                        //window.location = window.location;
+                    });
+                }
+                else {
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: data.Message.ErrorMessage,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
+                }*@
+                uploadHoso()
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            },
+            complete: function () {
+                $('#panel_body').unblock();
+            },
+        });
+        function uploadHoso() {
+            debugger
+            let files= filesUpload
+            var formData = new FormData();
+
+            for (var i = 0; i != files.length; i++) {
+                formData.append("files", files[i]);
+            }
+
+            $.ajax({
+                processData: false,
+            url: "/HoSo/UploadHoso/1",
+                type: "POST",
+                contentType: false,
+                data: formData,
             success: function (data) {
                 if (data.Message.Result == true) {
                     swal({
@@ -568,9 +612,9 @@ function () {
                 $('#panel_body').unblock();
             },
         });
+        }
     });
-</script>
-<script>
+
     $('#btn_Save').click(function (e) {
 
         if ($('#ddlDoiTac').val() == "0" || $('#ddlDoiTac').val() == undefined ) {

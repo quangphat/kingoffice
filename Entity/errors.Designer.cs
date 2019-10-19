@@ -70,11 +70,38 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to invalid_data.
+        /// </summary>
+        public static string invalid_data {
+            get {
+                return ResourceManager.GetString("invalid_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to invalid_id.
+        /// </summary>
+        public static string invalid_id {
+            get {
+                return ResourceManager.GetString("invalid_id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to invalid_username_or_pass.
         /// </summary>
         public static string invalid_username_or_pass {
             get {
                 return ResourceManager.GetString("invalid_username_or_pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to missing_data.
+        /// </summary>
+        public static string missing_data {
+            get {
+                return ResourceManager.GetString("missing_data", resourceCulture);
             }
         }
         

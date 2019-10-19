@@ -1,15 +1,17 @@
 using Business.Interfaces;
+using Entity.Infrastructures;
+using Entity.ViewModels;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Threading.Tasks;
 
 namespace Business.Classes
 {
-    public class {ModelName}Business : I{ModelName}Business
+    public class {ModelName}Business :BaseBusiness, I{ModelName}Business
     {
-        public {ModelName}Business()
+        public {ModelName}Business(CurrentProcess process):base(null,process)
         {
 
         }

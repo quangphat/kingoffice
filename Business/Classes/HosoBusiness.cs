@@ -70,6 +70,7 @@ namespace Business.Classes
                 denNgay, string.Empty, string.Empty, 1, trangthai);
             return result;
         }
+        
         private async Task<int> CountHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,

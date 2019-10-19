@@ -120,8 +120,17 @@
   <data name="error_login_expected" xml:space="preserve">
     <value>error_login_expected</value>
   </data>
+  <data name="invalid_data" xml:space="preserve">
+    <value>invalid_data</value>
+  </data>
+  <data name="invalid_id" xml:space="preserve">
+    <value>invalid_id</value>
+  </data>
   <data name="invalid_username_or_pass" xml:space="preserve">
     <value>invalid_username_or_pass</value>
+  </data>
+  <data name="missing_data" xml:space="preserve">
+    <value>missing_data</value>
   </data>
   <data name="username_or_password_must_not_be_empty" xml:space="preserve">
     <value>username_or_password_must_not_be_empty</value>

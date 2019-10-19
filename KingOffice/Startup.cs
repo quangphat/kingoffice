@@ -50,6 +50,7 @@ namespace KingOffice
             services.AddSingleton<INhanvienRepository, NhanvienRepository>();
             services.AddSingleton<ILoaiTailieuRepository, LoaiTailieuRepository>();
             services.AddSingleton<IDoitacRepository, DoitacRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
             //AppendMongoDI
 
             services.AddScoped<IHosoBusiness, HosoBusiness>();
@@ -57,6 +58,7 @@ namespace KingOffice
             services.AddScoped<ILocationBusiness, LocationBusiness>();
             services.AddScoped<IDoitacBusiness, DoitacBusiness>();
             services.AddScoped<ILoaiTailieuBusiness, LoaiTailieuBusiness>();
+            services.AddScoped<IProductBusiness, ProductBusiness>();
             services.AddScoped<INhanvienBusiness, NhanvienBusiness>();
             //<AppendBusinessDI>
             services.AddScoped<CurrentProcess>();

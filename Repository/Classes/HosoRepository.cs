@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Entity.Enums;
 using Entity.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Repository.Entities;
@@ -83,6 +84,10 @@ namespace Repository.Classes
                 },
                 commandType: CommandType.StoredProcedure);
             return result.ToList();
+        }
+        public async Task<AutoIDModel> GetAutoId()
+        {
+            var result = await connection.QueryFirstOrDefaultAsync("sp_AUTOID_GetID", new { ID = (int)AutoID.HoSo }, commandType: CommandType.StoredProcedure);
         }
         public async Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
             int maNhom,

@@ -6,7 +6,9 @@ using Business.Interfaces;
 using Entity.Infrastructures;
 using KingOffice.Infrastructures;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace KingOffice.Controllers
 {
@@ -14,15 +16,13 @@ namespace KingOffice.Controllers
     {
         protected readonly IHosoBusiness _bizHoso;
         protected readonly ILoaiTailieuBusiness _bizLoaiTl;
-        protected readonly IDoitacBusiness _bizDoitac;
+        
         public HosoController(CurrentProcess process, 
             ILoaiTailieuBusiness loaiTailieuBusiness,
-            IDoitacBusiness doitacBusiness,
             IHosoBusiness hosoBusiness) : base(process)
         {
             _bizHoso = hosoBusiness;
             _bizLoaiTl = loaiTailieuBusiness;
-            _bizDoitac = doitacBusiness;
         }
         public static Dictionary<string, ActionInfo> LstRole
         {
@@ -58,11 +58,17 @@ namespace KingOffice.Controllers
             var result = await _bizLoaiTl.GetList();
             return ToResponse(result);
         }
-        [Authorize]
-        public async Task<IActionResult> LayDSDoiTac()
+        
+        public async  Task<IActionResult> SaveDaft(string hoten, string phone, string phone2, string ngayNhanDon, int hoSoCuaAi, string cmnd, int gioiTinh
+           , int maKhuVuc, string diaChi, int courier, int sanPhamVay, string tenCuaHang, int baoHiem, int thoiHanVay, string soTienVay, string ghiChu)
         {
-            var result = await _bizDoitac.GetListSimple();
-            return ToResponse(result);
+            return ToResponse(true);
+        }
+        [Authorize]
+        [HttpPost("Hoso/UploadHoso/{id}")]
+        public async Task<IActionResult> UploadHoso(int id, IList<IFormFile> files)
+        {
+            return ToResponse(true);
         }
     }
 }
