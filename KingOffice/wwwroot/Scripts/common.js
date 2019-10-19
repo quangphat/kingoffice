@@ -163,6 +163,10 @@ function addAlert(elementId, message, success = false) {
            + '</div>');
     }
 }
+function convertStringToDate(strDatetime, format = "DD-MM-yyyy") {
+    var dte = moment(strDatetime, format);
+    return dte.local();
+}
 function FormatDateTimeDMYHM(datetime) {
     try {
         var valueDate = parseInt(datetime.substr(6));

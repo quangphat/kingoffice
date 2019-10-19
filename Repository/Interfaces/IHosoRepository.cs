@@ -1,4 +1,5 @@
-﻿using Entity.ViewModels;
+﻿using Entity.DatabaseModels;
+using Entity.ViewModels;
 using Repository.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,10 @@ namespace Repository.Interfaces
 {
     public interface IHosoRepository
     {
+        Task<bool> RemoveAllTailieu(int hosoId);
+        Task<bool> Update(HosoModel model);
+        Task<bool> InsertTailieu(int type, string path, string name, int hosoId);
+        Task<long> Create(HosoModel model);
         Task<List<Hoso>> Gets();
         Task<int> CountHosoDuyet(int maNVDangNhap,
             int maNhom,
@@ -43,6 +48,5 @@ namespace Repository.Interfaces
             int dateType,
             string status
             );
-        Task<AutoIDModel> GetAutoId();
     }
 }

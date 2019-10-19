@@ -51,6 +51,7 @@ namespace KingOffice
             services.AddSingleton<ILoaiTailieuRepository, LoaiTailieuRepository>();
             services.AddSingleton<IDoitacRepository, DoitacRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<IAutoIdRepository, AutoIdRepository>();
             //AppendMongoDI
 
             services.AddScoped<IHosoBusiness, HosoBusiness>();

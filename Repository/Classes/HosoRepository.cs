@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Entity.DatabaseModels;
 using Entity.Enums;
 using Entity.ViewModels;
 using Microsoft.Extensions.Configuration;
@@ -85,9 +86,41 @@ namespace Repository.Classes
                 commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
-        public async Task<AutoIDModel> GetAutoId()
+        
+        public async Task<long> Create(HosoModel model)
         {
-            var result = await connection.QueryFirstOrDefaultAsync("sp_AUTOID_GetID", new { ID = (int)AutoID.HoSo }, commandType: CommandType.StoredProcedure);
+            model.NgayTao = DateTime.Now;
+            var p = generateHosoParameter(model);
+            await connection.QueryFirstOrDefaultAsync<int>("sp_HO_SO_Them", p,
+                commandType: CommandType.StoredProcedure);
+            var result = p.Get<long>("ID");
+            return result;
+        }
+        public async Task<bool> Update(HosoModel model)
+        {
+            var p = generateHosoParameter(model);
+            await connection.ExecuteAsync("sp_HO_SO_CapNhat", p,
+                commandType: CommandType.StoredProcedure);
+            return true;
+        }
+        public async Task<bool> InsertTailieu(int type, string path, string name,int hosoId)
+        {
+            var p = new DynamicParameters();
+            p.Add("Maloai", type);
+            p.Add("DuongDan", path);
+            p.Add("Ten", name);
+            p.Add("MaHS", hosoId);
+            await connection.ExecuteAsync("sp_TAI_LIEU_HS_Them", p,
+                commandType: CommandType.StoredProcedure);
+            return true;
+        }
+        public async Task<bool> RemoveAllTailieu(int hosoId)
+        {
+            var p = new DynamicParameters();
+            p.Add("MaHS", hosoId);
+            await connection.ExecuteAsync("sp_TAI_LIEU_HS_XoaTatCa", p,
+                commandType: CommandType.StoredProcedure);
+            return true;
         }
         public async Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
             int maNhom,
@@ -115,6 +148,39 @@ namespace Repository.Classes
                 },
                 commandType: CommandType.StoredProcedure);
             return result.ToList();
+        }
+        private DynamicParameters generateHosoParameter(HosoModel model)
+        {
+            var p = new DynamicParameters();
+            if(model.ID >0)
+            {
+                p.Add("ID", model.ID);
+            }
+            else
+            {
+                p.Add("ID", dbType: DbType.Int64, direction: ParameterDirection.Output);
+            }
+            p.Add("MaHoSo", model.MaHoSo);
+            p.Add("CourierCode", model.CourierCode);
+            p.Add("TenKhachHang", model.TenKhachHang);
+            p.Add("CMND", model.CMND);
+            p.Add("DiaChi", model.DiaChi);
+            p.Add("MaKhuVuc", model.MaKhuVuc);
+            p.Add("SDT", model.SDT);
+            p.Add("SDT2", model.SDT2);
+            p.Add("GioiTinh", model.GioTinh);
+            p.Add("NgayTao", model.NgayTao);
+            p.Add("MaNguoiTao", model.MaNguoiTao);
+            p.Add("HoSoCuaAi", model.HoSoCuaAi);
+            p.Add("KetQuaHS", model.KetQuaHS);
+            p.Add("NgayNhanDon", model.NgayNhanDon);
+            p.Add("MaTrangThai", model.MaTrangThai);
+            p.Add("SanPhamVay", model.Sanphamvay);
+            p.Add("CoBaoHiem", model.CoBaoHiem);
+            p.Add("SoTienVay", model.SoTienVay);
+            p.Add("HanVay", model.HanVay);
+            p.Add("TenCuaHang", model.TenCuaHang);
+            return p;
         }
     }
 }

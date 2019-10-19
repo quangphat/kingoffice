@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="customername_must_not_be_empty" xml:space="preserve">
+    <value>customername_must_not_be_empty</value>
+  </data>
   <data name="error_login_expected" xml:space="preserve">
     <value>error_login_expected</value>
   </data>
@@ -129,8 +132,35 @@
   <data name="invalid_username_or_pass" xml:space="preserve">
     <value>invalid_username_or_pass</value>
   </data>
+  <data name="missing_cmnd" xml:space="preserve">
+    <value>missing_cmnd</value>
+  </data>
   <data name="missing_data" xml:space="preserve">
     <value>missing_data</value>
+  </data>
+  <data name="missing_diachi" xml:space="preserve">
+    <value>missing_diachi</value>
+  </data>
+  <data name="missing_location_code" xml:space="preserve">
+    <value>missing_location_code</value>
+  </data>
+  <data name="missing_money" xml:space="preserve">
+    <value>missing_money</value>
+  </data>
+  <data name="missing_ngaynhandon" xml:space="preserve">
+    <value>missing_ngaynhandon</value>
+  </data>
+  <data name="missing_phone" xml:space="preserve">
+    <value>missing_phone</value>
+  </data>
+  <data name="missing_product" xml:space="preserve">
+    <value>missing_product</value>
+  </data>
+  <data name="note_length_cannot_more_than_200" xml:space="preserve">
+    <value>note_length_cannot_more_than_200</value>
+  </data>
+  <data name="product_code_inuse" xml:space="preserve">
+    <value>product_code_inuse</value>
   </data>
   <data name="username_or_password_must_not_be_empty" xml:space="preserve">
     <value>username_or_password_must_not_be_empty</value>

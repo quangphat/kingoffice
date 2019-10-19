@@ -1,4 +1,5 @@
 ﻿using Entity.Enums;
+using Entity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -49,6 +50,38 @@ namespace Business.Infrastructures
             DateTime date = new DateTime(Convert.ToInt32(p[2]), Convert.ToInt32(p[1]), Convert.ToInt32(p[0]));
             return date;
 
+        }
+        public static string GenerateAutoCode(ref AutoIDModel model)
+        {
+            string result = string.Empty;
+            if (model == null)
+                model = new AutoIDModel();
+            string suffixes = "00" + DateTime.Now.Month.ToString();
+            suffixes = suffixes.Substring(suffixes.Length - 2, 2);
+            if (model.Prefix == DateTime.Now.Year.ToString().Substring(2, 2))
+            {
+
+                if (model.Suffixes == suffixes)
+                {
+                    model.Value++;
+                }
+                else
+                {
+                    model.Suffixes = suffixes;
+                    model.Value = 1;
+                }
+            }
+            else
+            {
+                model.Prefix = DateTime.Now.Year.ToString().Substring(2, 2);
+                model.Suffixes = suffixes;
+                model.Value = 1;
+            }
+            int length = 6;
+            string valueDefault = "000000" + model.Value.ToString();
+            result = valueDefault.Substring(valueDefault.Length - length, length);
+
+            return model.Prefix + model.Suffixes + result;
         }
     }
 }

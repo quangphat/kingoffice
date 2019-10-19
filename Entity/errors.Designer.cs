@@ -61,6 +61,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to customername_must_not_be_empty.
+        /// </summary>
+        public static string customername_must_not_be_empty {
+            get {
+                return ResourceManager.GetString("customername_must_not_be_empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to error_login_expected.
         /// </summary>
         public static string error_login_expected {
@@ -97,11 +106,92 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to missing_cmnd.
+        /// </summary>
+        public static string missing_cmnd {
+            get {
+                return ResourceManager.GetString("missing_cmnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to missing_data.
         /// </summary>
         public static string missing_data {
             get {
                 return ResourceManager.GetString("missing_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to missing_diachi.
+        /// </summary>
+        public static string missing_diachi {
+            get {
+                return ResourceManager.GetString("missing_diachi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to missing_location_code.
+        /// </summary>
+        public static string missing_location_code {
+            get {
+                return ResourceManager.GetString("missing_location_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to missing_money.
+        /// </summary>
+        public static string missing_money {
+            get {
+                return ResourceManager.GetString("missing_money", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to missing_ngaynhandon.
+        /// </summary>
+        public static string missing_ngaynhandon {
+            get {
+                return ResourceManager.GetString("missing_ngaynhandon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to missing_phone.
+        /// </summary>
+        public static string missing_phone {
+            get {
+                return ResourceManager.GetString("missing_phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to missing_product.
+        /// </summary>
+        public static string missing_product {
+            get {
+                return ResourceManager.GetString("missing_product", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to note_length_cannot_more_than_200.
+        /// </summary>
+        public static string note_length_cannot_more_than_200 {
+            get {
+                return ResourceManager.GetString("note_length_cannot_more_than_200", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to product_code_inuse.
+        /// </summary>
+        public static string product_code_inuse {
+            get {
+                return ResourceManager.GetString("product_code_inuse", resourceCulture);
             }
         }
         

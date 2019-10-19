@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Entity.DatabaseModels;
 using Entity.DatanbaseModels;
 using Entity.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,10 @@ namespace Business.Infrastructures
                 .ForMember(a => a.Code, b => b.MapFrom(c => c.Ma))
                 .ForMember(a => a.Email, b => b.MapFrom(c => c.Email))
                 .ForMember(a => a.Fullname, b => b.MapFrom(c => c.Ho_Ten));
+            CreateMap<HosoRequestModel, HosoModel>()
+                .ForMember(d => d.NgayNhanDon, map => map.MapFrom((s, d) => {
+                    return BusinessExtension.ConvertddMMyyyyToDateTime(s.ngaynhandon);
+                }));
         }
     }
 }

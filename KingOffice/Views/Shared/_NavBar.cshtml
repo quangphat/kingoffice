@@ -62,7 +62,7 @@
          $.ajax({
             type: "GET",
             datatype: "JSON",
-            url: '@Url.Action("GetNotificationHosoNotApprove", "Hoso", new { area="" })',
+             url: '/hoso/notification',
              success: function (data) {
                  if (data.success == true && !isNullOrNoItem(data.data)) {
                      renderNotificationHosoNotApprove(data.data)

@@ -45,6 +45,14 @@ namespace Repository.Classes
                 return true;
             return false;
         }
+        public async Task<bool> UpdateUse(int hosoId,int productId)
+        {
+            var p = new DynamicParameters();
+            p.Add("SanPhamVay", productId);
+            p.Add("ID", hosoId);
+            await connection.ExecuteAsync("sp_SAN_PHAM_VAY_CapNhatSuDung", p, commandType: CommandType.StoredProcedure);
+            return true;
+        }
     }
 }
 

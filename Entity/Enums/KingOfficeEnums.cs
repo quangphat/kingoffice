@@ -20,4 +20,12 @@ namespace Entity.Enums
     {
         HoSo = 1
     }
+    public enum KetQuaHoSo
+    {
+        Trong = 1,
+        GoiKhachHang = 2,
+        ThamDinhDiaBan = 3,
+        ChoKhoanVay = 4
+
+    }
 }

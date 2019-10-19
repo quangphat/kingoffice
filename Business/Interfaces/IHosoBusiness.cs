@@ -18,5 +18,6 @@ namespace Business.Interfaces
             int page = 1, int limit = 10,
             int maThanhVien = 0);
         Task<List<HosoDuyet>> GetHosoNotApprove();
+        Task<long> Save(HosoRequestModel model, bool isDraft);
     }
 }

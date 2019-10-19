@@ -47,5 +47,14 @@ namespace KingOffice.Infrastructures
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             });
         }
+        public static string ConvertToJson(object obj)
+        {
+            if (obj == null)
+                return null;
+            return JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+        }
     }
 }
