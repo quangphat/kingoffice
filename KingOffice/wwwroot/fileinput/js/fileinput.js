@@ -1290,7 +1290,7 @@
         },
         _parseFilePreviewIcon: function (content, fname) {
             var self = this, icn = self._getPreviewIcon(fname) || self.previewFileIcon, out = content;
-            if (out.indexOf('{previewFileIcon}') > -1) {
+            if (out !=null && out.indexOf('{previewFileIcon}') > -1) {
                 out = out.setTokens({'previewFileIconClass': self.previewFileIconClass, 'previewFileIcon': icn});
             }
             return out;
@@ -1307,9 +1307,9 @@
             }
             switch (event) {
                 // ignore these events
-                case 'filebatchuploadcomplete':
+                //case 'filebatchuploadcomplete':
                 case 'filebatchuploadsuccess':
-                case 'fileuploaded':
+                //case 'fileuploaded':
                 case 'fileclear':
                 case 'filecleared':
                 case 'filereset':
@@ -2759,6 +2759,13 @@
                         }
                     });
                 }
+                if(tmplt==null)
+                    {
+                        tmplt = '<div class="file-preview-frame {frameClass}" id="{previewId}" data-fileindex="{fileindex}" data-template="{template}"><div class="kv-file-content">'
+                        +  '<img src="{data}" class="file-preview-image kv-preview-data" title="{caption}" alt="{caption}" {style}>'
+                         + '</div>{footer}</div>'
+                        
+                    }
                 return tmplt.setTokens({
                     'previewId': id,
                     'caption': caption,

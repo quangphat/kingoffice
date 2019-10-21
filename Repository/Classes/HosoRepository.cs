@@ -87,41 +87,25 @@ namespace Repository.Classes
             return result.ToList();
         }
         
-        public async Task<long> Create(HosoModel model)
+        public async Task<int> Create(HosoModel model)
         {
             model.NgayTao = DateTime.Now;
             var p = generateHosoParameter(model);
-            await connection.QueryFirstOrDefaultAsync<int>("sp_HO_SO_Them", p,
+            await connection.ExecuteAsync("sp_HO_SO_Them", p,
                 commandType: CommandType.StoredProcedure);
-            var result = p.Get<long>("ID");
+            var result = p.Get<int>("ID");
             return result;
         }
         public async Task<bool> Update(HosoModel model)
         {
+            model.NgayTao = DateTime.Now;
             var p = generateHosoParameter(model);
             await connection.ExecuteAsync("sp_HO_SO_CapNhat", p,
                 commandType: CommandType.StoredProcedure);
             return true;
         }
-        public async Task<bool> InsertTailieu(int type, string path, string name,int hosoId)
-        {
-            var p = new DynamicParameters();
-            p.Add("Maloai", type);
-            p.Add("DuongDan", path);
-            p.Add("Ten", name);
-            p.Add("MaHS", hosoId);
-            await connection.ExecuteAsync("sp_TAI_LIEU_HS_Them", p,
-                commandType: CommandType.StoredProcedure);
-            return true;
-        }
-        public async Task<bool> RemoveAllTailieu(int hosoId)
-        {
-            var p = new DynamicParameters();
-            p.Add("MaHS", hosoId);
-            await connection.ExecuteAsync("sp_TAI_LIEU_HS_XoaTatCa", p,
-                commandType: CommandType.StoredProcedure);
-            return true;
-        }
+        
+        
         public async Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
             int maNhom,
             int maThanhvien,
@@ -158,9 +142,10 @@ namespace Repository.Classes
             }
             else
             {
-                p.Add("ID", dbType: DbType.Int64, direction: ParameterDirection.Output);
+                p.Add("MaHoSo", model.MaHoSo);
+                p.Add("ID", dbType: DbType.Int32, direction: ParameterDirection.Output);
             }
-            p.Add("MaHoSo", model.MaHoSo);
+            
             p.Add("CourierCode", model.CourierCode);
             p.Add("TenKhachHang", model.TenKhachHang);
             p.Add("CMND", model.CMND);

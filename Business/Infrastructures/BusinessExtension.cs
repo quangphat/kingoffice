@@ -2,6 +2,8 @@
 using Entity.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Business.Infrastructures
@@ -82,6 +84,46 @@ namespace Business.Infrastructures
             result = valueDefault.Substring(valueDefault.Length - length, length);
 
             return model.Prefix + model.Suffixes + result;
+        }
+        public static string GetSHA256Hash(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+                return String.Empty;
+
+            using (var sha = new System.Security.Cryptography.SHA256Managed())
+            {
+                byte[] textData = System.Text.Encoding.UTF8.GetBytes(input);
+                byte[] hash = sha.ComputeHash(textData);
+                return BitConverter.ToString(hash).Replace("-", String.Empty);
+            }
+        }
+        public static FileModel GetFileUploadUrl(string fileInputName, string webRootPath)
+        {
+            string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_" + fileInputName.Trim().Replace(" ", "_");
+            string root = System.IO.Path.Combine(webRootPath + "/Upload", "HoSo");
+            string pathTemp = "";
+            if (!Directory.Exists(root))
+                Directory.CreateDirectory(root);
+            pathTemp = DateTime.Now.Year.ToString();
+            string pathYear = System.IO.Path.Combine(root, pathTemp);
+            if (!Directory.Exists(pathYear))
+                Directory.CreateDirectory(pathYear);
+            pathTemp += "/" + DateTime.Now.Month.ToString();
+            string pathMonth = System.IO.Path.Combine(root, pathTemp);
+            if (!Directory.Exists(pathMonth))
+                Directory.CreateDirectory(pathMonth);
+            pathTemp += "/" + DateTime.Now.Day.ToString();
+            string pathDay = System.IO.Path.Combine(root, pathTemp);
+            if (!Directory.Exists(pathDay))
+                Directory.CreateDirectory(pathDay);
+            string path = System.IO.Path.Combine(pathDay, fileName);
+            string url = "/Upload/HoSo/" + pathTemp + "/" + fileName;
+            return new FileModel {
+                FileUrl = url,
+                Name = fileName,
+                FullPath = path
+            };
+            
         }
     }
 }

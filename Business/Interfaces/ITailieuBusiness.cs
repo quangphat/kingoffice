@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Interfaces
 {
-    public interface ILoaiTailieuBusiness
+    public interface ITailieuBusiness
     {
         Task<List<LoaiTaiLieuModel>> GetList();
     }

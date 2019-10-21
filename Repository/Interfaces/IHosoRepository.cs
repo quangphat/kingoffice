@@ -10,10 +10,10 @@ namespace Repository.Interfaces
 {
     public interface IHosoRepository
     {
-        Task<bool> RemoveAllTailieu(int hosoId);
+        
         Task<bool> Update(HosoModel model);
-        Task<bool> InsertTailieu(int type, string path, string name, int hosoId);
-        Task<long> Create(HosoModel model);
+        
+        Task<int> Create(HosoModel model);
         Task<List<Hoso>> Gets();
         Task<int> CountHosoDuyet(int maNVDangNhap,
             int maNhom,

@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Business.Classes
 {
-    public class LoaiTailieuBusiness :BaseBusiness, ILoaiTailieuBusiness
+    public class TailieuBusiness :BaseBusiness, ITailieuBusiness
     {
-        protected readonly ILoaiTailieuRepository _rpLoaiTailieu;
-        public LoaiTailieuBusiness(CurrentProcess process, ILoaiTailieuRepository loaiTailieuRepository):base(null,process)
+        protected readonly ITailieuRepository _rpLoaiTailieu;
+        public TailieuBusiness(CurrentProcess process, ITailieuRepository loaiTailieuRepository):base(null,process)
         {
             _rpLoaiTailieu = loaiTailieuRepository;
         }
         public async Task<List<LoaiTaiLieuModel>> GetList()
         {
-            return await _rpLoaiTailieu.GetList();
+            return await _rpLoaiTailieu.GetLoaiTailieuList();
         }
     }
 }

@@ -48,19 +48,21 @@ namespace KingOffice
             services.AddSingleton<IUserRoleMenuRepository, UserRoleMenuRepository>();
             services.AddSingleton<ILocationRepository, LocationRepository>();
             services.AddSingleton<INhanvienRepository, NhanvienRepository>();
-            services.AddSingleton<ILoaiTailieuRepository, LoaiTailieuRepository>();
+            services.AddSingleton<ITailieuRepository, TailieuRepository>();
             services.AddSingleton<IDoitacRepository, DoitacRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IAutoIdRepository, AutoIdRepository>();
+            services.AddSingleton<INotesRepository, NotesRepository>();
             //AppendMongoDI
 
             services.AddScoped<IHosoBusiness, HosoBusiness>();
             services.AddScoped<IAccountBusiness, AccountBusiness>();
             services.AddScoped<ILocationBusiness, LocationBusiness>();
             services.AddScoped<IDoitacBusiness, DoitacBusiness>();
-            services.AddScoped<ILoaiTailieuBusiness, LoaiTailieuBusiness>();
+            services.AddScoped<ITailieuBusiness, TailieuBusiness>();
             services.AddScoped<IProductBusiness, ProductBusiness>();
             services.AddScoped<INhanvienBusiness, NhanvienBusiness>();
+            services.AddScoped<IMediaBusiness, MediaBusiness>();
             //<AppendBusinessDI>
             services.AddScoped<CurrentProcess>();
             var mappingConfig = new MapperConfiguration(mc =>

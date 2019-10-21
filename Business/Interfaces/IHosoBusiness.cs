@@ -19,5 +19,6 @@ namespace Business.Interfaces
             int maThanhVien = 0);
         Task<List<HosoDuyet>> GetHosoNotApprove();
         Task<long> Save(HosoRequestModel model, bool isDraft);
+        Task<bool> UploadHoso(int hosoId, List<FileUploadModel> files, string rootPath);
     }
 }

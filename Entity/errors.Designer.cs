@@ -61,7 +61,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to customername_must_not_be_empty.
+        ///   Looks up a localized string similar to Tên khách hàng không được để trống.
         /// </summary>
         public static string customername_must_not_be_empty {
             get {
@@ -70,7 +70,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to error_login_expected.
+        ///   Looks up a localized string similar to Vui lòng đăng nhập.
         /// </summary>
         public static string error_login_expected {
             get {
@@ -79,7 +79,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to invalid_data.
+        ///   Looks up a localized string similar to Dữ liệu không hợp lệ.
         /// </summary>
         public static string invalid_data {
             get {
@@ -88,7 +88,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to invalid_id.
+        ///   Looks up a localized string similar to Id không hợp lệ.
         /// </summary>
         public static string invalid_id {
             get {
@@ -97,7 +97,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to invalid_username_or_pass.
+        ///   Looks up a localized string similar to Tên đăng nhập hoặc mật khẩu không đúng.
         /// </summary>
         public static string invalid_username_or_pass {
             get {
@@ -106,7 +106,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_cmnd.
+        ///   Looks up a localized string similar to Vui lòng nhập cmnd.
         /// </summary>
         public static string missing_cmnd {
             get {
@@ -115,7 +115,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_data.
+        ///   Looks up a localized string similar to Dữ liệu không hợp lệ.
         /// </summary>
         public static string missing_data {
             get {
@@ -124,7 +124,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_diachi.
+        ///   Looks up a localized string similar to Vui lòng nhập địa chỉ.
         /// </summary>
         public static string missing_diachi {
             get {
@@ -133,7 +133,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_location_code.
+        ///   Looks up a localized string similar to Vui lòng chọn mã huyện.
         /// </summary>
         public static string missing_location_code {
             get {
@@ -142,7 +142,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_money.
+        ///   Looks up a localized string similar to Vui lòng chọn số tiền vay.
         /// </summary>
         public static string missing_money {
             get {
@@ -151,7 +151,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_ngaynhandon.
+        ///   Looks up a localized string similar to Vui lòng nhập ngày nhận đơn.
         /// </summary>
         public static string missing_ngaynhandon {
             get {
@@ -160,7 +160,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_phone.
+        ///   Looks up a localized string similar to Vui lòng nhập số điện thoại.
         /// </summary>
         public static string missing_phone {
             get {
@@ -169,7 +169,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to missing_product.
+        ///   Looks up a localized string similar to Vui lòng chọn sản phẩm vay.
         /// </summary>
         public static string missing_product {
             get {
@@ -178,7 +178,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to note_length_cannot_more_than_200.
+        ///   Looks up a localized string similar to Nội dung ghi chú không được nhiều hơn 200 ký tự.
         /// </summary>
         public static string note_length_cannot_more_than_200 {
             get {
@@ -187,7 +187,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to product_code_inuse.
+        ///   Looks up a localized string similar to Mã sản phẩm đang được sử dung bởi hồ sơ khác, vui lòng chọn sản phẩm khác.
         /// </summary>
         public static string product_code_inuse {
             get {
@@ -196,7 +196,7 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to username_or_password_must_not_be_empty.
+        ///   Looks up a localized string similar to Tên đăng nhập hoặc mật khẩu không được để trống.
         /// </summary>
         public static string username_or_password_must_not_be_empty {
             get {

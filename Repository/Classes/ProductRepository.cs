@@ -40,7 +40,8 @@ namespace Repository.Classes
             p.Add("SanPhamVay", productId);
             p.Add("ID", hosoId);
             p.Add("Exist", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            var result = await connection.ExecuteScalarAsync<int>("sp_SAN_PHAM_VAY_CheckExist", p, commandType: CommandType.StoredProcedure);
+            await connection.ExecuteScalarAsync<int>("sp_SAN_PHAM_VAY_CheckExist", p, commandType: CommandType.StoredProcedure);
+            var result = p.Get<int>("Exist");
             if (result > 0)
                 return true;
             return false;

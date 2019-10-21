@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace Repository.Interfaces
 {
-    public interface ILoaiTailieuRepository
+    public interface ITailieuRepository
     {
-        Task<List<LoaiTaiLieuModel>> GetList();
+        Task<List<LoaiTaiLieuModel>> GetLoaiTailieuList();
+        Task<bool> Add(TaiLieu model);
+        Task<bool> RemoveAllTailieu(int hosoId);
     }
 }
 

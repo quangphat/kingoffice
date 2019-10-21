@@ -150,16 +150,16 @@ function FormatString(alias) {
 
 function addAlert(elementId, message, success = false) {
     $('#' + elementId).empty();
-    var mess = messages.find(p => p.code === message)
+    //var mess = messages.find(p => p.code === message)
     if (success === true) {
         $('#' + elementId).append(
             '<div class="alert alert-block alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
-            + '<p><strong><i class="ace-icon fa fa-check"></i></strong> ' + mess.value_vi + '</p>'
+            + '<p><strong><i class="ace-icon fa fa-check"></i></strong> ' + message + '</p>'
           + '</div>');
     } else {
         $('#' + elementId).append(
             '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
-            + '<p><strong><i class="ace-icon fa fa-times"></i></strong> ' + mess.value_vi + '</p>'
+            + '<p><strong><i class="ace-icon fa fa-times"></i></strong> ' + message + '</p>'
            + '</div>');
     }
 }

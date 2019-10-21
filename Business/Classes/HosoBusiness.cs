@@ -9,6 +9,7 @@ using Entity.ViewModels;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,16 +21,22 @@ namespace Business.Classes
         protected readonly IHosoRepository _rpHoso;
         protected readonly IProductRepository _rpProduct;
         protected readonly IAutoIdRepository _rpAuto;
+        protected readonly INotesRepository _rpNotes;
+        protected readonly ITailieuRepository _rpTailieu;
         public HosoBusiness(CurrentProcess process,
             IHosoRepository hosoRepository,
             IProductRepository productRepository,
             IAutoIdRepository autoIdRepository,
+            INotesRepository notesRepository,
+            ITailieuRepository tailieuRepository,
             IMapper mapper) : base(mapper, process)
         {
             _mapper = mapper;
             _rpHoso = hosoRepository;
             _rpProduct = productRepository;
             _rpAuto = autoIdRepository;
+            _rpTailieu = tailieuRepository;
+            _rpNotes = notesRepository;
         }
         public async Task<long> Save(HosoRequestModel model, bool isDraft)
         {
@@ -51,12 +58,16 @@ namespace Business.Classes
             model.MaNguoiTao = _process.User.Id;
             model.MaTrangThai = isDraft == true ? (int)TrangThaiHoSo.Nhap : (int)TrangThaiHoSo.NhapLieu;
             model.KetQuaHS = (int)KetQuaHoSo.Trong;
-
             if (model.ID > 0)
             {
-                return await Update(hoso);
+                await Update(hoso);
             }
-            return await Create(hoso);
+            var hosoId = model.ID > 0 ? model.ID : await Create(hoso);
+            if (hosoId > 0)
+            {
+                await AddNote(hosoId, model.Ghichu);
+            }
+            return hosoId;
         }
         public async Task<int> Update(HosoModel hoso)
         {
@@ -81,11 +92,15 @@ namespace Business.Classes
             var result = await _rpHoso.Update(hoso);
             if (result)
             {
-                await _rpHoso.RemoveAllTailieu(hoso.ID);
+                var deleteAll =await _rpTailieu.RemoveAllTailieu(hoso.ID);
+                if(deleteAll)
+                {
+
+                }
             }
             return hoso.ID;
         }
-        public async Task<long> Create(HosoModel hoso)
+        public async Task<int> Create(HosoModel hoso)
         {
             var autoId = await _rpAuto.GetAutoId((int)AutoID.HoSo);
             if (autoId == null)
@@ -167,6 +182,43 @@ namespace Business.Classes
                 maHS, cmnd, loaiNgay, trangThai, freeText);
             return result;
         }
+        public async Task<bool> UploadHoso(int hosoId, List<FileUploadModel> files, string rootPath)
+        {
+            if (hosoId <= 0 || files == null || !files.Any())
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            var deleteAll = await _rpTailieu.RemoveAllTailieu(hosoId);
+            if (!deleteAll)
+                return false;
+            foreach (var item in files)
+            {
+                var tailieu = new TaiLieu
+                {
+                    FileName = item.FileName,
+                    FilePath = item.FileUrl,
+                    HosoId = hosoId,
+                    TypeId = Convert.ToInt32(item.Key)
+                };
+                await _rpTailieu.Add(tailieu);
+            }
+            return true;
+        }
+        public async Task AddNote(int hosoId, string ghiChu)
+        {
+            
+            if (string.IsNullOrWhiteSpace(ghiChu))
+                return;
+            GhichuModel ghichu = new GhichuModel
+            {
+                UserId = _process.User.Id,
+                HosoId = hosoId,
+                Noidung = ghiChu,
+                CommentTime = DateTime.Now
+            };
+            await _rpNotes.Add(ghichu);
+        }
         private async Task<List<HosoDuyet>> GetHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,
@@ -206,7 +258,7 @@ namespace Business.Classes
             {
                 return (false, errors.customername_must_not_be_empty);
             }
-            if(!isDraft)
+            if (!isDraft)
             {
                 if (string.IsNullOrWhiteSpace(hoso.SDT))
                 {
@@ -237,7 +289,7 @@ namespace Business.Classes
                     return (false, errors.missing_money);
                 }
             }
-            
+
             return (true, string.Empty);
         }
     }

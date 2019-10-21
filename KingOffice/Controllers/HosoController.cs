@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Business.Interfaces;
@@ -7,6 +8,7 @@ using Entity.Infrastructures;
 using Entity.ViewModels;
 using KingOffice.Infrastructures;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -17,14 +19,16 @@ namespace KingOffice.Controllers
     public class HosoController : BaseController
     {
         protected readonly IHosoBusiness _bizHoso;
-        protected readonly ILoaiTailieuBusiness _bizLoaiTl;
-        
-        public HosoController(CurrentProcess process, 
-            ILoaiTailieuBusiness loaiTailieuBusiness,
-            IHosoBusiness hosoBusiness) : base(process)
+        protected readonly ITailieuBusiness _bizLoaiTl;
+        protected readonly IHostingEnvironment _hosting;
+        public HosoController(CurrentProcess process,
+            ITailieuBusiness loaiTailieuBusiness,
+            IHostingEnvironment hosting,
+        IHosoBusiness hosoBusiness) : base(process)
         {
             _bizHoso = hosoBusiness;
             _bizLoaiTl = loaiTailieuBusiness;
+            _hosting = hosting;
         }
         public static Dictionary<string, ActionInfo> LstRole
         {
@@ -82,10 +86,12 @@ namespace KingOffice.Controllers
             return ToResponse(true);
         }
         [Authorize]
-        [HttpPost("UploadHoso/{id}")]
-        public async Task<IActionResult> UploadHoso(int id, IList<IFormFile> files)
+        [HttpPost("UploadHoso/{hosoId}")]
+        public async Task<IActionResult> UploadHoso(int hosoId, [FromBody] List<FileUploadModel> files)
         {
-            return ToResponse(true);
+            var result = await _bizHoso.UploadHoso(hosoId, files, _hosting.WebRootPath);
+            return ToResponse(result);
         }
+
     }
 }

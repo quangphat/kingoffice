@@ -401,6 +401,7 @@ function () {
         });
     }
     let filesUpload = [];
+    var lstFile = null;
     function LayDSTaiLieu() {
         $.ajax({
             type: "GET",
@@ -428,22 +429,32 @@ function () {
                             $('#tbDoc').append("<div class=\"form-group\">" + htmlContent + "</div>");
                             htmlContent = "";
                         }
+                        
                     });
-                    var lstFile = $(".attachFile");
+                    lstFile = $(".attachFile");
                     $.each(lstFile, function (index, option) {
+                        //_initialPreview = [""];
+                        //_initialPreviewConfig = [{
+                        //    caption: "",
+                        //    url: "",
+                        //    type: "pdf",
+                        //    width: "120px"
+                        //}];
+                        let key = parseInt($(option).attr("key"));
                         $(option).fileinput({
-                            uploadUrl: '@Url.Action("UploadHoSo", "HoSo")' + "?key=" + $(option).attr("key"),
+                            
+                            uploadUrl: '/media/uploadtemp/'+ $(option).attr("key") ,
                             validateInitialCount: true,
                             maxFileSize: 25 * 1024,
                             msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>)'
-                                            + 'exceeds maximum allowed upload size of <b>{25} MB</b>. '
-                                            + 'Please retry your upload!',
-                            allowedFileExtensions: [ 'png', 'jpg','pdf'],
+                                + 'exceeds maximum allowed upload size of <b>{25} MB</b>. '
+                                + 'Please retry your upload!',
+                            allowedFileExtensions: ['png', 'jpg', 'pdf'],
                             initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
                             initialPreviewFileType: 'image',
                             overwriteInitial: false,
                             showUpload: false,
-                            showUploadedThumbs:false,
+                            showUploadedThumbs: false,
                             uploadAsync: false,
                             showClose: false,
                             showCaption: false,
@@ -453,24 +464,32 @@ function () {
                             browseOnZoneClick: true,
                             removeLabel: '',
                             dropZoneTitle: 'Kéo và thả tập tin vào đây',
-                            dropZoneClickTitle:'<br>(hoặc nhấp để chọn)',
-                            removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
+                            dropZoneClickTitle: '<br>(hoặc nhấp để chọn)',
+                            removeIcon: '<i class="glyphicon glyphicon-remove" id ="' + "btn-remove-" + key + '"></i>',
                             removeTitle: 'Cancel or reset changes',
                             elErrorContainer: '#kv-avatar-errors-2',
                             msgErrorClass: 'alert alert-block alert-danger',
                             //layoutTemplates: { main2: '{preview} ' + btnCust + ' {remove} {browse}' },
                             //layoutTemplates: { footer: '' },
+                            
+                            append: true
 
                         }).on("filebatchselected", function (event, files) {
-                            filesUpload = option.files;
-                            //$(option).fileinput("upload");
+                            
+                            $(option).fileinput("upload");
+                        }).on("filebeforedelete", function (event, files) {
+                            filesUpload = filesUpload.filter(p => p.Key != key)
+                            
+                        }).on('filebatchuploadsuccess', function (event, data) {
+                            var form = data.form, files = data.files, extra = data.extra,
+                                response = data.response, reader = data.reader;
+                            filesUpload.push({
+                                Key: response.initialPreviewConfig[0].key,
+                                FileName: response.initialPreviewConfig[0].caption,
+                                FileUrl: response.initialPreview
+                            })
                         });
-                        $(option).on('filesuccessremove', function (event, key, jqXHR, data) {
-                            console.log('Key = ' + key);
-                            //alert(1);
-                        })
-
-
+                        
                     });
                 }
 
@@ -481,6 +500,9 @@ function () {
                 showError(jqXHR, exception);
             }
         });
+    }
+    function removeImage() {
+        alert("add remove")
     }
     var hoso = {
         ID: 0,
@@ -506,7 +528,7 @@ function () {
         Ghichu: null
     };
     $('#btn_Temp').click(function (e) {
-        @*if ($('#txtHoTen').val() == "" || $('#txtHoTen').val() == undefined) {
+        if ($('#txtHoTen').val() == "" || $('#txtHoTen').val() == undefined) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng nhập tên",
@@ -516,7 +538,7 @@ function () {
             });
             return;
         }
-        if ($('#ddlDoiTac').val() == "0" || $('#ddlDoiTac').val() == undefined) {
+        @*if ($('#ddlDoiTac').val() == "0" || $('#ddlDoiTac').val() == undefined) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn đối tác",
@@ -525,8 +547,8 @@ function () {
                 showConfirmButton: true,
             });
             return;
-        }*@
-        @*if ($('#ddlSanPhamVay').val() == "0" || $('#ddlSanPhamVay').val() == undefined) {
+        }
+        if ($('#ddlSanPhamVay').val() == "0" || $('#ddlSanPhamVay').val() == undefined) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -564,13 +586,15 @@ function () {
                 if (data.success == true) {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
-                        text: data.Message.ErrorMessage,
+                        text: 'Thành công',
                         type: "success",
                         timer: 4000,
                         showConfirmButton: true,
                     }, function () {
-                            hoso.ID = data.data.ID;
+                            hoso.ID = data.data;
+                            uploadHoso(hoso.ID)
                     });
+
                 }
                 else {
                     swal({
@@ -581,7 +605,7 @@ function () {
                         showConfirmButton: true,
                     });
                 }
-                //uploadHoso()
+                
             },
             error: function (jqXHR, exception) {
                 showError(jqXHR, exception);
@@ -590,32 +614,20 @@ function () {
                 $('#panel_body').unblock();
             },
         });
-        function uploadHoso() {
+        function uploadHoso(hosoId) {
+            if (isNullOrNoItem(filesUpload))
+                return;
             
-            let files= filesUpload
-            var formData = new FormData();
-
-            for (var i = 0; i != files.length; i++) {
-                formData.append("files", files[i]);
-            }
 
             $.ajax({
-                processData: false,
-            url: "/HoSo/UploadHoso/1",
+                url: `/HoSo/UploadHoso/${hosoId}`,
                 type: "POST",
-                contentType: false,
-                data: formData,
-            success: function (data) {
-                if (data.Message.Result == true) {
-                    swal({
-                        title: "@Html.Raw(Global.Message_Title)",
-                        text: data.Message.ErrorMessage,
-                        type: "success",
-                        timer: 4000,
-                        showConfirmButton: true,
-                    }, function () {
-                        //window.location = window.location;
-                    });
+                contentType: "application/json;",
+                dataType: 'json',
+                data: JSON.stringify(filesUpload),
+                success: function (data) {
+                    if (data.success == true) {
+                    
                 }
                 else {
                     swal({
