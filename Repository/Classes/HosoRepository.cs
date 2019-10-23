@@ -20,6 +20,16 @@ namespace Repository.Classes
         {
 
         }
+        public async Task<HoSoInfoModel> GetHosoById(int hosoId)
+        {
+            var result = await connection.QueryFirstOrDefaultAsync<HoSoInfoModel>("sp_HO_SO_LayChiTiet",
+                new
+                {
+                    ID = hosoId
+                },
+                commandType: CommandType.StoredProcedure);
+            return result;
+        }
         public async Task<List<Hoso>> Gets()
         {
             var result = await connection.QueryAsync<Hoso>("select * from HO_SO");
@@ -98,14 +108,23 @@ namespace Repository.Classes
         }
         public async Task<bool> Update(HosoModel model)
         {
-            model.NgayTao = DateTime.Now;
+            model.NgayCapnhat = DateTime.Now;
             var p = generateHosoParameter(model);
             await connection.ExecuteAsync("sp_HO_SO_CapNhat", p,
                 commandType: CommandType.StoredProcedure);
             return true;
         }
-        
-        
+        public async Task<bool> CreateHosoDuyetXem(int hosoId)
+        {
+            await connection.ExecuteAsync("sp_HO_SO_DUYET_XEM_Them",
+                new
+                {
+                    ID = hosoId
+                },
+                commandType: CommandType.StoredProcedure);
+            return true;
+        }
+
         public async Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
             int maNhom,
             int maThanhvien,
@@ -136,9 +155,11 @@ namespace Repository.Classes
         private DynamicParameters generateHosoParameter(HosoModel model)
         {
             var p = new DynamicParameters();
-            if(model.ID >0)
+            if(model.ID >0 )
             {
                 p.Add("ID", model.ID);
+                p.Add("UpdatedUserId", model.MaNguoiCapnhat);
+                p.Add("UpdatedDate", model.NgayCapnhat);
             }
             else
             {

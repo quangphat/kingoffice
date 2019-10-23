@@ -147,8 +147,14 @@
   <data name="missing_money" xml:space="preserve">
     <value>Vui lòng chọn số tiền vay</value>
   </data>
+  <data name="missing_must_have_files" xml:space="preserve">
+    <value>Vui lòng đính kèm các tập tin</value>
+  </data>
   <data name="missing_ngaynhandon" xml:space="preserve">
     <value>Vui lòng nhập ngày nhận đơn</value>
+  </data>
+  <data name="missing_partner" xml:space="preserve">
+    <value>Vui lòng chọn đối tác</value>
   </data>
   <data name="missing_phone" xml:space="preserve">
     <value>Vui lòng nhập số điện thoại</value>

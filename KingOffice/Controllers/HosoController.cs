@@ -79,11 +79,11 @@ namespace KingOffice.Controllers
             return ToResponse(result);
         }
         [Authorize]
-        [HttpPost("test")]
-        public async Task<IActionResult> SaveDaft([FromBody]TestModel model)
+        [HttpPost("submit")]
+        public async Task<IActionResult> Submit([FromBody]HosoRequestModel model)
         {
-            //var result = await _bizHoso.Save(model, true);
-            return ToResponse(true);
+            var result = await _bizHoso.Save(model, false);
+            return ToResponse(result);
         }
         [Authorize]
         [HttpPost("UploadHoso/{hosoId}")]

@@ -12,7 +12,7 @@ namespace Repository.Interfaces
     {
         
         Task<bool> Update(HosoModel model);
-        
+        Task<HoSoInfoModel> GetHosoById(int hosoId);
         Task<int> Create(HosoModel model);
         Task<List<Hoso>> Gets();
         Task<int> CountHosoDuyet(int maNVDangNhap,
@@ -48,5 +48,6 @@ namespace Repository.Interfaces
             int dateType,
             string status
             );
+        Task<bool> CreateHosoDuyetXem(int hosoId);
     }
 }

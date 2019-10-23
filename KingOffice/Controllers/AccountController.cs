@@ -50,8 +50,8 @@ namespace KingOffice.Controllers
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim("Id", account.Id.ToString()));
             claims.Add(new Claim("UserName", account.UserName));
-            if (!string.IsNullOrWhiteSpace(account.Fullname))
-                claims.Add(new Claim("Fullname", account.Fullname));
+            if (!string.IsNullOrWhiteSpace(account.FullName))
+                claims.Add(new Claim("FullName", account.FullName));
             if (!string.IsNullOrWhiteSpace(account.Email))
                 claims.Add(new Claim("Email", account.Email));
             if (!string.IsNullOrWhiteSpace(account.Code))

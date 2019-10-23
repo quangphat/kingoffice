@@ -45,6 +45,25 @@ namespace Business.Classes
                 AddError(errors.note_length_cannot_more_than_200);
                 return 0;
             }
+            if(model.Doitac <=0)
+            {
+                AddError(errors.missing_partner);
+                return 0;
+            }
+            if (!isDraft)
+            {
+                var lstLoaiTailieu =await _rpTailieu.GetLoaiTailieuList();
+                if(lstLoaiTailieu!=null)
+                {
+                    var missingNames = BusinessExtension.GetFilesMissing(lstLoaiTailieu, model.files);
+                   if(missingNames.Length>0)
+                    {
+                        AddError($"{errors.missing_must_have_files} {missingNames.ToString()}");
+                        return 0;
+                    }
+                }
+            }
+            
             var hoso = _mapper.Map<HosoModel>(model);
             var validate = validateHoso(hoso, isDraft);
 
@@ -60,12 +79,17 @@ namespace Business.Classes
             model.KetQuaHS = (int)KetQuaHoSo.Trong;
             if (model.ID > 0)
             {
+                model.MaNguoiCapnhat = _process.User.Id;
                 await Update(hoso);
             }
             var hosoId = model.ID > 0 ? model.ID : await Create(hoso);
             if (hosoId > 0)
             {
                 await AddNote(hosoId, model.Ghichu);
+            }
+            if(!isDraft)
+            {
+
             }
             return hosoId;
         }
@@ -92,11 +116,7 @@ namespace Business.Classes
             var result = await _rpHoso.Update(hoso);
             if (result)
             {
-                var deleteAll =await _rpTailieu.RemoveAllTailieu(hoso.ID);
-                if(deleteAll)
-                {
-
-                }
+               
             }
             return hoso.ID;
         }
@@ -253,10 +273,13 @@ namespace Business.Classes
             {
                 return (false, errors.invalid_data);
             }
-
             if (string.IsNullOrWhiteSpace(hoso.TenKhachHang))
             {
                 return (false, errors.customername_must_not_be_empty);
+            }
+            if(hoso.Sanphamvay <=0)
+            {
+                return (false, errors.missing_product);
             }
             if (!isDraft)
             {

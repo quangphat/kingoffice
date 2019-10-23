@@ -151,11 +151,29 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lòng đính kèm các tập tin.
+        /// </summary>
+        public static string missing_must_have_files {
+            get {
+                return ResourceManager.GetString("missing_must_have_files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng nhập ngày nhận đơn.
         /// </summary>
         public static string missing_ngaynhandon {
             get {
                 return ResourceManager.GetString("missing_ngaynhandon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn đối tác.
+        /// </summary>
+        public static string missing_partner {
+            get {
+                return ResourceManager.GetString("missing_partner", resourceCulture);
             }
         }
         

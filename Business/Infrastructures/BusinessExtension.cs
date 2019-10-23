@@ -3,6 +3,7 @@ using Entity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -20,6 +21,25 @@ namespace Business.Infrastructures
                 + ((int)TrangThaiHoSo.DaDoiChieu).ToString() + ","
                 + ((int)TrangThaiHoSo.PCB).ToString() + ","
                 + ((int)TrangThaiHoSo.GiaiNgan).ToString();
+        }
+        public static string[] GetFilesMissing(List<LoaiTaiLieuModel> loaiTailieus, List<FileUploadModel> filesUpload)
+        {
+            var names = new List<string>();
+            if (!filesUpload.Any())
+            {
+                return loaiTailieus.Where(p => p.BatBuoc == 1).Select(p => p.Ten).ToArray();
+
+            }
+
+            var keys = filesUpload.Select(p => Convert.ToInt32(p.Key)).ToList();
+            var mustHaveIds = loaiTailieus.Where(p => p.BatBuoc == 1).Select(p => p.ID).ToList();
+            foreach (int id in mustHaveIds)
+            {
+                if (!keys.Contains(id))
+                    names.Add(loaiTailieus.FirstOrDefault(p => p.ID == id).Ten);
+
+            }
+            return names.ToArray();
         }
         public static DateTime ConvertddMMyyyyToDateTime(this string str)
         {
@@ -118,12 +138,13 @@ namespace Business.Infrastructures
                 Directory.CreateDirectory(pathDay);
             string path = System.IO.Path.Combine(pathDay, fileName);
             string url = "/Upload/HoSo/" + pathTemp + "/" + fileName;
-            return new FileModel {
+            return new FileModel
+            {
                 FileUrl = url,
                 Name = fileName,
                 FullPath = path
             };
-            
+
         }
     }
 }

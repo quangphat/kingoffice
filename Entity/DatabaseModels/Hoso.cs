@@ -17,7 +17,9 @@ namespace Entity.DatabaseModels
         public string SDT2 { get; set; }
         public int GioTinh { get; set; }
         public DateTime NgayTao { get; set; }
+        public DateTime NgayCapnhat { get; set; }
         public int MaNguoiTao { get; set; }
+        public int MaNguoiCapnhat { get; set; }
         public int HoSoCuaAi { get; set; }
         public int? KetQuaHS { get; set; }
         public DateTime? NgayNhanDon { get; set; }

@@ -81,17 +81,17 @@
                         </div>
                     </div>
                     @*<div class="form-group">
-                        <label class="col-sm-2 control-label no-padding-right">Sale Code</label>
-                        <div class="col-sm-4">
-                            <select id="ddlInternalCode" class="chosen-select form-control" data-placeholder="Chọn Sale Code">
-                                <option value="0"></option>
-                            </select>
-                        </div>
-                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên nhân viên</label>
-                        <div class="col-sm-4">
-                            <input type="text" id="txtTenNV" data-toggle-tt="tooltip" placeholder="Tên nhân viên" class="form-control" />
-                        </div>
-                    </div>*@
+                            <label class="col-sm-2 control-label no-padding-right">Sale Code</label>
+                            <div class="col-sm-4">
+                                <select id="ddlInternalCode" class="chosen-select form-control" data-placeholder="Chọn Sale Code">
+                                    <option value="0"></option>
+                                </select>
+                            </div>
+                            <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên nhân viên</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="txtTenNV" data-toggle-tt="tooltip" placeholder="Tên nhân viên" class="form-control" />
+                            </div>
+                        </div>*@
                     <div class="form-group">
                         <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Courier Code</label>
                         <div class="col-sm-4">
@@ -184,7 +184,16 @@
                     </div>
                 </form>
             </div>
+            <div class="col-xs-12">
+                <div class="col-md-8 activity-log">
+                    <div class="timline-addNote only-new-note">
+                        <div class="timeline-date-event timline-date-event--margin mt-0" id="dsGhichu">
 
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -206,25 +215,25 @@
 </script>
 <script>
     jQuery.fn.ForceNumericOnly =
-function () {
-    return this.each(function () {
-        $(this).keydown(function (e) {
-            var key = e.charCode || e.keyCode || 0;
-            // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
-            // home, end, period, and numpad decimal
-            return (
-                key == 8 ||
-                key == 9 ||
-                key == 13 ||
-                key == 46 ||
-                key == 110 ||
-                key == 190 ||
-                (key >= 35 && key <= 40) ||
-                (key >= 48 && key <= 57) ||
-                (key >= 96 && key <= 105));
-        });
-    });
-};
+        function () {
+            return this.each(function () {
+                $(this).keydown(function (e) {
+                    var key = e.charCode || e.keyCode || 0;
+                    // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+                    // home, end, period, and numpad decimal
+                    return (
+                        key == 8 ||
+                        key == 9 ||
+                        key == 13 ||
+                        key == 46 ||
+                        key == 110 ||
+                        key == 190 ||
+                        (key >= 35 && key <= 40) ||
+                        (key >= 48 && key <= 57) ||
+                        (key >= 96 && key <= 105));
+                });
+            });
+        };
     $("#txtDienThoai").ForceNumericOnly();
     $("#txtDienThoai2").ForceNumericOnly();
     $("#txtTienDeNghiVay").ForceNumericOnly();
@@ -348,9 +357,9 @@ function () {
         });
     }
 
-    
+
     function getProductByPartnetId(maDoiTac) {
-        
+
         let doitacId = parseInt(maDoiTac)
         $.ajax({
             type: "GET",
@@ -429,7 +438,7 @@ function () {
                             $('#tbDoc').append("<div class=\"form-group\">" + htmlContent + "</div>");
                             htmlContent = "";
                         }
-                        
+
                     });
                     lstFile = $(".attachFile");
                     $.each(lstFile, function (index, option) {
@@ -442,7 +451,7 @@ function () {
                         //}];
                         let key = parseInt($(option).attr("key"));
                         $(option).fileinput({
-                            
+
                             uploadUrl: '/media/uploadtemp/'+ $(option).attr("key") ,
                             validateInitialCount: true,
                             maxFileSize: 25 * 1024,
@@ -471,15 +480,15 @@ function () {
                             msgErrorClass: 'alert alert-block alert-danger',
                             //layoutTemplates: { main2: '{preview} ' + btnCust + ' {remove} {browse}' },
                             //layoutTemplates: { footer: '' },
-                            
+
                             append: true
 
                         }).on("filebatchselected", function (event, files) {
-                            
+
                             $(option).fileinput("upload");
                         }).on("filebeforedelete", function (event, files) {
                             filesUpload = filesUpload.filter(p => p.Key != key)
-                            
+
                         }).on('filebatchuploadsuccess', function (event, data) {
                             var form = data.form, files = data.files, extra = data.extra,
                                 response = data.response, reader = data.reader;
@@ -489,7 +498,7 @@ function () {
                                 FileUrl: response.initialPreview
                             })
                         });
-                        
+
                     });
                 }
 
@@ -521,14 +530,51 @@ function () {
         NgayNhanDon: null,
         MaTrangThai: 0,
         Sanphamvay: 0,
+        Doitac:0,
         CoBaoHiem: 0,
         SoTienVay: 0,
         HanVay: 0,
         TenCuaHang: null,
         Ghichu: null
     };
+    function renderGhichu(noidung) {
+        if (isNullOrWhiteSpace(noidung))
+            return
+        $('#dsGhichu').prepend(
+            '<div class="timeline-event-content  active">' +
+                '<div class="timeline-item">' +
+                    '<div class="timeline-body">' +
+                        '<div class="timeline__message-container">'
+                            + noidung +
+            '</div></div></div></div>'
+
+        )
+    }
+    function getModel() {
+        hoso.TenKhachHang = $('#txtHoTen').val();
+        hoso.SDT = $('#txtDienThoai').val();
+        hoso.SDT2 = $('#txtDienThoai2').val();
+        hoso.ngaynhandon = $('#txtToDate').val();
+        hoso.CMND = $('#txtCMND').val();
+        hoso.GioTinh = parseInt($('#ddlGioiTinh').val());
+        hoso.MaKhuVuc = parseInt($('#ddlHuyen').val());
+        hoso.DiaChi = $('#txtDiaChi').val();
+        hoso.CourierCode = parseInt($('#ddlCourier').val());
+        hoso.Sanphamvay = parseInt($('#ddlSanPhamVay').val());
+        hoso.TenCuaHang = $('#txtTenCuaHang').val();
+        hoso.CoBaoHiem = $('#cbbaohiem').is(":checked") == false ? 0 : 1;
+        hoso.HanVay = parseInt($('#spnThoiHanVay').val());
+        hoso.Ghichu = $('#txtGhiChu').val();
+        hoso.Doitac = parseInt($('#ddlDoiTac').val());
+        hoso.files = null;
+        hoso.SoTienVay = isNullOrWhiteSpace($('#txtTienDeNghiVay').val().replace(/\./g, '')) ? 0 : parseFloat($('#txtTienDeNghiVay').val().replace(/\./g, ''));
+        return hoso;
+    }
     $('#btn_Temp').click(function (e) {
-        if ($('#txtHoTen').val() == "" || $('#txtHoTen').val() == undefined) {
+        let model = getModel();
+        if (isNullOrUndefined(hoso))
+            return;
+        if (isNullOrWhiteSpace(model.TenKhachHang)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng nhập tên",
@@ -538,7 +584,7 @@ function () {
             });
             return;
         }
-        @*if ($('#ddlDoiTac').val() == "0" || $('#ddlDoiTac').val() == undefined) {
+        if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn đối tác",
@@ -548,7 +594,7 @@ function () {
             });
             return;
         }
-        if ($('#ddlSanPhamVay').val() == "0" || $('#ddlSanPhamVay').val() == undefined) {
+        if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -557,33 +603,18 @@ function () {
                 showConfirmButton: true,
             });
             return;
-        }*@
-        if (isNullOrUndefined(hoso))
-            return;
-        hoso.TenKhachHang = $('#txtHoTen').val();
-        hoso.SDT = $('#txtDienThoai').val();
-        hoso.SDT2 = $('#txtDienThoai2').val();
-        hoso.ngaynhandon = $('#txtToDate').val();
-        hoso.CMND = $('#txtCMND').val();
-        hoso.GioTinh = parseInt( $('#ddlGioiTinh').val());
-        hoso.MaKhuVuc = parseInt($('#ddlHuyen').val());
-        hoso.DiaChi = $('#txtDiaChi').val();
-        hoso.CourierCode = parseInt($('#ddlCourier').val());
-        hoso.Sanphamvay = parseInt($('#ddlSanPhamVay').val());
-        hoso.TenCuaHang = $('#txtTenCuaHang').val();
-        hoso.CoBaoHiem = $('#cbbaohiem').is(":checked") == false ? 0 :1;
-        hoso.HanVay = parseInt($('#spnThoiHanVay').val());
-        hoso.Ghichu = $('#txtGhiChu').val();
-        hoso.SoTienVay = isNullOrWhiteSpace($('#txtTienDeNghiVay').val().replace(/\./g, ''))?0: parseFloat($('#txtTienDeNghiVay').val().replace(/\./g, ''));
+        }
+
+
         $.ajax({
             traditional: true,
             url: '/hoso/draft',
             type: "POST",
             contentType: "application/json;",
             dataType: 'json',
-            data: JSON.stringify(hoso),
+            data: JSON.stringify(model),
             success: function (data) {
-                if (data.success == true) {
+                if (data.success == true && data.data>0) {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
                         text: 'Thành công',
@@ -592,6 +623,9 @@ function () {
                         showConfirmButton: true,
                     }, function () {
                             hoso.ID = data.data;
+                            renderGhichu(hoso.Ghichu)
+                            hoso.Ghichu =''
+                            $("#txtGhiChu").val('')
                             uploadHoso(hoso.ID)
                     });
 
@@ -605,7 +639,7 @@ function () {
                         showConfirmButton: true,
                     });
                 }
-                
+
             },
             error: function (jqXHR, exception) {
                 showError(jqXHR, exception);
@@ -614,11 +648,9 @@ function () {
                 $('#panel_body').unblock();
             },
         });
-        function uploadHoso(hosoId) {
+        function uploadHoso(hosoId, reloadOnSuccess = false) {
             if (isNullOrNoItem(filesUpload))
                 return;
-            
-
             $.ajax({
                 url: `/HoSo/UploadHoso/${hosoId}`,
                 type: "POST",
@@ -627,7 +659,9 @@ function () {
                 data: JSON.stringify(filesUpload),
                 success: function (data) {
                     if (data.success == true) {
-                    
+                        if (reloadOnSuccess == true) {
+                            window.location = window.location;
+                        }
                 }
                 else {
                     swal({
@@ -650,8 +684,20 @@ function () {
     });
 
     $('#btn_Save').click(function (e) {
-
-        if ($('#ddlDoiTac').val() == "0" || $('#ddlDoiTac').val() == undefined ) {
+        let model = getModel();
+        if (isNullOrUndefined(hoso))
+            return;
+        if (isNullOrWhiteSpace(model.TenKhachHang)) {
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng nhập tên",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
+            return;
+        }
+        if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn đối tác",
@@ -661,7 +707,7 @@ function () {
             });
             return;
         }
-        if ($('#ddlSanPhamVay').val() == "0" || $('#ddlSanPhamVay').val() == undefined) {
+        if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -672,7 +718,9 @@ function () {
             return;
         }
 
-        if ($('#txtDienThoai').val().length != 10) {
+
+        if (isNullOrWhiteSpace(model.SDT)
+            || model.SDT.length != 10) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số điện thoại di động phải đúng 10 số!",
@@ -682,17 +730,19 @@ function () {
             });
             return;
         }
-        if ($('#txtDienThoai2').val().length > 0 && $('#txtDienThoai2').val().length != 10) {
+        if (isNullOrWhiteSpace(model.SDT2)
+            || model.SDT2.length != 10) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
-                text: "Số điện thoại di động 2 phải đúng 10 số!",
+                text: "Số điện thoại nhân viên phải đúng 10 số!",
                 type: "error",
                 timer: 4000,
                 showConfirmButton: true,
             });
             return;
         }
-        if ($('#txtCMND').val().length != 9 && $('#txtCMND').val().length != 12) {
+        if (isNullOrWhiteSpace(model.CMND) ||
+            (model.CMND.length != 9 && model.CMND.length != 12)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số CMND chỉ 9 hoặc 12 số!",
@@ -702,24 +752,16 @@ function () {
             });
             return;
         }
-        var objectSend = JSON.stringify({
-            'hoten': $('#txtHoTen').val(), 'phone': $('#txtDienThoai').val(),
-            'phone2': $('#txtDienThoai2').val(), 'ngayNhanDon': $('#txtToDate').val(),
-            'hoSoCuaAi': $('#ddlInternalCode').val(), 'cmnd': $('#txtCMND').val(), 'gioiTinh': $('#ddlGioiTinh').val(),
-            'maKhuVuc': $('#ddlHuyen').val(), 'diaChi': $('#txtDiaChi').val(),'courier':$('#ddlCourier').val(),
-            'sanPhamVay': $('#ddlSanPhamVay').val(), 'tenCuaHang': $('#txtTenCuaHang').val(),
-            'baoHiem': $('#cbbaohiem').is(":checked"), 'thoiHanVay': $('#spnThoiHanVay').val(),
-            'ghiChu': $('#txtGhiChu').val(),
-            'soTienVay': $('#txtTienDeNghiVay').val().replace(/\./g, '')
-        });
+        model.files = filesUpload
         $.ajax({
             traditional: true,
-            url: '@Url.Action("Save", "HoSo")',
+            url: '/hoso/submit',
             type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: objectSend,
+            contentType: "application/json;",
+            dataType: 'json',
+            data: JSON.stringify(model),
             success: function (data) {
-                if (data.Message.Result == true) {
+                if (data.success == true && data.data>0) {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
                         text: data.Message.ErrorMessage,
@@ -727,13 +769,14 @@ function () {
                         timer: 4000,
                         showConfirmButton: true,
                     }, function () {
-                        window.location = window.location;
+                            uploadHoso(hoso.ID,true);
+                        
                     });
                 }
                 else {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
-                        text: data.Message.ErrorMessage,
+                        text: data.error.code,
                         type: "error",
                         timer: 4000,
                         showConfirmButton: true,

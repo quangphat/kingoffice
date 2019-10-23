@@ -9,6 +9,8 @@ namespace Entity.ViewModels
     {
         public string Ghichu { get; set; }
         public string ngaynhandon { get; set; }
+        public int Doitac { get; set; }
+        public  List<FileUploadModel> files { get; set; }
     }
     public class TestModel
     {
