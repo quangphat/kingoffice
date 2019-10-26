@@ -70,10 +70,10 @@ namespace KingOffice.Infrastructures
                     account.Email = list.FirstOrDefault((Claim a) => a.Type == "Email")?.Value;
                     account.Role = list.FirstOrDefault((Claim a) => a.Type == "Role")?.Value;
                     account.FullName = list.FirstOrDefault((Claim a) => a.Type == "FullName")?.Value;
-                    string scopeStr = list.FirstOrDefault((Claim a) => a.Type == "Scope")?.Value;
+                    string scopeStr = list.FirstOrDefault((Claim a) => a.Type == "Scopes")?.Value;
                     if (!string.IsNullOrWhiteSpace(scopeStr))
                     {
-                        account.Scope = scopeStr;
+                        account.Scopes = scopeStr.Split(',').ToArray();
                     }
                     string menuStr = list.FirstOrDefault((Claim a) => a.Type == "MenuIds")?.Value;
                     if (!string.IsNullOrWhiteSpace(menuStr))

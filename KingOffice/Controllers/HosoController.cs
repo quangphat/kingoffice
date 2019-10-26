@@ -41,14 +41,14 @@ namespace KingOffice.Controllers
             }
 
         }
-        [Authorize]
+        [MyAuthorize(Roles = RoleConsts.hoso_read)]
         [HttpGet("notification")]
         public async Task<IActionResult> GetNotificationHosoNotApprove()
         {
             var result = await _bizHoso.GetHosoNotApprove();
             return ToResponse(result);
         }
-        [Authorize]
+        [MyAuthorize(Roles = RoleConsts.hoso_write)]
         [HttpGet("AddNew")]
         public ActionResult AddNew()
         {

@@ -40,6 +40,7 @@ namespace Business.Classes
             }
 
             var nhanvien = await _rpAccount.Login(username);
+
             if (nhanvien == null)
             {
                 AddError(nameof(errors.invalid_username_or_pass));
@@ -48,27 +49,14 @@ namespace Business.Classes
 
             if (nhanvien.Mat_Khau != Utils.getMD5(password))
                 return null;
-
+            var scope = await _rpAccount.GetScopesByRole(nhanvien.Role);
             var account = _mapper.Map<Account>(nhanvien);
+            account.Scopes = scope.ToArray();
             var menus = await _rpUserRoleMenu.GetMenuByUserRole(account.Role);
             if (menus != null)
             {
                 account.MenuIds = menus.Select(p => p.MenuId).ToList();
             }
-            //var tokenHandler = new JwtSecurityTokenHandler();
-            //var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            //var tokenDescriptor = new SecurityTokenDescriptor
-            //{
-            //    Subject = new ClaimsIdentity(new Claim[]
-            //    {
-            //        new Claim(ClaimTypes.Name, account.UserName),
-            //        new Claim(ClaimTypes.Role, account.Role)
-            //    }),
-            //    Expires = DateTime.UtcNow.AddDays(7),
-            //    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            //};
-            //var token = tokenHandler.CreateToken(tokenDescriptor);
-            //account.Token = tokenHandler.WriteToken(token);
             return account;
         }
     }

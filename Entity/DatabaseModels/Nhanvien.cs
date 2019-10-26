@@ -14,6 +14,5 @@ namespace Entity.DatanbaseModels
         public string Dien_Thoai { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
-        public string Scope { get; set; }
     }
 }

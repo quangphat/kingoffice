@@ -3,6 +3,8 @@ using Entity.DatanbaseModels;
 using Microsoft.Extensions.Configuration;
 using Repository.Entities;
 using Repository.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Repository.Classes
@@ -13,6 +15,14 @@ namespace Repository.Classes
         {
 
         }
+
+        public async Task<List<string>> GetScopesByRole(string role)
+        {
+            var result = await connection.QueryAsync<string>($"select Scope from ScopeRole " +
+                $"where role = '{role}'");
+            return result.ToList();
+        }
+
         public async Task<Nhanvien> Login(string userName)
         {
             var result = await connection.QueryFirstOrDefaultAsync<Nhanvien>($"select * from NHAN_VIEN " +

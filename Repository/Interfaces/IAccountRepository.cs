@@ -10,6 +10,7 @@ namespace Repository.Interfaces
     public interface IAccountRepository
     {
         Task<Nhanvien> Login(string userName);
+        Task<List<string>> GetScopesByRole(string role);
     }
 }
 
