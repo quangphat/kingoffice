@@ -58,9 +58,13 @@ namespace KingOffice.Controllers
                 claims.Add(new Claim("Code", account.Code));
             if (!string.IsNullOrWhiteSpace(account.Role))
                 claims.Add(new Claim("Role", account.Role));
-            var menusStr = string.Join(",", account.MenuIds.ToArray());
+            
             if (account.MenuIds!=null && account.MenuIds.Any())
+            {
+                var menusStr = string.Join(",", account.MenuIds.ToArray());
                 claims.Add(new Claim("MenuIds", menusStr));
+            }
+                
             if (!string.IsNullOrWhiteSpace(account.Scope))
             {
                 claims.Add(new Claim("Scope", String.Join(",", account.Scope)));
