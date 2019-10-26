@@ -1,6 +1,6 @@
 ﻿using Entity.DatabaseModels;
 using Entity.ViewModels;
-using Repository.Entities;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +14,6 @@ namespace Repository.Interfaces
         Task<bool> Update(HosoModel model);
         Task<HoSoInfoModel> GetHosoById(int hosoId);
         Task<int> Create(HosoModel model);
-        Task<List<Hoso>> Gets();
         Task<int> CountHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,

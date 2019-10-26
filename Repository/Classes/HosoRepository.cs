@@ -1,9 +1,10 @@
 ﻿using Dapper;
 using Entity.DatabaseModels;
 using Entity.Enums;
+using Entity.Infrastructures;
 using Entity.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Repository.Entities;
+
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Repository.Classes
 {
     public class HosoRepository : BaseRepository, IHosoRepository
     {
-        public HosoRepository(IConfiguration configuration) : base(configuration)
+        public HosoRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
         {
 
         }
@@ -29,11 +30,6 @@ namespace Repository.Classes
                 },
                 commandType: CommandType.StoredProcedure);
             return result;
-        }
-        public async Task<List<Hoso>> Gets()
-        {
-            var result = await connection.QueryAsync<Hoso>("select * from HO_SO");
-            return result.ToList();
         }
         public async Task<int> CountHosoDuyet(int maNVDangNhap,
             int maNhom,

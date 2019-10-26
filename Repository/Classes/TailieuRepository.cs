@@ -1,7 +1,7 @@
 using Dapper;
+using Entity.Infrastructures;
 using Entity.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Repository.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace Repository.Classes
 {
     public class TailieuRepository : BaseRepository, ITailieuRepository
     {
-        public TailieuRepository(IConfiguration configuration) : base(configuration)
+        public TailieuRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
         {
 
         }

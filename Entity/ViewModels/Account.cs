@@ -15,7 +15,7 @@ namespace Entity.ViewModels
         public string Token { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }
-        public string[] Scopes { get; set; }
+        public string[] Permissions { get; set; }
         public string Phone { get; set; }
         public List<int> MenuIds { get; set; }
     }

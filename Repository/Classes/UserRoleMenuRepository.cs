@@ -1,7 +1,7 @@
 using Dapper;
 using Entity.DatabaseModels;
+using Entity.Infrastructures;
 using Microsoft.Extensions.Configuration;
-using Repository.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Repository.Classes
 {
     public class UserRoleMenuRepository : BaseRepository, IUserRoleMenuRepository
     {
-        public UserRoleMenuRepository(IConfiguration configuration) : base(configuration)
+        public UserRoleMenuRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
         {
 
         }

@@ -64,9 +64,9 @@ namespace KingOffice.Controllers
                 var menusStr = string.Join(",", account.MenuIds.ToArray());
                 claims.Add(new Claim("MenuIds", menusStr));
             }
-            if (account.Scopes.Any())
+            if (account.Permissions.Any())
             {
-                claims.Add(new Claim("Scopes", string.Join(",", account.Scopes.ToArray())));
+                claims.Add(new Claim("Scopes", string.Join(",", account.Permissions.ToArray())));
             }
             var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             

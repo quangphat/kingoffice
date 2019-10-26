@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Business.Infrastructures
 {
@@ -21,6 +22,20 @@ namespace Business.Infrastructures
                 + ((int)TrangThaiHoSo.DaDoiChieu).ToString() + ","
                 + ((int)TrangThaiHoSo.PCB).ToString() + ","
                 + ((int)TrangThaiHoSo.GiaiNgan).ToString();
+        }
+        public static bool IsValidEmail(string email, int maxLength = 255)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+            if (email.Length > maxLength)
+            {
+                return false;
+            }
+
+            var patternEmail =
+            "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
+
+            return Regex.IsMatch(email, patternEmail);
         }
         public static string[] GetFilesMissing(List<LoaiTaiLieuModel> loaiTailieus, List<FileUploadModel> filesUpload)
         {

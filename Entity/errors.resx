@@ -120,11 +120,17 @@
   <data name="customername_must_not_be_empty" xml:space="preserve">
     <value>Tên khách hàng không được để trống</value>
   </data>
+  <data name="email_cannot_be_null" xml:space="preserve">
+    <value>Email không được để trống</value>
+  </data>
   <data name="error_login_expected" xml:space="preserve">
     <value>Vui lòng đăng nhập</value>
   </data>
   <data name="invalid_data" xml:space="preserve">
     <value>Dữ liệu không hợp lệ</value>
+  </data>
+  <data name="invalid_email" xml:space="preserve">
+    <value>Email không hợp lệ</value>
   </data>
   <data name="invalid_id" xml:space="preserve">
     <value>Id không hợp lệ</value>
@@ -164,6 +170,9 @@
   </data>
   <data name="note_length_cannot_more_than_200" xml:space="preserve">
     <value>Nội dung ghi chú không được nhiều hơn 200 ký tự</value>
+  </data>
+  <data name="password_not_match" xml:space="preserve">
+    <value>Mật khẩu không khớp</value>
   </data>
   <data name="product_code_inuse" xml:space="preserve">
     <value>Mã sản phẩm đang được sử dung bởi hồ sơ khác, vui lòng chọn sản phẩm khác</value>

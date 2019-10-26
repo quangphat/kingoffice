@@ -70,6 +70,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email không được để trống.
+        /// </summary>
+        public static string email_cannot_be_null {
+            get {
+                return ResourceManager.GetString("email_cannot_be_null", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng đăng nhập.
         /// </summary>
         public static string error_login_expected {
@@ -84,6 +93,15 @@ namespace Entity {
         public static string invalid_data {
             get {
                 return ResourceManager.GetString("invalid_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email không hợp lệ.
+        /// </summary>
+        public static string invalid_email {
+            get {
+                return ResourceManager.GetString("invalid_email", resourceCulture);
             }
         }
         
@@ -201,6 +219,15 @@ namespace Entity {
         public static string note_length_cannot_more_than_200 {
             get {
                 return ResourceManager.GetString("note_length_cannot_more_than_200", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mật khẩu không khớp.
+        /// </summary>
+        public static string password_not_match {
+            get {
+                return ResourceManager.GetString("password_not_match", resourceCulture);
             }
         }
         

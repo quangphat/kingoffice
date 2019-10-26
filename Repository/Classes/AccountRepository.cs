@@ -1,9 +1,10 @@
 using Dapper;
 using Entity.DatanbaseModels;
+using Entity.Infrastructures;
 using Microsoft.Extensions.Configuration;
-using Repository.Entities;
 using Repository.Interfaces;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,15 +12,14 @@ namespace Repository.Classes
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        public AccountRepository(IConfiguration configuration) : base(configuration)
+        public AccountRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
         {
 
         }
 
-        public async Task<List<string>> GetScopesByRole(string role)
+        public async Task<List<string>> GetPermissionByUserId(int userId)
         {
-            var result = await connection.QueryAsync<string>($"select Scope from ScopeRole " +
-                $"where role = '{role}'");
+            var result = await connection.QueryAsync<string>("sp_getPermissionByUserId",new { @userId = userId}, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
 

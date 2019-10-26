@@ -8,6 +8,7 @@ namespace Entity.DatabaseModels
     {
         public int Id { get; set; }
         public int MenuId { get; set; }
-        public string UserRole { get; set; }
+        public string RoleCode { get; set; }
+        public int RoleId { get; set; }
     }
 }

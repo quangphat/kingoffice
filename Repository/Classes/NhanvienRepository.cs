@@ -1,7 +1,8 @@
 using Dapper;
+using Entity.DatanbaseModels;
+using Entity.Infrastructures;
 using Entity.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Repository.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,26 @@ namespace Repository.Classes
 {
     public class NhanvienRepository : BaseRepository, INhanvienRepository
     {
-        public NhanvienRepository(IConfiguration configuration) : base(configuration)
+        public NhanvienRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
         {
 
+        }
+        public async Task<int> Create(Nhanvien entity)
+        {
+            var p = AddOutputParam("id");
+            p.Add("Ma", entity.Ma);
+            p.Add("Ten_Dang_Nhap", entity.Ten_Dang_Nhap);
+            p.Add("Mat_Khau", entity.Mat_Khau);
+            p.Add("Ho_Ten", entity.Ho_Ten);
+            p.Add("Dien_Thoai", entity.Dien_Thoai);
+            p.Add("Email", entity.Email);
+            p.Add("Role", entity.Role);
+            p.Add("CreatedTime", DateTime.Now);
+            p.Add("CreatedBy", _process.User.Id);
+            p.Add("UpdatedTime", DateTime.Now);
+            p.Add("UpdatedBy",_process.User.Id);
+            await connection.ExecuteAsync("sp_InsertUser",p,commandType:CommandType.StoredProcedure);
+            return  p.Get<int>("id"); ;
         }
         public async Task<List<OptionSimpleModel>> GetListCourierSimple()
         {

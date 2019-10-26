@@ -1,5 +1,6 @@
+using Entity.DatanbaseModels;
 using Entity.ViewModels;
-using Repository.Entities;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,7 @@ namespace Repository.Interfaces
 {
     public interface INhanvienRepository
     {
+        Task<int> Create(Nhanvien entity);
         Task<List<OptionSimpleModel>> GetListCourierSimple();
         Task<List<OptionSimpleModelV2>> GetListByUserId(int userId);
     }

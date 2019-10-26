@@ -49,9 +49,9 @@ namespace Business.Classes
 
             if (nhanvien.Mat_Khau != Utils.getMD5(password))
                 return null;
-            var scope = await _rpAccount.GetScopesByRole(nhanvien.Role);
+            var scope = await _rpAccount.GetPermissionByUserId(nhanvien.ID);
             var account = _mapper.Map<Account>(nhanvien);
-            account.Scopes = scope.ToArray();
+            account.Permissions = scope.ToArray();
             var menus = await _rpUserRoleMenu.GetMenuByUserRole(account.Role);
             if (menus != null)
             {

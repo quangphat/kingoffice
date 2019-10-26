@@ -1,8 +1,9 @@
 using Dapper;
 using Entity.Enums;
+using Entity.Infrastructures;
 using Entity.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Repository.Entities;
+
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Repository.Classes
 {
     public class AutoIdRepository : BaseRepository, IAutoIdRepository
     {
-        public AutoIdRepository(IConfiguration configuration) : base(configuration)
+        public AutoIdRepository(IConfiguration configuration, CurrentProcess process) : base(configuration,process)
         {
 
         }

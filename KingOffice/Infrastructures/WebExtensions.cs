@@ -73,7 +73,7 @@ namespace KingOffice.Infrastructures
                     string scopeStr = list.FirstOrDefault((Claim a) => a.Type == "Scopes")?.Value;
                     if (!string.IsNullOrWhiteSpace(scopeStr))
                     {
-                        account.Scopes = scopeStr.Split(',').ToArray();
+                        account.Permissions = scopeStr.Split(',').ToArray();
                     }
                     string menuStr = list.FirstOrDefault((Claim a) => a.Type == "MenuIds")?.Value;
                     if (!string.IsNullOrWhiteSpace(menuStr))

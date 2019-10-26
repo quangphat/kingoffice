@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Entity.DatanbaseModels
 {
-    public class Nhanvien
+    public class Nhanvien : BaseSqlEntity
     {
         public int ID { get; set; }
         public string Ten_Dang_Nhap { get; set; }

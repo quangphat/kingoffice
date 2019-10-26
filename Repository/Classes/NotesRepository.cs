@@ -1,7 +1,7 @@
 using Dapper;
 using Entity.DatabaseModels;
+using Entity.Infrastructures;
 using Microsoft.Extensions.Configuration;
-using Repository.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Repository.Classes
 {
     public class NotesRepository : BaseRepository, INotesRepository
     {
-        public NotesRepository(IConfiguration configuration) : base(configuration)
+        public NotesRepository(IConfiguration configuration, CurrentProcess process) : base(configuration,process)
         {
 
         }

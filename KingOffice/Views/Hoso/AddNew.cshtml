@@ -291,8 +291,8 @@
 
     function LayDSCourier() {
         $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetCourierSimpleList", "Nhanvien")',
+            type: "GET",
+            url: '/employee/courier',
             data: {},
             success: function (data) {
                 $('#ddlCourier').empty();
