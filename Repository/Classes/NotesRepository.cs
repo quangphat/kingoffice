@@ -15,7 +15,7 @@ namespace Repository.Classes
 {
     public class NotesRepository : BaseRepository, INotesRepository
     {
-        public NotesRepository(IConfiguration configuration, CurrentProcess process) : base(configuration,process)
+        public NotesRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

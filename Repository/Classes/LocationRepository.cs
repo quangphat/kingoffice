@@ -14,7 +14,7 @@ namespace Repository.Classes
 {
     public class LocationRepository : BaseRepository, ILocationRepository
     {
-        public LocationRepository(IConfiguration configuration, CurrentProcess process) : base(configuration,process)
+        public LocationRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

@@ -7,7 +7,7 @@
     
 }
 <script type="text/javascript">
-    SetActiveMenu('@ViewBag.formindex', 2);
+   
 </script>
 <div class="main-content-inner">
     <div class="breadcrumbs" id="breadcrumbs">
@@ -190,6 +190,10 @@
     var totalPage = 1;
     var totalRecord = 0;
     $(document).ready(function e() {
+        setTimeout(function () {
+            SetActiveMenu('@ViewBag.formindex', 2)
+        }, 500);
+        
         window.addEventListener('popstate', function (e) {
             queries = new URLSearchParams(window.location.search)
             bindQueries()
@@ -476,7 +480,7 @@
                   'loaiNgay': $('input[name="radio-ngay"]:checked').val()
             },
             success: function (response) {
-                if (response.success && !isNullOrNoItem(response.data.Datas)) {
+                if (response.success ) {
                     totalRecord = response.data.TotalRecord;
                     var search = this.url.replace("/DuyetHoSo/TimHS", "");
                     queries = new URLSearchParams(search)

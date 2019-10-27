@@ -13,13 +13,13 @@ namespace Repository.Classes
 {
     public class UserRoleMenuRepository : BaseRepository, IUserRoleMenuRepository
     {
-        public UserRoleMenuRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
+        public UserRoleMenuRepository(IConfiguration configuration) : base(configuration)
         {
 
         }
         public async Task<List<UserRoleMenu>> GetMenuByUserRole(string role)
         {
-            var result = await connection.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where UserRole = '{role}'");
+            var result = await connection.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where RoleCode = '{role}'");
             return result.ToList();
         }
     }

@@ -66,7 +66,9 @@
              success: function (data) {
                  if (data.success == true && !isNullOrNoItem(data.data)) {
                      renderNotificationHosoNotApprove(data.data)
+                     
                  }
+                 $("#fullname").text(document["account"].fullName)
             },
             error: function (jqXHR, exception) { if (jqXHR.status != 0) alert('Error'); }
          });
@@ -113,7 +115,7 @@
                 + "</ul>"
                 + "</li>"
             $("#notification").prepend(mainContent)
-            $("#fullname").text(document["account"].fullName)
+            
            
         }
 

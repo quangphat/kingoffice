@@ -33,10 +33,18 @@
                 { id: 1, parentId: 0, text: "Trang chủ", icon: "menu-icon home", index: "0", href: "/Home/Index" },
                 { id: 2, parentId: 1, text: "Giới thiệu", icon: "", index: "0_1", href: "/Home/Index" },
                 { id: 3, parentId: 1, text: "Phiên bản", icon: "", index: "0_2", href: "/Home/PhienBan" },
-                { id: 4, parentId: 0, text: "Tạo hồ sơ", icon: "menu-icon hs", index: "1", href: "/HoSo/AddNew" },
+                { id: 4, parentId: 0, text: "Tạo hồ sơ", icon: "menu-icon hs", index: "1_1", href: "/HoSo/AddNew" },
                 { id: 5, parentId: 0, text: "Quản lý hồ sơ", icon: "menu-icon qlhs", index: "2", href: "#" },
                 { id: 6, parentId: 5, text: "Danh sách hồ sơ", icon: "", index: "2_2", href: "/QuanLyHoSo/DanhSachHoSo" },
                 { id: 7, parentId: 5, text: "Duyệt hồ sơ", icon: "", index: "2_3", href: "/DuyetHoSo/Index" },
+                { id: 8, parentId: 0, text: "Tổ nhóm", icon: "menu-icon group", index: "3", href: "#" },
+                { id: 9, parentId: 8, text: "Tạo mới", icon: "", index: "3_1", href: "#" },
+                { id: 10, parentId: 8, text: "Quản lý tổ nhóm", icon: "", index: "3_2", href: "#" },
+                { id: 11, parentId: 8, text: "Cấu hình duyệt", icon: "", index: "3_3", href: "#" },
+                { id: 12, parentId: 0, text: "Mã AP", icon: "menu-icon sanpham", index: "4", href: "#" },
+                { id: 13, parentId: 12, text: "Quản lý mã AP", icon: "", index: "4_1", href: "#" },
+                { id: 14, parentId: 12, text: "Import", icon: "", index: "4_2", href: "#" },
+                { id: 15, parentId: 0, text: "Nhân sự", icon: "", index: "5", href: "/employee" },
             ]
             let content = '';
             $.each(menus, function (index, item) {
@@ -48,12 +56,14 @@
                 if (item.parentId == 0) {
                     let subMenucontent = '';
                     let subMenus = menus.filter(p => p.parentId == item.id)
+                    
                     if (subMenus != null && subMenus.length > 0) {
                         subMenucontent = '<ul class="submenu can-scroll ace-scroll scroll-disabled" >';
                         let subMenuItemcontent = '';
                         $.each(subMenus, function (index, sub) {
                             if (accountMenus.indexOf(sub.id) < 0)
                                 return
+                            
                             subMenuItemcontent += '<li class="hover" id="' + sub.index + '">'
                                 + '<a href="' + sub.href + '">'
                                 + '<i class="menu-icon fa fa-caret-right" ></i > '
@@ -64,10 +74,11 @@
                         subMenucontent += subMenuItemcontent
                             + '</ul>'
                     }
+                    
                     let canClick = ''
                     if (item.href == "#")
                         canClick = "dropdown-toggle"
-                    content += '<li class="hover">'
+                    content += '<li class="hover" id="' + item.id +'">'
                         + '<a href="' + item.href + '" class="' + canClick + '" >'
                         + '<i class="menu-icon home" ></i > '
                         + '<span class="menu-text">' + item.text + '</span>'

@@ -14,7 +14,7 @@ namespace Repository.Classes
 {
     public class TailieuRepository : BaseRepository, ITailieuRepository
     {
-        public TailieuRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
+        public TailieuRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

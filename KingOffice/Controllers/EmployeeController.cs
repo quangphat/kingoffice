@@ -11,12 +11,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace KingOffice.Controllers
 {
     [Route("employee")]
-    public class NhanvienController : BaseController
+    public class EmployeeController : BaseController
     {
         protected readonly INhanvienBusiness _bizNhanvien;
-        public NhanvienController(CurrentProcess process,INhanvienBusiness nhanvienBusiness) : base(process)
+        public EmployeeController(CurrentProcess process,INhanvienBusiness nhanvienBusiness) : base(process)
         {
             _bizNhanvien = nhanvienBusiness;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
+        [HttpGet("add")]
+        public async Task<IActionResult> Add()
+        {
+            return View();
         }
         [MyAuthorize]
         [HttpPost]

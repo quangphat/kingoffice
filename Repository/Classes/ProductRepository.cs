@@ -14,7 +14,7 @@ namespace Repository.Classes
 {
     public class ProductRepository : BaseRepository, IProductRepository
     {
-        public ProductRepository(IConfiguration configuration, CurrentProcess process) : base(configuration,process)
+        public ProductRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

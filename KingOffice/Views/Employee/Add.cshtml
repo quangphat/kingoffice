@@ -1,0 +1,182 @@
+﻿@using KingOffice.Resources;
+@{
+    ViewBag.Title = "Thêm mới nhân viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    SetActiveMenu('@ViewBag.formindex', 2);
+</script>
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/employee">Nhân sự</a><span><a href="#"> /Thêm mới nhân viên</a></span>
+            </li>
+        </ul>
+    </div>
+    <div class="page-content" id="page_content_panel">
+        <div class="page-header">
+            <h1>Thông tin cá nhân</h1>
+        </div>
+        <!--/. Page header-->
+        <div class="user-profile row">
+            <div class="col-xs-12 col-sm-3 center">
+                @if (ViewBag.ThongTin != null)
+                {
+                    <div>
+                        <span class="profile-picture">
+                            <img id="avatar" class="editable img-responsive editable-click editable-empty" alt="Alex's Avatar" src="~/Content/ace-master/assets/avatars/profile-pic.jpg">
+                           
+                        </span>
+
+                        <div class="space-4"></div>
+
+                        <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                            <div class="inline position-relative">
+                                <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                    <i class="ace-icon fa fa-circle light-green"></i>
+                                    &nbsp;
+
+                                    <span class="white">@ViewBag.ThongTin.UserName</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="space-6"></div>
+                <div class="hr hr16 dotted"></div>
+            </div>
+            <div class="col-sm-9" id="panel_body">
+                <form class="form-horizontal" role="form" autocomplete="off" id="frm_doimatkhau">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#info" aria-expanded="true">
+                                    <i class="green ace-icon fa fa-info-circle bigger-125"></i>
+                                    @Global.NhanVien_UserProfile_Info
+                                </a>
+                            </li>
+                           
+                        </ul>
+                        <div class="tab-content profile-edit-tab-content">
+                            <div id="info" class="tab-pane  in active">
+                                <div class="space-10"></div>
+                                <div class="form-group">
+
+                                    <div class="profile-user-info profile-user-info-striped">
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name">@Global.NhanVien_UserProfile_Name: </div>
+
+                                            <div class="profile-info-value col-sm-4">
+                                                <input type="text" id="txtDienThoai" placeholder="Họ tên" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name">Mã nhân viên:</div>
+
+                                            <div class="profile-info-value col-sm-4">
+                                                <input type="text" id="txtDienThoai" placeholder="Mã nhân viên" class="form-control">
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> @Global.NhanVien_UserProfile_Email: </div>
+
+                                            <div class="profile-info-value col-sm-4">
+                                                <input type="text" id="txtDienThoai" placeholder="Email" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> @Global.NhanVien_UserProfile_Phone: </div>
+
+                                            <div class="profile-info-value col-sm-4">
+                                                <input type="text" id="txtDienThoai" placeholder="Số điện thoại" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> @Global.NhanVien_UserProfile_UserName: </div>
+
+                                            <div class="profile-info-value col-sm-4">
+                                                <input type="text" id="txtDienThoai" placeholder="Tên đăng nhập" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name">Mật khẩu: </div>
+
+                                            <div class="profile-info-value col-sm-4">
+                                                <input type="text" id="txtDienThoai" placeholder="Mật khẩu" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name">Xác nhận mật khẩu: </div>
+
+                                            <div class="profile-info-value col-sm-4">
+                                                <input type="text" id="txtDienThoai" placeholder="Xác nhận mật khẩu" class="form-control">
+                                            </div>
+                                        </div>
+
+                                     
+                                    </div>
+                                    <div class="clearfix form-actions">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button class="btn btn-info" type="button" onclick="ChangePass(this)" id="btn_luu_doi_mat_khau">
+                                                <i class="ace-icon fa fa-check bigger-110"></i>
+                                                Lưu
+                                            </button>
+                                            
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    var strLoading = '@Html.Raw(Global.Message_Loading)';
+</script>
+<script type="text/ecmascript">
+    $('#btn_reset_matkhau').click(function (evt) {
+        $('#newPassword').val('');
+        $('#oldPassword').val('');
+        $('#confirmPassword').val('');
+    });
+</script>
+<script>
+    function ChangePass(e) {
+        showBlock($('#panel_body'), strLoading);
+        $.ajax({
+            type: "POST",
+            datatype: "JSON",
+            url: '@Url.Action("ChangePass", "NhanVien")',
+            data: $('#frm_doimatkhau').serialize(),
+            success: function (data) {
+                if (data.Message.Result == true) {
+                    $('#oldPassword').val('');
+                    $('#newPassword').val('');
+                    $('#confirmPassword').val('');
+                    addAlert("div_result_alert", data.Message.ErrorMessage, data.Message.Result);
+                }
+                else {
+                    addAlert("div_result_alert", data.Message.ErrorMessage, data.Message.Result);
+                }
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            },
+            complete: function () {
+                $('#panel_body').unblock();
+            }
+        });
+    }
+</script>

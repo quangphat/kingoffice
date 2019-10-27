@@ -26,7 +26,7 @@ namespace KingOffice.Controllers
                 return _lstRole;
             }
         }
-        [MyAuthorize(Roles = "dddddd")]
+        [MyAuthorize(Roles = "admin")]
         public IActionResult Index()
         {
             ViewBag.formindex = LstRole[RouteData.Values["action"].ToString()]._formindex;

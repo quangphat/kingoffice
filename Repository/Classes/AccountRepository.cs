@@ -12,7 +12,7 @@ namespace Repository.Classes
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        public AccountRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
+        public AccountRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

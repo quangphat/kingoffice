@@ -15,7 +15,7 @@ namespace Repository.Classes
 {
     public class NhanvienRepository : BaseRepository, INhanvienRepository
     {
-        public NhanvienRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
+        public NhanvienRepository(IConfiguration configuration) : base(configuration)
         {
 
         }
@@ -30,9 +30,9 @@ namespace Repository.Classes
             p.Add("Email", entity.Email);
             p.Add("Role", entity.Role);
             p.Add("CreatedTime", DateTime.Now);
-            p.Add("CreatedBy", _process.User.Id);
+            p.Add("CreatedBy", entity.CreatedBy);
             p.Add("UpdatedTime", DateTime.Now);
-            p.Add("UpdatedBy",_process.User.Id);
+            p.Add("UpdatedBy",entity.UpdatedBy);
             await connection.ExecuteAsync("sp_InsertUser",p,commandType:CommandType.StoredProcedure);
             return  p.Get<int>("id"); ;
         }

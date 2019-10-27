@@ -14,7 +14,7 @@ namespace Repository.Classes
 {
     public class DoitacRepository : BaseRepository, IDoitacRepository
     {
-        public DoitacRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
+        public DoitacRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

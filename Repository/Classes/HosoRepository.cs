@@ -17,7 +17,7 @@ namespace Repository.Classes
 {
     public class HosoRepository : BaseRepository, IHosoRepository
     {
-        public HosoRepository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
+        public HosoRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

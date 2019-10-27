@@ -4,7 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script type="text/javascript">
-    SetActiveMenu('@ViewBag.formindex', 2);
+    $(document).ready(function e() {
+        setTimeout(function () {
+            SetActiveMenu('0_1', 2)
+        }, 500);
+    })
 </script>
 <div class="main-content-inner">
     <div class="breadcrumbs" id="breadcrumbs">

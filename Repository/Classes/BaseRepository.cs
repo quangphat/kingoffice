@@ -10,19 +10,15 @@ namespace Repository.Classes
     public abstract class BaseRepository
     {
         protected IDbConnection connection;
-        protected CurrentProcess _process;
         private IConfiguration configuration;
 
-        public BaseRepository(IConfiguration configuration, CurrentProcess process)
+        public BaseRepository(IConfiguration configuration)
         {
-            _process = process;
+            
             connection = new SqlConnection(configuration.GetConnectionString("kingoffice"));
         }
 
-        protected BaseRepository(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
+       
 
         protected DynamicParameters AddOutputParam(string name, DbType type = DbType.Int32)
         {

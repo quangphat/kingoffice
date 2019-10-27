@@ -16,7 +16,7 @@ namespace Repository.Classes
 {
     public class AutoIdRepository : BaseRepository, IAutoIdRepository
     {
-        public AutoIdRepository(IConfiguration configuration, CurrentProcess process) : base(configuration,process)
+        public AutoIdRepository(IConfiguration configuration) : base(configuration)
         {
 
         }

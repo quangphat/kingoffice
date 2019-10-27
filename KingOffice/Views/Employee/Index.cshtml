@@ -1,0 +1,183 @@
+﻿@using KingOffice.Resources;
+@{
+    ViewBag.Title = "Nhân sự";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+
+}
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="#" class="active">Duyệt hồ sơ</a>
+            </li>
+        </ul>
+    </div>
+    <div class="page-content" id="panel_body">
+        <div class="row">
+            <div class="col-xs-12">
+                <form class="form-horizontal" role="form">
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label class="col-sm-1  col-xs-12 control-label no-padding-right" for="form-field-1">Nhóm</label>
+                        <div class="col-sm-5 col-xs-12 ">
+                            <select id="ddlNhom" class="chosen-select form-control" data-placeholder="Chọn nhóm">
+                                <option value="0"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 col-xs-12">
+                                <label class="control-label no-padding-right">
+                                    <input name="radio-ngay" type="radio" checked="checked" value="1" class="ace">
+                                    <span class="lbl"> Ngày tạo</span>
+                                </label>
+                                <label class="control-label no-padding-right">
+                                    <input name="radio-ngay" type="radio" value="2" class="ace">
+                                    <span class="lbl"> Ngày cập nhật</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-2 col-xs-12 ">
+                                <div class="input-group">
+                                    <input class="form-control date-picker" id="txtFromDate" />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-xs-12 ">
+                                <div class="input-group">
+                                    <input class="form-control date-picker" id="txtToDate" />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+
+                        <label class="col-sm-1  col-xs-12 control-label no-padding-right" for="form-field-1">Tìm kiếm</label>
+                        <div class="col-sm-5 col-xs-12 ">
+                            <input type="text" class="form-control" id="txtFreeText" placeholder="Tìm kiếm" />
+                        </div>
+                        
+                    </div>
+                    <div class="form-group text-right">
+                        <div class="col-xs-12 ">
+                            <a class="btn btn-primary" id="btn_search">
+                                Tìm kiếm
+                            </a>
+                            <a class="btn btn-primary" href="/Employee/Add">
+                                Tạo mới
+                            </a>
+                        </div>
+                    </div>
+
+                </form>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div class="table-header">
+                    Danh sách hồ sơ
+                </div>
+                <div class="dataTables_wrapper form-inline no-footer">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label>
+                                Hiển thị
+                                <select id="ddlLimit" class="form-control input-sm" onchange="onSelectLimit()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> dòng mỗi trang
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- div.table-responsive -->
+                <!-- div.dataTables_borderWrap -->
+                <div class="col">
+                    <div class="report-table-custom--overflow">
+                        <table id="dtSource" class="report-table-custom table table-striped table-bordered table-hover">
+                            <thead class="table-header">
+                                <tr>
+                                    <th class="center w-45">STT</th>
+                                    <th class="w-98">ID</th>
+                                    <th class="w-94">Ngày tạo</th>
+                                    <th class="w-84">Đối tác</th>
+                                    <th class="w-105">CMND</th>
+                                    <th class="m-w-150">Tên khách hàng</th>
+                                    <th style="width: 150px">Trạng thái</th>
+                                    <th class="m-w-300">Ghi chú</th>
+                                    <th class="w-94">Ngày cập nhật cuối</th>
+                                    <th class="w-150">Tên sản phẩm</th>
+                                    <th class="w-84">Mã nhân viên</th>
+                                    <th class="m-w-150">Nhân viên bán hàng</th>
+                                    <th class="w-130">Đội ngũ bán hàng</th>
+                                    <th class="m-w-150">Nhân viên lấy HS</th>
+                                    <th class="w-60">Bảo hiểm</th>
+                                    <th class="w-130">Khu vực</th>
+                                    <th class="w-84">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="clearfix" />
+                <div class="one-row no-gutters justify-content-between paginate">
+                    <div class="col-auto">
+                        <div class="dataTables_info" id="dtSource_info" role="status" aria-live="polite"></div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="one-row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <span id="totalPage"></span>
+                            </div>
+                            <div class="col">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dtSource_paginate">
+                                    <ul class="pagination" id="paging"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-xs-12 clearfix" style="margin-bottom:40px">
+                <div class="pull-right">
+                    <a id="btnDownReport" onclick="DownloadReport(this)" class="btn btn-sm btn-primary "><i class="ace-icon fa fa-download"></i>@Global.Button_Download</a>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    var queries = new URLSearchParams(window.location.search);
+    var page = 1;
+    var limit = 10;
+    var pageMargin = 2;
+    var totalPage = 1;
+    var totalRecord = 0;
+    $(document).ready(function e() {
+        setTimeout(function () {
+
+        }, 500);
+    })
+
+        
+</script>
