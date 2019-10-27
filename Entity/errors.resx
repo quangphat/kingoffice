@@ -126,6 +126,9 @@
   <data name="error_login_expected" xml:space="preserve">
     <value>Vui lòng đăng nhập</value>
   </data>
+  <data name="freetext_length_cannot_lagger_30" xml:space="preserve">
+    <value>Chuỗi tìm kiếm không được nhiều hơn 30 ký tự</value>
+  </data>
   <data name="invalid_data" xml:space="preserve">
     <value>Dữ liệu không hợp lệ</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="missing_diachi" xml:space="preserve">
     <value>Vui lòng nhập địa chỉ</value>
+  </data>
+  <data name="missing_district" xml:space="preserve">
+    <value>Vui lòng chọn quận huyện</value>
   </data>
   <data name="missing_location_code" xml:space="preserve">
     <value>Vui lòng chọn mã huyện</value>
@@ -168,14 +174,23 @@
   <data name="missing_product" xml:space="preserve">
     <value>Vui lòng chọn sản phẩm vay</value>
   </data>
+  <data name="missing_province" xml:space="preserve">
+    <value>Vui lòng chọn tỉnh/thành phố</value>
+  </data>
   <data name="note_length_cannot_more_than_200" xml:space="preserve">
     <value>Nội dung ghi chú không được nhiều hơn 200 ký tự</value>
   </data>
   <data name="password_not_match" xml:space="preserve">
     <value>Mật khẩu không khớp</value>
   </data>
+  <data name="password_not_match_min_length" xml:space="preserve">
+    <value>Độ dài mật khẩu phải có ít nhất 6 ký tự</value>
+  </data>
   <data name="product_code_inuse" xml:space="preserve">
     <value>Mã sản phẩm đang được sử dung bởi hồ sơ khác, vui lòng chọn sản phẩm khác</value>
+  </data>
+  <data name="username_has_exist" xml:space="preserve">
+    <value>Tên đăng nhập đã tồn tại</value>
   </data>
   <data name="username_or_password_must_not_be_empty" xml:space="preserve">
     <value>Tên đăng nhập hoặc mật khẩu không được để trống</value>

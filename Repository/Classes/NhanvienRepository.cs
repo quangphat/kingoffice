@@ -19,20 +19,64 @@ namespace Repository.Classes
         {
 
         }
+        public async Task<int> Count(
+            DateTime fromDate,
+            DateTime toDate,
+            int dateFilterType,
+            string freeText)
+        {
+            var p = new DynamicParameters();
+            p.Add("fromDate",fromDate);
+            p.Add("toDate", toDate);
+            p.Add("freeText", freeText);
+            p.Add("dateFilterType", dateFilterType);
+            var total = await connection.ExecuteScalarAsync<int>("sp_CountNhanvien", p, commandType: CommandType.StoredProcedure);
+            return total;
+        }
+        public async Task<List<Nhanvien>> Gets(
+            DateTime fromDate,
+            DateTime toDate,
+            int dateFilterType,
+            string freeText,
+            int offset,
+            int limit)
+        {
+            var p = new DynamicParameters();
+            p.Add("fromDate", fromDate);
+            p.Add("toDate", toDate);
+            p.Add("freeText", freeText);
+            p.Add("dateFilterType", dateFilterType);
+            p.Add("offset", offset);
+            p.Add("limit", limit);
+            var results = await connection.QueryAsync<Nhanvien>("sp_GetNhanvien", p, commandType: CommandType.StoredProcedure);
+            return results.ToList();
+        }
+        public async Task<Nhanvien> GetByUserName(string userName, int id = 0)
+        {
+            string query = "select * from Nhan_Vien where Ten_Dang_Nhap = @userName";
+            if(id>0)
+            {
+                query += " and ID <> @id";
+            }
+            var result = await connection.QueryFirstOrDefaultAsync<Nhanvien>(query, new { @userName = userName, @id = id }, commandType: CommandType.Text);
+            return result;
+        }
         public async Task<int> Create(Nhanvien entity)
         {
             var p = AddOutputParam("id");
-            p.Add("Ma", entity.Ma);
-            p.Add("Ten_Dang_Nhap", entity.Ten_Dang_Nhap);
-            p.Add("Mat_Khau", entity.Mat_Khau);
-            p.Add("Ho_Ten", entity.Ho_Ten);
-            p.Add("Dien_Thoai", entity.Dien_Thoai);
-            p.Add("Email", entity.Email);
-            p.Add("Role", entity.Role);
-            p.Add("CreatedTime", DateTime.Now);
-            p.Add("CreatedBy", entity.CreatedBy);
-            p.Add("UpdatedTime", DateTime.Now);
-            p.Add("UpdatedBy",entity.UpdatedBy);
+            p.Add("ProvinceId", entity.ProvinceId);
+            p.Add("DistrictId", entity.DistrictId);
+            p.Add("userName", entity.Ten_Dang_Nhap);
+            p.Add("password", entity.Mat_Khau);
+            p.Add("fullName", entity.Ho_Ten);
+            p.Add("phone", entity.Dien_Thoai);
+            p.Add("email", entity.Email);
+            p.Add("workDate", entity.WorkDate);
+            //p.Add("Role", entity.Role);
+            p.Add("createdtime", DateTime.Now);
+            p.Add("createdby", entity.CreatedBy);
+            //p.Add("UpdatedTime", DateTime.Now);
+            //p.Add("UpdatedBy",entity.UpdatedBy);
             await connection.ExecuteAsync("sp_InsertUser",p,commandType:CommandType.StoredProcedure);
             return  p.Get<int>("id"); ;
         }

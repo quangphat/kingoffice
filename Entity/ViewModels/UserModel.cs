@@ -9,10 +9,11 @@ namespace Entity.ViewModels
         public string UserName { get; set; }
         public string Password { get; set; }
         public string PasswordConfirm { get; set; }
-        public string Code { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }
         public string Phone { get; set; }
-        List<int> RoleIds { get; set; }
+        public int ProvinceId { get; set; }
+        public int DistrictId { get; set; }
+        public DateTime WorkDate { get; set; }
     }
 }

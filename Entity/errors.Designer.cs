@@ -88,6 +88,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chuỗi tìm kiếm không được nhiều hơn 30 ký tự.
+        /// </summary>
+        public static string freetext_length_cannot_lagger_30 {
+            get {
+                return ResourceManager.GetString("freetext_length_cannot_lagger_30", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dữ liệu không hợp lệ.
         /// </summary>
         public static string invalid_data {
@@ -147,6 +156,15 @@ namespace Entity {
         public static string missing_diachi {
             get {
                 return ResourceManager.GetString("missing_diachi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn quận huyện.
+        /// </summary>
+        public static string missing_district {
+            get {
+                return ResourceManager.GetString("missing_district", resourceCulture);
             }
         }
         
@@ -214,6 +232,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn tỉnh/thành phố.
+        /// </summary>
+        public static string missing_province {
+            get {
+                return ResourceManager.GetString("missing_province", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nội dung ghi chú không được nhiều hơn 200 ký tự.
         /// </summary>
         public static string note_length_cannot_more_than_200 {
@@ -232,11 +259,29 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Độ dài mật khẩu phải có ít nhất 6 ký tự.
+        /// </summary>
+        public static string password_not_match_min_length {
+            get {
+                return ResourceManager.GetString("password_not_match_min_length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã sản phẩm đang được sử dung bởi hồ sơ khác, vui lòng chọn sản phẩm khác.
         /// </summary>
         public static string product_code_inuse {
             get {
                 return ResourceManager.GetString("product_code_inuse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tên đăng nhập đã tồn tại.
+        /// </summary>
+        public static string username_has_exist {
+            get {
+                return ResourceManager.GetString("username_has_exist", resourceCulture);
             }
         }
         

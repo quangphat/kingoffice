@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Interfaces;
 using Entity.Infrastructures;
+using Entity.ViewModels;
 using KingOffice.Infrastructures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,11 +29,21 @@ namespace KingOffice.Controllers
         {
             return View();
         }
-        [MyAuthorize]
+        //[MyAuthorize]
         [HttpPost]
-        public async Task<IActionResult> CreateUser()
+        public async Task<IActionResult> CreateUser([FromBody] UserModel model)
         {
-            return ToResponse(true);
+            var result = await _bizNhanvien.Create(model);
+            return ToResponse(result);
+        }
+        [HttpGet]
+        [Route("list")]
+        public async Task<IActionResult> Gets(DateTime? fromDate, DateTime? toDate,
+            string freetext = "",
+            int page = 1, int limit = 10)
+        {
+            var result = await _bizNhanvien.Gets(fromDate, toDate, freetext, page, limit);
+            return ToResponse(DataPaging.Create(result.datas, result.totalRecord));
         }
         [Authorize]
         [HttpGet("courier")]

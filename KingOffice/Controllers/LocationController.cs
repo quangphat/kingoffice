@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KingOffice.Controllers
 {
+    [Route("locations")]
     public class LocationController : BaseController
     {
         protected readonly ILocationBusiness _bizLocation;
@@ -15,11 +16,13 @@ namespace KingOffice.Controllers
         {
             _bizLocation = locationBusiness;
         }
+        [HttpGet("provinces")]
         public async Task<IActionResult> GetProvinceSimpleList()
         {
             var result = await _bizLocation.GetProvinceSimpleList();
             return ToResponse(result);
         }
+        [HttpGet("districts/{provinceId}")]
         public async Task<IActionResult> GetDistrictSimpleList(int provinceId)
         {
             var result = await _bizLocation.GetDistrictSimpleListByProvinceId(provinceId);

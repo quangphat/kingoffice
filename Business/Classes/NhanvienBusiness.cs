@@ -20,6 +20,30 @@ namespace Business.Classes
         public NhanvienBusiness(CurrentProcess process, INhanvienRepository nhanvienRepository, IMapper mapper) : base(mapper, process)
         {
             _rpNhanvien = nhanvienRepository;
+            _mapper = mapper;
+        }
+        public async Task<(int totalRecord,List<Account> datas)> Gets(DateTime? fromDate, DateTime? toDate,
+            string freetext = "",
+            int page = 1, int limit = 10)
+        {
+            if(!string.IsNullOrWhiteSpace(freetext) && freetext.Length > 30)
+            {
+                AddError(errors.freetext_length_cannot_lagger_30);
+                return (0, null);
+            }
+            var fDate = fromDate == null ? DateTime.Now : fromDate.Value;
+            var tDate = toDate == null ? DateTime.Now : toDate.Value;
+            int offset = 0;
+            BusinessExtension.ProcessPaging(page, ref limit, ref offset);
+            freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
+            var totalRecord = await _rpNhanvien.Count(fDate, tDate,0, freetext);
+            if(totalRecord ==0)
+            {
+                return (0, null);
+            }
+            var nhanviens = await _rpNhanvien.Gets(fDate, tDate, 0, freetext, offset, limit);
+            var datas = _mapper.Map<List<Account>>(nhanviens);
+            return (totalRecord, datas);
         }
         public async Task<int> Create(UserModel entity)
         {
@@ -28,7 +52,7 @@ namespace Business.Classes
                 AddError(errors.invalid_data);
                 return 0;
             }
-            if(string.IsNullOrWhiteSpace(entity.UserName))
+            if (string.IsNullOrWhiteSpace(entity.UserName))
             {
                 AddError(errors.username_or_password_must_not_be_empty);
                 return 0;
@@ -36,6 +60,11 @@ namespace Business.Classes
             if (string.IsNullOrWhiteSpace(entity.Password))
             {
                 AddError(errors.username_or_password_must_not_be_empty);
+                return 0;
+            }
+            if (entity.Password.Trim().Length < Constanst.PasswordMinLengthRequire)
+            {
+                AddError(errors.password_not_match_min_length);
                 return 0;
             }
             if (string.IsNullOrWhiteSpace(entity.PasswordConfirm))
@@ -53,12 +82,31 @@ namespace Business.Classes
                 AddError(errors.email_cannot_be_null);
                 return 0;
             }
-            if (!BusinessExtension.IsValidEmail(entity.Email,50))
+            if (!BusinessExtension.IsValidEmail(entity.Email, 50))
             {
                 AddError(errors.invalid_email);
                 return 0;
             }
+            if (entity.ProvinceId <= 0)
+            {
+                AddError(errors.missing_province);
+                return 0;
+            }
+            if (entity.DistrictId <= 0)
+            {
+                AddError(errors.missing_district);
+                return 0;
+            }
+            var existUserName = await _rpNhanvien.GetByUserName(entity.UserName.Trim(), 0);
+            if(existUserName!=null)
+            {
+                AddError(errors.username_has_exist);
+                return 0;
+            }
+            entity.UserName = entity.UserName.Trim();
+            entity.Password = entity.Password.Trim();
             var user = _mapper.Map<Nhanvien>(entity);
+            user.CreatedBy = _process.User.Id;
             user.Mat_Khau = Utils.getMD5(entity.Password);
             var result = await _rpNhanvien.Create(user);
             return result;

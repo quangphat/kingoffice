@@ -28,4 +28,10 @@ namespace Entity.Enums
         ChoKhoanVay = 4
 
     }
+    public enum DateTimeFilterType
+    {
+        CreateDate = 1,
+        UpdateDate = 2,
+        WorkDate =3
+    }
 }

@@ -20,8 +20,7 @@ namespace Business.Infrastructures
                 .ForMember(a => a.Code, b => b.MapFrom(c => c.Ma))
                 .ForMember(a => a.Email, b => b.MapFrom(c => c.Email))
                 .ForMember(a => a.FullName, b => b.MapFrom(c => c.Ho_Ten));
-            CreateMap<UserModel, Nhanvien>()
-                .ForMember(a => a.Ma, b => b.MapFrom(c => c.Code))
+            CreateMap<UserModel, Nhanvien>()              
                 .ForMember(a => a.Ten_Dang_Nhap, b => b.MapFrom(c => c.UserName))
                 .ForMember(a => a.Dien_Thoai, b => b.MapFrom(c => c.Phone))
                 .ForMember(a => a.Email, b => b.MapFrom(c => c.Email))

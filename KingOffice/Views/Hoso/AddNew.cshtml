@@ -215,26 +215,7 @@
     });
 </script>
 <script>
-    jQuery.fn.ForceNumericOnly =
-        function () {
-            return this.each(function () {
-                $(this).keydown(function (e) {
-                    var key = e.charCode || e.keyCode || 0;
-                    // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
-                    // home, end, period, and numpad decimal
-                    return (
-                        key == 8 ||
-                        key == 9 ||
-                        key == 13 ||
-                        key == 46 ||
-                        key == 110 ||
-                        key == 190 ||
-                        (key >= 35 && key <= 40) ||
-                        (key >= 48 && key <= 57) ||
-                        (key >= 96 && key <= 105));
-                });
-            });
-        };
+    
     $("#txtDienThoai").ForceNumericOnly();
     $("#txtDienThoai2").ForceNumericOnly();
     $("#txtTienDeNghiVay").ForceNumericOnly();
@@ -269,9 +250,9 @@
 
     function LayDSTinh() {
         $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetProvinceSimpleList", "Location")',
-            data: {},
+            type: "GET",
+            url: '/locations/provinces',
+            
             success: function (data) {
                 $('#ddlTinh').empty();
                 $('#ddlTinh').append("<option value='0'></option>");
@@ -315,9 +296,9 @@
 
     function LayDSHuyen(maTinh) {
         $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetDistrictSimpleList", "Location")',
-            data: {'provinceId':maTinh},
+            type: "GET",
+            url: '/locations/districts/' + maTinh,
+            
             success: function (data) {
                 $('#ddlHuyen').empty();
                 $('#ddlHuyen').append("<option value='0'></option>");
