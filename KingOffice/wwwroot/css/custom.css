@@ -12,72 +12,12 @@
 }
 
 
-/*---ace.min.css------------------------------------*/
-/*
-.sidebar {
-    width: 250px;
+.pl-0{
+    padding-left:0px!important;
 }
-.sidebar+.main-content {
-    margin-left: 250px;
+.pr-0 {
+    padding-right: 0px !important;
 }
-.sidebar+.main-content .breadcrumbs-fixed {left: 250px;}
-.sidebar~.footer .footer-inner {
-    left: 250px;
-}
-
-.sidebar .my-nav-sidebar{
-    min-height: 40px;
-    line-height: 35px;
-    border-bottom: none;
-}
-.sidebar .my-nav-sidebar:before{
-    top: 20px;
-}
-.user-info {
-    max-width: 150px;
-}
-*/
-
-/*media screen*/
-/*
-@media 
-only screen and (max-width:1200px), 
-only screen and (max-width:1199px),
-only screen and (max-width:992px),
-only screen and (max-width:991px),
-only screen and (max-width:767px),
-only screen and (max-width:540px),
-only screen and (max-width:480px),
-only screen and (max-width:479px),
-only screen and (max-width:360px),
-only screen and (max-width:319px)
-{
-    .sidebar.responsive {left: 250px;margin-left: -250px;}
-    .sidebar+.main-content {margin-left: 0px;}
-    .sidebar~.footer .footer-inner {left: 0px;}
-    .sidebar+.main-content .breadcrumbs-fixed {left: 0px;}
-}
-
-@media only screen and (max-width: 479px)
-{
-    .navbar:not(.navbar-collapse) .navbar-header {
-      float: left;
-      display: block;
-    }
-}
-
-@media only screen and (max-width: 479px) {
-    .navbar:not(.navbar-collapse) .navbar-header 
-    {
-        float: left !important;
-    }
-}
-@media (max-width: 540px) and (min-width: 480px), (max-width: 360px), (max-width: 479px)
-{
-    .navbar:not(.navbar-collapse) .navbar-buttons .user-info {
-    }
- }
-*/
 .report-table-custom tbody {
     word-break: break-all;
 }

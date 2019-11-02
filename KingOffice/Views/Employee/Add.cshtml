@@ -136,7 +136,14 @@
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name">Vai trò trên trang: </div>
+                                            <div class="profile-info-value col-sm-4">
+                                                <select id="ddlRole" class="chosen-select form-control" data-placeholder="Chọn nhóm">
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="clearfix form-actions">
                                         <div class="col-md-offset-3 col-md-9">
@@ -196,6 +203,7 @@
         $('#btnSave').click(function (e) {
             createUser();
         })
+        getRoles("#ddlRole", false);
     })
     
     function createUser() {
@@ -205,6 +213,7 @@
         nhanvien.Email = $("#txtEmail").val();
         nhanvien.WorkDate = $("#txtWorkDate").val();
         nhanvien.UserName = $("#txtUserName").val();
+        nhanvien.RoleId = $("#ddlRole").val();
         nhanvien.Password = $("#txtPass").val();
         nhanvien.PasswordConfirm = $("#txtConfirmPass").val();
         nhanvien.ProvinceId = (!isNullOrWhiteSpace($("#ddlProvince").val()) && !isNullOrUndefined($("#ddlProvince").val())) ? parseInt($("#ddlProvince").val()) : 0;
@@ -350,5 +359,5 @@
             }
         });
     }
-
+    
 </script>

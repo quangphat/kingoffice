@@ -53,6 +53,7 @@ namespace KingOffice
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IAutoIdRepository, AutoIdRepository>();
             services.AddSingleton<INotesRepository, NotesRepository>();
+            services.AddSingleton<IRoleRepository, RoleRepository>();
             //AppendMongoDI
 
             services.AddScoped<IHosoBusiness, HosoBusiness>();
@@ -63,6 +64,7 @@ namespace KingOffice
             services.AddScoped<IProductBusiness, ProductBusiness>();
             services.AddScoped<INhanvienBusiness, NhanvienBusiness>();
             services.AddScoped<IMediaBusiness, MediaBusiness>();
+            services.AddScoped<IRoleBusiness, RoleBusiness>();
             //<AppendBusinessDI>
             services.AddScoped<CurrentProcess>();
             var mappingConfig = new MapperConfiguration(mc =>

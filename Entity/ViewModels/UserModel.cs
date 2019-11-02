@@ -14,6 +14,7 @@ namespace Entity.ViewModels
         public string Phone { get; set; }
         public int ProvinceId { get; set; }
         public int DistrictId { get; set; }
+        public int RoleId { get; set; }
         public DateTime WorkDate { get; set; }
     }
 }

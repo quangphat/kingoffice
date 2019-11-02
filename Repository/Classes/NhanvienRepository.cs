@@ -20,35 +20,35 @@ namespace Repository.Classes
 
         }
         public async Task<int> Count(
-            DateTime fromDate,
-            DateTime toDate,
-            int dateFilterType,
+            DateTime workFromDate,
+            DateTime workToDate,
+            int roleId,
             string freeText)
         {
             var p = new DynamicParameters();
-            p.Add("fromDate",fromDate);
-            p.Add("toDate", toDate);
+            p.Add("workFromDate",workFromDate);
+            p.Add("workToDate", workToDate);
+            p.Add("roleId", roleId);
             p.Add("freeText", freeText);
-            p.Add("dateFilterType", dateFilterType);
             var total = await connection.ExecuteScalarAsync<int>("sp_CountNhanvien", p, commandType: CommandType.StoredProcedure);
             return total;
         }
-        public async Task<List<Nhanvien>> Gets(
-            DateTime fromDate,
-            DateTime toDate,
-            int dateFilterType,
+        public async Task<List<EmployeeViewModel>> Gets(
+            DateTime workFromDate,
+            DateTime workToDate,
+            int roleId,
             string freeText,
-            int offset,
+            int page,
             int limit)
         {
             var p = new DynamicParameters();
-            p.Add("fromDate", fromDate);
-            p.Add("toDate", toDate);
+            p.Add("workFromDate", workFromDate);
+            p.Add("workToDate", workToDate);
             p.Add("freeText", freeText);
-            p.Add("dateFilterType", dateFilterType);
-            p.Add("offset", offset);
+            p.Add("page", page);
+            p.Add("roleId", roleId);
             p.Add("limit", limit);
-            var results = await connection.QueryAsync<Nhanvien>("sp_GetNhanvien", p, commandType: CommandType.StoredProcedure);
+            var results = await connection.QueryAsync<EmployeeViewModel>("sp_GetNhanvien", p, commandType: CommandType.StoredProcedure);
             return results.ToList();
         }
         public async Task<Nhanvien> GetByUserName(string userName, int id = 0)
@@ -70,6 +70,7 @@ namespace Repository.Classes
             p.Add("password", entity.Mat_Khau);
             p.Add("fullName", entity.Ho_Ten);
             p.Add("phone", entity.Dien_Thoai);
+            p.Add("roleId", entity.RoleId);
             p.Add("email", entity.Email);
             p.Add("workDate", entity.WorkDate);
             //p.Add("Role", entity.Role);
@@ -78,11 +79,11 @@ namespace Repository.Classes
             //p.Add("UpdatedTime", DateTime.Now);
             //p.Add("UpdatedBy",entity.UpdatedBy);
             await connection.ExecuteAsync("sp_InsertUser",p,commandType:CommandType.StoredProcedure);
-            return  p.Get<int>("id"); ;
+            return  p.Get<int>("id"); 
         }
-        public async Task<List<OptionSimpleModel>> GetListCourierSimple()
+        public async Task<List<OptionSimpleModelOld>> GetListCourierSimple()
         {
-            var result = await connection.QueryAsync<OptionSimpleModel>("sp_NHAN_VIEN_LayDSCourierCode", null, commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<OptionSimpleModelOld>("sp_NHAN_VIEN_LayDSCourierCode", null, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
         public async Task<List<OptionSimpleModelV2>> GetListByUserId(int userId)

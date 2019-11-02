@@ -8,8 +8,8 @@ namespace Business.Interfaces
 {
     public interface ILocationBusiness
     {
-        Task<List<OptionSimpleModel>> GetProvinceSimpleList();
-        Task<List<OptionSimpleModel>> GetDistrictSimpleListByProvinceId(int provinceId);
+        Task<List<OptionSimpleModelOld>> GetProvinceSimpleList();
+        Task<List<OptionSimpleModelOld>> GetDistrictSimpleListByProvinceId(int provinceId);
 
     }
 }

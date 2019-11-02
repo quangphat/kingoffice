@@ -24,11 +24,10 @@ namespace Business.Infrastructures
                 + ((int)TrangThaiHoSo.PCB).ToString() + ","
                 + ((int)TrangThaiHoSo.GiaiNgan).ToString();
         }
-        public static void ProcessPaging(int page, ref int limit, ref int offset)
+        public static void ProcessPaging(int page, ref int limit)
         {
             page = page <= 0 ? 1 : page;
             limit = (limit <= 0 || limit >= Constanst.Limit_Max_Page) ? Constanst.Limit_Max_Page : limit;
-            offset = (page - 1) * limit;
         }
         public static bool IsValidEmail(string email, int maxLength = 255)
         {

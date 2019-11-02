@@ -68,7 +68,7 @@ namespace KingOffice.Infrastructures
                     account.Code = list.FirstOrDefault((Claim a) => a.Type == "Code")?.Value;
                     account.Id = Convert.ToInt32(list.FirstOrDefault((Claim a) => a.Type == "Id")?.Value);
                     account.Email = list.FirstOrDefault((Claim a) => a.Type == "Email")?.Value;
-                    account.Role = list.FirstOrDefault((Claim a) => a.Type == "Role")?.Value;
+                    account.RoleId = Convert.ToInt32(list.FirstOrDefault((Claim a) => a.Type == "Role")?.Value);
                     account.FullName = list.FirstOrDefault((Claim a) => a.Type == "FullName")?.Value;
                     string scopeStr = list.FirstOrDefault((Claim a) => a.Type == "Scopes")?.Value;
                     if (!string.IsNullOrWhiteSpace(scopeStr))

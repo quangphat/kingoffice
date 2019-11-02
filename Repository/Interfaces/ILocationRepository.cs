@@ -9,8 +9,8 @@ namespace Repository.Interfaces
 {
     public interface ILocationRepository
     {
-        Task<List<OptionSimpleModel>> GetListProvinceSimple();
-        Task<List<OptionSimpleModel>> GetListDistrictSimple(int provinceId);
+        Task<List<OptionSimpleModelOld>> GetListProvinceSimple();
+        Task<List<OptionSimpleModelOld>> GetListDistrictSimple(int provinceId);
     }
 }
 

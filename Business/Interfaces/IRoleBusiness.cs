@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Business.Interfaces
 {
-    public interface IDoitacBusiness
+    public interface IRoleBusiness
     {
-        Task<List<OptionSimpleModelOld>> GetListSimple();
+        Task<List<OptionSimple>> GetList();
     }
 }

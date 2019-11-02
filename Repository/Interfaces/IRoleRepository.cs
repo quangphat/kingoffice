@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Interfaces
+namespace Repository.Interfaces
 {
-    public interface IDoitacBusiness
+    public interface IRoleRepository
     {
-        Task<List<OptionSimpleModelOld>> GetListSimple();
+        Task<List<OptionSimple>> GetList();
     }
 }
+

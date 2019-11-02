@@ -22,7 +22,7 @@ namespace Business.Classes
             _rpNhanvien = nhanvienRepository;
             _mapper = mapper;
         }
-        public async Task<(int totalRecord,List<Account> datas)> Gets(DateTime? fromDate, DateTime? toDate,
+        public async Task<(int totalRecord,List<EmployeeViewModel> datas)> Gets(DateTime? fromDate, DateTime? toDate,
             string freetext = "",
             int page = 1, int limit = 10)
         {
@@ -33,17 +33,16 @@ namespace Business.Classes
             }
             var fDate = fromDate == null ? DateTime.Now : fromDate.Value;
             var tDate = toDate == null ? DateTime.Now : toDate.Value;
-            int offset = 0;
-            BusinessExtension.ProcessPaging(page, ref limit, ref offset);
+            BusinessExtension.ProcessPaging(page, ref limit);
             freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
             var totalRecord = await _rpNhanvien.Count(fDate, tDate,0, freetext);
             if(totalRecord ==0)
             {
                 return (0, null);
             }
-            var nhanviens = await _rpNhanvien.Gets(fDate, tDate, 0, freetext, offset, limit);
-            var datas = _mapper.Map<List<Account>>(nhanviens);
-            return (totalRecord, datas);
+            var nhanviens = await _rpNhanvien.Gets(fDate, tDate, 0, freetext, page, limit);
+            
+            return (totalRecord, nhanviens);
         }
         public async Task<int> Create(UserModel entity)
         {
@@ -111,7 +110,7 @@ namespace Business.Classes
             var result = await _rpNhanvien.Create(user);
             return result;
         }
-        public async Task<List<OptionSimpleModel>> GetCourierList()
+        public async Task<List<OptionSimpleModelOld>> GetCourierList()
         {
             return await _rpNhanvien.GetListCourierSimple();
         }

@@ -18,14 +18,14 @@ namespace Repository.Classes
         {
 
         }
-        public async Task<List<OptionSimpleModel>> GetListProvinceSimple()
+        public async Task<List<OptionSimpleModelOld>> GetListProvinceSimple()
         {
-            var result = await connection.QueryAsync<OptionSimpleModel>("sp_KHU_VUC_LayDSTinh", null, commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<OptionSimpleModelOld>("sp_KHU_VUC_LayDSTinh", null, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
-        public async Task<List<OptionSimpleModel>> GetListDistrictSimple(int provinceId)
+        public async Task<List<OptionSimpleModelOld>> GetListDistrictSimple(int provinceId)
         {
-            var result = await connection.QueryAsync<OptionSimpleModel>("sp_KHU_VUC_LayDSHuyen", new { @MaTinh = provinceId}, commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<OptionSimpleModelOld>("sp_KHU_VUC_LayDSHuyen", new { @MaTinh = provinceId}, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
     }

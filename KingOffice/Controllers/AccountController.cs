@@ -24,7 +24,7 @@ namespace KingOffice.Controllers
         }
         public IActionResult GetAccount()
         {
-            if(_process==null || _process.User==null)
+            if (_process == null || _process.User == null)
             {
                 return null;
             }
@@ -42,7 +42,7 @@ namespace KingOffice.Controllers
         }
         public async Task<IActionResult> DangNhap(string userName, string password, string rememberMe)
         {
-            var account = await _bizAccount.Login(userName,password);
+            var account = await _bizAccount.Login(userName, password);
             if (account == null)
                 return ToResponse();
             if (!isValidAccount(account)) return ToResponse();
@@ -56,10 +56,9 @@ namespace KingOffice.Controllers
                 claims.Add(new Claim("Email", account.Email));
             if (!string.IsNullOrWhiteSpace(account.Code))
                 claims.Add(new Claim("Code", account.Code));
-            if (!string.IsNullOrWhiteSpace(account.Role))
-                claims.Add(new Claim("Role", account.Role));
-            
-            if (account.MenuIds!=null && account.MenuIds.Any())
+            claims.Add(new Claim("Role", account.RoleId.ToString()));
+
+            if (account.MenuIds != null && account.MenuIds.Any())
             {
                 var menusStr = string.Join(",", account.MenuIds.ToArray());
                 claims.Add(new Claim("MenuIds", menusStr));
@@ -69,7 +68,7 @@ namespace KingOffice.Controllers
                 claims.Add(new Claim("Scopes", string.Join(",", account.Permissions.ToArray())));
             }
             var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            
+
             ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
             var authProperties = new AuthenticationProperties
             {

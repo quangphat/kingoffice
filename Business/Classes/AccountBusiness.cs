@@ -52,7 +52,7 @@ namespace Business.Classes
             var scope = await _rpAccount.GetPermissionByUserId(nhanvien.ID);
             var account = _mapper.Map<Account>(nhanvien);
             account.Permissions = scope.ToArray();
-            var menus = await _rpUserRoleMenu.GetMenuByUserRole(account.Role);
+            var menus = await _rpUserRoleMenu.GetMenuByRoleId(account.RoleId);
             if (menus != null)
             {
                 account.MenuIds = menus.Select(p => p.MenuId).ToList();

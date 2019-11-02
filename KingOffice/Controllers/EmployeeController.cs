@@ -38,11 +38,12 @@ namespace KingOffice.Controllers
         }
         [HttpGet]
         [Route("list")]
-        public async Task<IActionResult> Gets(DateTime? fromDate, DateTime? toDate,
+        public async Task<IActionResult> Gets(DateTime? workFromDate, DateTime? workToDate,
             string freetext = "",
+            int roleId =0,
             int page = 1, int limit = 10)
         {
-            var result = await _bizNhanvien.Gets(fromDate, toDate, freetext, page, limit);
+            var result = await _bizNhanvien.Gets(workFromDate, workToDate, freetext, page, limit);
             return ToResponse(DataPaging.Create(result.datas, result.totalRecord));
         }
         [Authorize]

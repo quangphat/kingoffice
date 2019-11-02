@@ -1,17 +1,137 @@
-﻿//function showBlock(div, text) {
-//    div.block({
-//        css: {
-//            border: 'none',
-//            padding: '15px',
-//            backgroundColor: '#000',
-//            '-webkit-border-radius': '10px',
-//            '-moz-border-radius': '10px',
-//            opacity: 1,
-//            color: '#fff'
-//        },
-//        message: '<h2 style="color:#fff">' + text + ' ...</h2>'
-//    });
-//}
+﻿function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format= 'dd/mm/yy') {
+    $(controlId).datepicker({
+        dateFormat: format
+    }).next().on(ace.click_event, function () {
+        $(this).prev().focus();
+    });
+    if (isSetDefaultDate === true) {
+        if (isNullOrUndefined(day))
+            day = 0;
+        $(controlId).datepicker({ dateFormat: format }).datepicker("setDate", new Date().getDay + day);
+    }
+}
+function getTotalPage(totalRecord, limit =10) {
+    return totalRecord > limit ? Math.ceil(totalRecord / limit) : 1;
+}
+function renderGoPreviousPage(page) {
+    let newCurrentPage = page;
+    if (page > 1) {
+        newCurrentPage = page - 1;
+        return "<li class='paginate_button previous' aria-controls='dtSource' tabindex='0' onclick='onClickPage(" + newCurrentPage + ")'>"
+            + "<a href='javascript:;'>Trước</a>"
+            + "</li>";
+
+    } else {
+        return "";
+    }
+}
+function renderGoNextPage(page) {
+    if (page < totalPage) {
+        newCurrentPage = page + 1;
+        return "<li class='paginate_button next' aria-controls='dtSource' tabindex='0' onclick='onClickPage(" + newCurrentPage + ")' >"
+            + "<a href='javascript:;'>Sau</a>"
+            + "</li>";
+
+    } else {
+        return "";
+    }
+}
+function renderGoLastPage(page) {
+
+    if (totalPage > page) {
+        return "<li class='paginate_button next' aria-controls='dtSource' tabindex='0' onclick='onClickPage(" + totalPage + ")' >"
+            + "<a href='javascript:;'>Trang cuối</a>"
+            + "</li>";
+    } else {
+        return "";
+    }
+}
+function renderGoFirstPage(page) {
+    if (totalPage > 1 && page > 1) {
+        return "<li class='paginate_button next' aria-controls='dtSource' tabindex='0' onclick='onClickPage(" + 1 + ")' >"
+            + "<a href='javascript:;'>Trang đầu</a>"
+            + "</li>";
+    } else {
+        return "";
+    }
+}
+function renderTotalPage(totalPage) {
+    if (totalPage > 0)
+        return "<label>Tổng: " + totalPage + "</label>";
+    return "";
+}
+function renderPageList(page, limit, totalRc) {
+    let pageMargin = 2;
+    totalPage = getTotalPage(totalRc, limit);
+    var startPage = page > pageMargin ? page - pageMargin : 1;
+    var endPage = pageMargin + page > totalPage ? totalPage : pageMargin + page;
+    var paging = $("#paging");
+    paging.empty();
+    var first = renderGoFirstPage(page);
+    var next = renderGoNextPage(page);
+    var prev = renderGoPreviousPage(page);
+    var last = renderGoLastPage(page);
+    paging.append(first);
+    paging.append(prev);
+    for (var i = startPage; i <= endPage; i++) {
+        var active = page === i ? ' active' : '';
+        var item = "<li class='paginate_button" + active + " aria-controls='dtSource' tabindex='0' onclick='onClickPage(" + i + ")' >"
+            + "<a href='javascript:;'>" + i + "</a>"
+            + "</li>";
+        paging.append(item);
+    }
+    paging.append(next);
+    paging.append(last);
+}
+function getValueDisplay(value, type) {
+    if (isNullOrWhiteSpace(type)) {
+        if (isNullOrWhiteSpace(value))
+            return "";
+        return value;
+    }
+
+    var display = null;
+    switch (type) {
+        case 'datetime':
+            display = FormatDateTimeDMY(value);
+            break;
+        default: break;
+    }
+    return display;
+}
+function renderTextLeft(value, type, className = '') {
+    return "<td class='text-left " + className + "'>" + getValueDisplay(value, type) + "</td>";
+}
+function renderTextCenter(value, type) {
+    return "<td class='text-center'>" + getValueDisplay(value, type) + "</td>";
+}
+function renderAction(id) {
+    let thaoTac = "<div class='action-buttons'><a title='Chỉnh sửa' class='green' style='cursor: pointer'  onclick='onEdit("  + id +")' >";
+    thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
+    thaoTac += "</i>";
+    thaoTac += "</a>";
+    thaoTac += "</a></div>";
+    return "<td class='text-center'>" + thaoTac + "</td>";
+}
+
+function preventTxtSearchEnter(controlId = "txtFreeText", btnSearchId = "#btnSearch") {
+    var input = document.getElementById(controlId);
+    input.addEventListener("keydown", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+
+        }
+    });
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $(btnSearchId).click();
+        }
+    });
+}
+function setTableLimit(controlId = "#ddlLimit") {
+    $(controlId).chosen({ width: '100%', allow_single_deselect: true });
+}
 jQuery.fn.ForceNumericOnly =
     function () {
         return this.each(function () {
@@ -20,12 +140,12 @@ jQuery.fn.ForceNumericOnly =
                 // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
                 // home, end, period, and numpad decimal
                 return (
-                    key == 8 ||
-                    key == 9 ||
-                    key == 13 ||
-                    key == 46 ||
-                    key == 110 ||
-                    key == 190 ||
+                    key === 8 ||
+                    key === 9 ||
+                    key === 13 ||
+                    key === 46 ||
+                    key === 110 ||
+                    key === 190 ||
                     (key >= 35 && key <= 40) ||
                     (key >= 48 && key <= 57) ||
                     (key >= 96 && key <= 105));
@@ -98,29 +218,26 @@ function addDefaultOption(selectList, objectText) {
 
 function addSelectListWithDefaultValue(selectList, results, defaultValue) {
     //debugger;
-    if (results.length == 0) {
+    if (results.length === 0) {
         selectList.html('<option value="-1">Không có dữ liệu</option>');
         return;
     }
     $.each(results, function (i, value) {
         var transformedResult = value.Text;
         var option = $("<option></option>").attr("value", value.Value).text(transformedResult);
-        if (defaultValue != null && defaultValue == value.Value) {
+        if (defaultValue !== null && defaultValue === value.Value) {
             option.attr('selected', 'selected');
-        }
-        if (defaultValue == null) {
-
         }
         selectList.append(option);
     });
 }
 
 function addSelectListItems(selectList, results) {
-    if (results.length == 0) {
+    if (results.length === 0) {
         selectList.html('<option value="-1">Không có dữ liệu</option>');
         return;
     }
-    if (results.length == 1) {
+    if (results.length === 1) {
         selectList
                 .append($("<option></option>")
                 .attr("value", results[0].Value)
@@ -138,13 +255,13 @@ function addSelectListItems(selectList, results) {
 }
 
 function shortDateFormat(intDate) {
-    if (intDate != null && intDate != '')
+    if (intDate !== null && intDate !== '')
         return kendo.toString(new Date(parseInt(intDate) + (new Date().getTimezoneOffset()) * 60 * 1000), "dd/MM/yyyy");
     return intDate;
 }
 
 function fullDateFormat(intDate) {
-    if (intDate != null && intDate != '')
+    if (intDate !== null && intDate !== '')
         return kendo.toString(new Date(parseInt(intDate) + (new Date().getTimezoneOffset()) * 60 * 1000), "dd/MM/yyyy HH:mm");
     return intDate;
 }
@@ -196,12 +313,14 @@ function FormatDateTimeDMYHM(datetime) {
             var dateStr = ('00' + dateObj.getDate()).slice(-2) + "/" + ('00' + (dateObj.getMonth() + 1)).slice(-2) + "/" + dateObj.getFullYear() + " " + ('00' + dateObj.getHours()).slice(-2) + ":" + ('00' + dateObj.getMinutes()).slice(-2);
             return dateStr;
         }
-        return dateStr;
     } catch (e) {
         return "";
     }
 }
+
 function FormatDateTimeDMY(datetime) {
+    if (isNullOrUndefined(datetime))
+        return "";
     try {
         var d = new Date(datetime);
         return d.toLocaleDateString();
@@ -228,7 +347,6 @@ function SetFormatDateTime(datetime) {
             var dateStr = ('00' + dateObj.getDate()).slice(-2) + "-" + ('00' + (dateObj.getMonth() + 1)).slice(-2) + "-" + dateObj.getFullYear();
             return dateStr;
         }
-        return dateStr;
     } catch (e) {
         return "";
     }
@@ -243,7 +361,6 @@ function SetFormatDateTimeDMY(datetime) {
             var dateStr = ('00' + dateObj.getDate()).slice(-2) + "-" + ('00' + (dateObj.getMonth() + 1)).slice(-2) + "-" + dateObj.getFullYear();
             return dateStr;
         }
-        return dateStr;
     } catch (e) {
         return "";
     }

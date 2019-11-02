@@ -16,7 +16,7 @@ namespace Business.Classes
         {
             _rpDoitac = doitacRepository;
         }
-        public async Task<List<OptionSimpleModel>> GetListSimple()
+        public async Task<List<OptionSimpleModelOld>> GetListSimple()
         {
             return await _rpDoitac.GetListSimple();
         }

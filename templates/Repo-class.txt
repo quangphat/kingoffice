@@ -13,7 +13,7 @@ namespace Repository.Classes
 {
     public class {ModelName}Repository : BaseRepository, I{ModelName}Repository
     {
-        public {ModelName}Repository(IConfiguration configuration, CurrentProcess process) : base(configuration, process)
+        public {ModelName}Repository(IConfiguration configuration) : base(configuration)
         {
 
         }

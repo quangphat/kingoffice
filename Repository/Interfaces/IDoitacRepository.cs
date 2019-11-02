@@ -8,7 +8,7 @@ namespace Repository.Interfaces
 {
     public interface IDoitacRepository
     {
-        Task<List<OptionSimpleModel>> GetListSimple();
+        Task<List<OptionSimpleModelOld>> GetListSimple();
     }
 }
 

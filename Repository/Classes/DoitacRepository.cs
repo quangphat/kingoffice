@@ -18,9 +18,9 @@ namespace Repository.Classes
         {
 
         }
-        public async Task<List<OptionSimpleModel>> GetListSimple()
+        public async Task<List<OptionSimpleModelOld>> GetListSimple()
         {
-            var result = await connection.QueryAsync<OptionSimpleModel>("sp_DOI_TAC_LayDS", null, commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<OptionSimpleModelOld>("sp_DOI_TAC_LayDS", null, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
     }

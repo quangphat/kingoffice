@@ -16,11 +16,11 @@ namespace Business.Classes
         {
             _rpLocation = locationRepository;
         }
-        public async Task<List<OptionSimpleModel>> GetProvinceSimpleList()
+        public async Task<List<OptionSimpleModelOld>> GetProvinceSimpleList()
         {
             return await _rpLocation.GetListProvinceSimple();
         }
-        public async Task<List<OptionSimpleModel>> GetDistrictSimpleListByProvinceId(int provinceId)
+        public async Task<List<OptionSimpleModelOld>> GetDistrictSimpleListByProvinceId(int provinceId)
         {
             return await _rpLocation.GetListDistrictSimple(provinceId);
         }

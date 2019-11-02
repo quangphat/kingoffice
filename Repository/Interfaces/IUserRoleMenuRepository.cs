@@ -9,6 +9,7 @@ namespace Repository.Interfaces
 {
     public interface IUserRoleMenuRepository
     {
+        Task<List<UserRoleMenu>> GetMenuByRoleId(int roleId);
         Task<List<UserRoleMenu>> GetMenuByUserRole(string role);
     }
 }

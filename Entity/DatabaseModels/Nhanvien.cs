@@ -13,7 +13,7 @@ namespace Entity.DatanbaseModels
         public string Ho_Ten { get; set; }
         public string Dien_Thoai { get; set; }
         public string Email { get; set; }
-        public string Role { get; set; }
+        public int  RoleId { get; set; }
         public int ProvinceId { get; set; }
         public int DistrictId { get; set; }
         public DateTime WorkDate { get; set; }
