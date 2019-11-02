@@ -1,6 +1,6 @@
 ﻿@using KingOffice.Resources;
 @{
-    ViewBag.Title = "Thêm mới nhân viên";
+    ViewBag.Title = "Cập nhật nhân viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script type="text/javascript">
@@ -11,7 +11,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="ace-icon fa fa-home home-icon"></i>
-                <a href="/employee">Nhân sự</a><span><a href="#"> /Thêm mới nhân viên</a></span>
+                <a href="/employee">Nhân sự</a><span><a href="#"> /Cập nhật nhân viên</a></span>
             </li>
         </ul>
     </div>
@@ -105,20 +105,8 @@
                                                 <input type="text" id="txtUserName" placeholder="Tên đăng nhập" class="form-control">
                                             </div>
                                         </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name">Mật khẩu: </div>
 
-                                            <div class="profile-info-value col-sm-4">
-                                                <input type="password" id="txtPass" placeholder="Mật khẩu" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name">Xác nhận mật khẩu: </div>
 
-                                            <div class="profile-info-value col-sm-4">
-                                                <input type="password" id="txtConfirmPass" placeholder="Xác nhận mật khẩu" class="form-control">
-                                            </div>
-                                        </div>
                                         <div class="profile-info-row">
                                             <div class="profile-info-name">Tỉnh/Thành phố: </div>
 
@@ -139,15 +127,13 @@
                                         <div class="profile-info-row">
                                             <div class="profile-info-name">Vai trò trên trang: </div>
                                             <div class="profile-info-value col-sm-4">
-                                                <select id="ddlRole" class="chosen-select form-control" data-placeholder="Chọn nhóm">
-                                                    
-                                                </select>
+                                                <select id="ddlRole" class="chosen-select form-control" data-placeholder="Chọn nhóm"></select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="clearfix form-actions">
                                         <div class="col-md-offset-3 col-md-9">
-                                            <button class="btn btn-info" type="button"  id="btnSave">
+                                            <button class="btn btn-info" type="button" id="btnSave">
                                                 <i class="ace-icon fa fa-check bigger-110"></i>
                                                 Lưu
                                             </button>
@@ -176,52 +162,46 @@
     });
 </script>
 <script>
-    var nhanvien = {
-        UserName: '',
-        Password: '',
-        PasswordConfirm: '',
-        Email: '',
-        FullName: '',
-        Phone: '',
-        ProvinceId: 0,
-        DistrictId: 0,
-        WorkDate:''
-    }
+    var employee = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.employee));
     $(document).ready(function e() {
-        setDateTimeInput("#txtWorkDate")
+        $('.chosen-select').chosen({ width: '100%', allow_single_deselect: true });
+        setDateTimeInput("#txtWorkDate");
         $("#txtPhone").ForceNumericOnly();
-        getProvinces("#ddlProvince");
+        getProvinces("#ddlProvince", employee.ProvinceId);
+        getDistricts(employee.ProvinceId, employee.DistrictId, "#ddlDistrict");
         $('#ddlProvince').on('change', function () {
-            getDistricts(this.value,"#ddlDistrict");
+            debugger
+            getDistricts(employee.ProvinceId, employee.DistrictId, "#ddlDistrict");
         });
+        debugger
+        bindToControl(employee)
         $('#btnSave').click(function (e) {
-            createUser();
+            updateUser();
         })
-        getRoles("#ddlRole", false);
+        getRoles("#ddlRole", true);
     })
-    
-    function createUser() {
-        nhanvien.FullName = $("#txtFullName").val();
-        nhanvien.Email = $("#txtEmail").val();
-        nhanvien.Phone = $("#txtPhone").val();
-        nhanvien.WorkDate = $("#txtWorkDate").val();
-        nhanvien.UserName = $("#txtUserName").val();
-        nhanvien.RoleId = $("#ddlRole").val();
-        nhanvien.Password = $("#txtPass").val();
-        nhanvien.PasswordConfirm = $("#txtConfirmPass").val();
-        nhanvien.ProvinceId = (!isNullOrWhiteSpace($("#ddlProvince").val()) && !isNullOrUndefined($("#ddlProvince").val())) ? parseInt($("#ddlProvince").val()) : 0;
-        nhanvien.DistrictId = (!isNullOrWhiteSpace($("#ddlDistrict").val()) && !isNullOrUndefined($("#ddlDistrict").val())) ? parseInt($("#ddlDistrict").val()) : 0;
-        if (isNullOrWhiteSpace(nhanvien.UserName)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Tên đăng nhập không được để trống",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
-            return;
-        }
-        if (isNullOrWhiteSpace(nhanvien.WorkDate) || isNullOrUndefined(nhanvien.WorkDate)) {
+
+    function bindToControl(employee) {
+        $("#txtFullName").val(employee.FullName);
+        $("#txtEmail").val(employee.Email);
+        $("#txtPhone").val(employee.Phone);
+        $("#txtWorkDate").val(SetFormatDateTimeDMY(employee.WorkDate));
+        $("#txtUserName").val(employee.UserName);
+        $("#ddlProvince").val(employee.ProvinceId);
+        $("#ddlDistrict").val(employee.DistrictId);
+        $("#ddlRole").val(employee.RoleId);
+
+    }
+    function updateUser() {
+        employee.FullName = $("#txtFullName").val();
+        employee.Email = $("#txtEmail").val();
+        employee.Phone = $("#txtPhone").val();
+        employee.WorkDate = $("#txtWorkDate").val();
+        employee.RoleId = (!isNullOrWhiteSpace($("#ddlRole").val()) && !isNullOrUndefined($("#ddlRole").val())) ? parseInt($("#ddlRole").val()) : 0;
+        employee.ProvinceId = (!isNullOrWhiteSpace($("#ddlProvince").val()) && !isNullOrUndefined($("#ddlProvince").val())) ? parseInt($("#ddlProvince").val()) : 0;
+        employee.DistrictId = (!isNullOrWhiteSpace($("#ddlDistrict").val()) && !isNullOrUndefined($("#ddlDistrict").val())) ? parseInt($("#ddlDistrict").val()) : 0;
+
+        if (isNullOrWhiteSpace(employee.WorkDate) || isNullOrUndefined(employee.WorkDate)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn ngày vào làm",
@@ -231,7 +211,7 @@
             });
             return;
         }
-        if (isNullOrWhiteSpace(nhanvien.Email)) {
+        if (isNullOrWhiteSpace(employee.Email)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Email không được để trống",
@@ -241,7 +221,7 @@
             });
             return;
         }
-        if (isNullOrWhiteSpace(nhanvien.FullName)) {
+        if (isNullOrWhiteSpace(employee.FullName)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Họ tên không được để trống",
@@ -251,7 +231,7 @@
             });
             return;
         }
-        if (nhanvien.ProvinceId<=0) {
+        if (employee.ProvinceId<=0) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn tỉnh/thành phố",
@@ -261,7 +241,7 @@
             });
             return;
         }
-        if (nhanvien.DistrictId <=0 ) {
+        if (employee.DistrictId <=0 ) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn quận/huyện",
@@ -271,15 +251,25 @@
             });
             return;
         }
+        if (employee.RoleId <= 0) {
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng chọn vai trò",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
+            return;
+        }
         $.ajax({
             traditional: true,
-            url: '/employee',
+            url: '/employee/update',
             type: "POST",
             contentType: "application/json;",
             dataType: 'json',
-            data: JSON.stringify(nhanvien),
+            data: JSON.stringify(employee),
             success: function (data) {
-                if (data.success == true && data.data >0 ) {
+                if (data.success == true ) {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
                         text: 'Thành công',
@@ -310,6 +300,51 @@
             },
         });
     }
-    
-    
+    function getProvinces(controlId, value) {
+        $.ajax({
+            type: "GET",
+            url: '/locations/provinces',
+            success: function (data) {
+                //$(controlId).empty();
+                //$(controlId).append("<option value='0'></option>");
+                if (data !== null) {
+                    $.each(data.data, function (index, optionData) {
+                        $(controlId).append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
+                    });
+                }
+                $(controlId).val(value)
+                $(controlId).chosen().trigger("chosen:updated");
+                
+            },
+            complete: function () {
+
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+    function getDistricts(provinceId, value, controlId) {
+        $.ajax({
+            type: "GET",
+            url: '/locations/districts/' + provinceId,
+            success: function (data) {
+                debugger
+                $(controlId).empty();
+                $(controlId).append("<option value='0'></option>");
+                if (data !== null) {
+                    $.each(data.data, function (index, optionData) {
+                        $(controlId).append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
+                    });
+                }
+                $(controlId).val(value);
+                $(controlId).chosen().trigger("chosen:updated");
+            },
+            complete: function () {
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
 </script>

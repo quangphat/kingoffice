@@ -25,6 +25,16 @@ namespace Business.Infrastructures
                 .ForMember(a => a.Dien_Thoai, b => b.MapFrom(c => c.Phone))
                 .ForMember(a => a.Email, b => b.MapFrom(c => c.Email))
                 .ForMember(a => a.Ho_Ten, b => b.MapFrom(c => c.FullName));
+            CreateMap<EmployeeEditModel, Nhanvien>()
+                .ForMember(a => a.Dien_Thoai, b => b.MapFrom(c => c.Phone))
+                .ForMember(a => a.Email, b => b.MapFrom(c => c.Email))
+                .ForMember(a => a.Ten_Dang_Nhap, b => b.MapFrom(c => c.UserName))
+                .ForMember(a => a.Ho_Ten, b => b.MapFrom(c => c.FullName));
+            CreateMap<Nhanvien, EmployeeEditModel>()
+               .ForMember(a => a.Phone, b => b.MapFrom(c => c.Dien_Thoai))
+               .ForMember(a => a.UserName, b => b.MapFrom(c => c.Ten_Dang_Nhap))
+               .ForMember(a => a.Email, b => b.MapFrom(c => c.Email))
+               .ForMember(a => a.FullName, b => b.MapFrom(c => c.Ho_Ten));
             CreateMap<HosoRequestModel, HosoModel>()
                 .ForMember(d => d.NgayNhanDon, map => map.MapFrom((s, d) => {
                     return BusinessExtension.ConvertddMMyyyyToDateTime(s.ngaynhandon);

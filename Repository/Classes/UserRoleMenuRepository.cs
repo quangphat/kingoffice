@@ -19,12 +19,12 @@ namespace Repository.Classes
         }
         public async Task<List<UserRoleMenu>> GetMenuByUserRole(string role)
         {
-            var result = await connection.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where RoleCode = '{role}'");
+            var result = await _connection.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where RoleCode = '{role}'");
             return result.ToList();
         }
         public async Task<List<UserRoleMenu>> GetMenuByRoleId(int roleId)
         {
-            var result = await connection.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where RoleId = {roleId}");
+            var result = await _connection.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where RoleId = {roleId}");
             return result.ToList();
         }
     }

@@ -19,13 +19,13 @@ namespace Repository.Classes
 
         public async Task<List<string>> GetPermissionByUserId(int userId)
         {
-            var result = await connection.QueryAsync<string>("sp_getPermissionByUserId",new { @userId = userId}, commandType: CommandType.StoredProcedure);
+            var result = await _connection.QueryAsync<string>("sp_getPermissionByUserId",new { @userId = userId}, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
 
         public async Task<Nhanvien> Login(string userName)
         {
-            var result = await connection.QueryFirstOrDefaultAsync<Nhanvien>($"select * from NHAN_VIEN " +
+            var result = await _connection.QueryFirstOrDefaultAsync<Nhanvien>($"select * from NHAN_VIEN " +
                 $"where Ten_Dang_Nhap = '{userName}' and Trang_Thai = 1 and Xoa <> 1");
             return result;
         }

@@ -46,6 +46,28 @@ namespace KingOffice.Controllers
             var result = await _bizNhanvien.Gets(workFromDate, workToDate, freetext, page, limit);
             return ToResponse(DataPaging.Create(result.datas, result.totalRecord));
         }
+        [HttpGet]
+        [Route("Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var result = await _bizNhanvien.GetById(id);
+            ViewBag.employee = result;
+            return View();
+        }
+        [HttpGet]
+        [Route("getuser/{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var result = await _bizNhanvien.GetById(id);
+            return ToResponse(result);
+        }
+        [HttpPost]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] EmployeeEditModel model)
+        {
+            var result = await _bizNhanvien.Update(model);
+            return ToResponse(result);
+        }
         [Authorize]
         [HttpGet("courier")]
         public async Task<IActionResult> GetCourierSimpleList()

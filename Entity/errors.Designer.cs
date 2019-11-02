@@ -241,6 +241,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Không tìm thấy người dùng.
+        /// </summary>
+        public static string not_found_user {
+            get {
+                return ResourceManager.GetString("not_found_user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nội dung ghi chú không được nhiều hơn 200 ký tự.
         /// </summary>
         public static string note_length_cannot_more_than_200 {

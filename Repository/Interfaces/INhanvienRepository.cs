@@ -10,6 +10,8 @@ namespace Repository.Interfaces
 {
     public interface INhanvienRepository
     {
+        Task<Nhanvien> GetById(int id);
+        Task<bool> Update(Nhanvien entity);
         Task<int> Count(
             DateTime workFromDate,
             DateTime workToDate,

@@ -16,17 +16,42 @@ namespace Business.Classes
     public class NhanvienBusiness : BaseBusiness, INhanvienBusiness
     {
         INhanvienRepository _rpNhanvien;
-        IMapper _mapper;
         public NhanvienBusiness(CurrentProcess process, INhanvienRepository nhanvienRepository, IMapper mapper) : base(mapper, process)
         {
             _rpNhanvien = nhanvienRepository;
-            _mapper = mapper;
         }
-        public async Task<(int totalRecord,List<EmployeeViewModel> datas)> Gets(DateTime? fromDate, DateTime? toDate,
+        public async Task<bool> Update(EmployeeEditModel model)
+        {
+            if (model == null || model.Id <= 0)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            var user = _mapper.Map<Nhanvien>(model);
+            user.UpdatedBy = _process.User.Id;
+            return await _rpNhanvien.Update(user);
+        }
+        public async Task<EmployeeEditModel> GetById(int id)
+        {
+            if (id <= 0)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var user = await _rpNhanvien.GetById(id);
+            if (user == null)
+            {
+                AddError(errors.not_found_user);
+                return null;
+            }
+            var result = _mapper.Map<EmployeeEditModel>(user);
+            return result;
+        }
+        public async Task<(int totalRecord, List<EmployeeViewModel> datas)> Gets(DateTime? fromDate, DateTime? toDate,
             string freetext = "",
             int page = 1, int limit = 10)
         {
-            if(!string.IsNullOrWhiteSpace(freetext) && freetext.Length > 30)
+            if (!string.IsNullOrWhiteSpace(freetext) && freetext.Length > 30)
             {
                 AddError(errors.freetext_length_cannot_lagger_30);
                 return (0, null);
@@ -35,13 +60,13 @@ namespace Business.Classes
             var tDate = toDate == null ? DateTime.Now : toDate.Value;
             BusinessExtension.ProcessPaging(page, ref limit);
             freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
-            var totalRecord = await _rpNhanvien.Count(fDate, tDate,0, freetext);
-            if(totalRecord ==0)
+            var totalRecord = await _rpNhanvien.Count(fDate, tDate, 0, freetext);
+            if (totalRecord == 0)
             {
                 return (0, null);
             }
             var nhanviens = await _rpNhanvien.Gets(fDate, tDate, 0, freetext, page, limit);
-            
+
             return (totalRecord, nhanviens);
         }
         public async Task<int> Create(UserModel entity)
@@ -97,7 +122,7 @@ namespace Business.Classes
                 return 0;
             }
             var existUserName = await _rpNhanvien.GetByUserName(entity.UserName.Trim(), 0);
-            if(existUserName!=null)
+            if (existUserName != null)
             {
                 AddError(errors.username_has_exist);
                 return 0;

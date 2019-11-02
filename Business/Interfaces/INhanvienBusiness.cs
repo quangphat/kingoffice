@@ -8,6 +8,8 @@ namespace Business.Interfaces
 {
     public interface INhanvienBusiness
     {
+        Task<bool> Update(EmployeeEditModel model);
+        Task<EmployeeEditModel> GetById(int id);
         Task<(int totalRecord, List<EmployeeViewModel> datas)> Gets(DateTime? fromDate, DateTime? toDate,
             string freetext = "",
             int page = 1, int limit = 10);

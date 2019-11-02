@@ -22,7 +22,7 @@ namespace Repository.Classes
         {
             var p = new DynamicParameters();
             p.Add("MaHS", hosoId);
-            await connection.ExecuteAsync("sp_TAI_LIEU_HS_XoaTatCa", p,
+            await _connection.ExecuteAsync("sp_TAI_LIEU_HS_XoaTatCa", p,
                 commandType: CommandType.StoredProcedure);
             return true;
         }
@@ -33,14 +33,14 @@ namespace Repository.Classes
             p.Add("DuongDan", model.FilePath);
             p.Add("Ten", model.FileName);
             p.Add("MaHS", model.HosoId);
-            await connection.ExecuteAsync("sp_TAI_LIEU_HS_Them", p,
+            await _connection.ExecuteAsync("sp_TAI_LIEU_HS_Them", p,
                 commandType: CommandType.StoredProcedure);
             return true;
         }
 
         public async Task<List<LoaiTaiLieuModel>> GetLoaiTailieuList()
         {
-            var result = await connection.QueryAsync<LoaiTaiLieuModel>("sp_LOAI_TAI_LIEU_LayDS",null,commandType: CommandType.StoredProcedure);
+            var result = await _connection.QueryAsync<LoaiTaiLieuModel>("sp_LOAI_TAI_LIEU_LayDS",null,commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
     }

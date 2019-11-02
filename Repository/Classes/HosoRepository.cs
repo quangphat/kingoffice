@@ -23,7 +23,7 @@ namespace Repository.Classes
         }
         public async Task<HoSoInfoModel> GetHosoById(int hosoId)
         {
-            var result = await connection.QueryFirstOrDefaultAsync<HoSoInfoModel>("sp_HO_SO_LayChiTiet",
+            var result = await _connection.QueryFirstOrDefaultAsync<HoSoInfoModel>("sp_HO_SO_LayChiTiet",
                 new
                 {
                     ID = hosoId
@@ -43,7 +43,7 @@ namespace Repository.Classes
             string freeText = "")
         {
 
-            return  await connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
+            return  await _connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
                 new
                 {
                     @MaNVDangNhap = maNVDangNhap,
@@ -73,7 +73,7 @@ namespace Repository.Classes
             int limit, 
             bool isDowload = false)
         {
-            var result = await connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyet",
+            var result = await _connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyet",
                 new
                 {
                     @MaNVDangNhap = maNVDangNhap,
@@ -97,7 +97,7 @@ namespace Repository.Classes
         {
             model.NgayTao = DateTime.Now;
             var p = generateHosoParameter(model);
-            await connection.ExecuteAsync("sp_HO_SO_Them", p,
+            await _connection.ExecuteAsync("sp_HO_SO_Them", p,
                 commandType: CommandType.StoredProcedure);
             var result = p.Get<int>("ID");
             return result;
@@ -106,13 +106,13 @@ namespace Repository.Classes
         {
             model.NgayCapnhat = DateTime.Now;
             var p = generateHosoParameter(model);
-            await connection.ExecuteAsync("sp_HO_SO_CapNhat", p,
+            await _connection.ExecuteAsync("sp_HO_SO_CapNhat", p,
                 commandType: CommandType.StoredProcedure);
             return true;
         }
         public async Task<bool> CreateHosoDuyetXem(int hosoId)
         {
-            await connection.ExecuteAsync("sp_HO_SO_DUYET_XEM_Them",
+            await _connection.ExecuteAsync("sp_HO_SO_DUYET_XEM_Them",
                 new
                 {
                     ID = hosoId
@@ -132,7 +132,7 @@ namespace Repository.Classes
             string status
             )
         {
-            var result = await connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyetChuaXem",
+            var result = await _connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyetChuaXem",
                 new
                 {
                     @MaNVDangNhap = userId,

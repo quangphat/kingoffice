@@ -22,7 +22,7 @@ namespace Repository.Classes
         public async Task<List<OptionSimple>> GetList()
         {
             string query = "select Id, Name from Role where Deleted <> 1";
-            var result = await connection.QueryAsync<OptionSimple>(query,  commandType: CommandType.Text);
+            var result = await _connection.QueryAsync<OptionSimple>(query,  commandType: CommandType.Text);
             return result.ToList();
 
         }

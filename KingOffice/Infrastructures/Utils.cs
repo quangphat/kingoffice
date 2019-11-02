@@ -1,4 +1,5 @@
 ﻿using Entity.ViewModels;
+using Microsoft.AspNetCore.Html;
 using MsgPack.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -7,11 +8,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Html;
 namespace KingOffice.Infrastructures
 {
     public static class Utils
     {
+        public static string ToJson(object value)
+        {
+            JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include,
+                ContractResolver = new DefaultContractResolver()
+            };
+            return JsonConvert.SerializeObject(value, _jsonSerializerSettings);
+        }
         public static byte[] ToBinary(Account account)
         {
             using (var ms = new MemoryStream())

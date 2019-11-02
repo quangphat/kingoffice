@@ -180,6 +180,9 @@
   <data name="note_length_cannot_more_than_200" xml:space="preserve">
     <value>Nội dung ghi chú không được nhiều hơn 200 ký tự</value>
   </data>
+  <data name="not_found_user" xml:space="preserve">
+    <value>Không tìm thấy người dùng</value>
+  </data>
   <data name="password_not_match" xml:space="preserve">
     <value>Mật khẩu không khớp</value>
   </data>

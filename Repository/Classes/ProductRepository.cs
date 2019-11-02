@@ -20,14 +20,14 @@ namespace Repository.Classes
         }
         public async Task<List<ProductViewModel>> GetListByDoitacId(int doitacId)
         {
-            var result = await connection.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new {
+            var result = await _connection.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new {
                 @MaDoiTac = doitacId
             }, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
         public async Task<List<ProductViewModel>> GetListByHosoId(int doitaId, int hosoId)
         {
-            var result = await connection.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new
+            var result = await _connection.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new
             {
                 @MaHS = hosoId,
                 @MaDoiTac = doitaId
@@ -40,7 +40,7 @@ namespace Repository.Classes
             p.Add("SanPhamVay", productId);
             p.Add("ID", hosoId);
             p.Add("Exist", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            await connection.ExecuteScalarAsync<int>("sp_SAN_PHAM_VAY_CheckExist", p, commandType: CommandType.StoredProcedure);
+            await _connection.ExecuteScalarAsync<int>("sp_SAN_PHAM_VAY_CheckExist", p, commandType: CommandType.StoredProcedure);
             var result = p.Get<int>("Exist");
             if (result > 0)
                 return true;
@@ -51,7 +51,7 @@ namespace Repository.Classes
             var p = new DynamicParameters();
             p.Add("SanPhamVay", productId);
             p.Add("ID", hosoId);
-            await connection.ExecuteAsync("sp_SAN_PHAM_VAY_CapNhatSuDung", p, commandType: CommandType.StoredProcedure);
+            await _connection.ExecuteAsync("sp_SAN_PHAM_VAY_CapNhatSuDung", p, commandType: CommandType.StoredProcedure);
             return true;
         }
     }
