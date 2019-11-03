@@ -49,6 +49,7 @@ namespace Business.Classes
         }
         public async Task<(int totalRecord, List<EmployeeViewModel> datas)> Gets(DateTime? fromDate, DateTime? toDate,
             string freetext = "",
+            int roleId = 0,
             int page = 1, int limit = 10)
         {
             if (!string.IsNullOrWhiteSpace(freetext) && freetext.Length > 30)
@@ -60,12 +61,12 @@ namespace Business.Classes
             var tDate = toDate == null ? DateTime.Now : toDate.Value;
             BusinessExtension.ProcessPaging(page, ref limit);
             freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
-            var totalRecord = await _rpNhanvien.Count(fDate, tDate, 0, freetext);
+            var totalRecord = await _rpNhanvien.Count(fDate, tDate, roleId, freetext);
             if (totalRecord == 0)
             {
                 return (0, null);
             }
-            var nhanviens = await _rpNhanvien.Gets(fDate, tDate, 0, freetext, page, limit);
+            var nhanviens = await _rpNhanvien.Gets(fDate, tDate, roleId, freetext, page, limit);
 
             return (totalRecord, nhanviens);
         }

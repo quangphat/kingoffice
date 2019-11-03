@@ -21,7 +21,6 @@ namespace Repository.Classes
         }
         public async Task<List<OptionSimpleModelOld>> GetListProvinceSimple()
         {
-            NewConnection();
             var result = await _connection.QueryAsync<OptionSimpleModelOld>("sp_KHU_VUC_LayDSTinh", null, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }

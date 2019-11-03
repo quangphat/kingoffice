@@ -43,7 +43,7 @@ namespace KingOffice.Controllers
             int roleId =0,
             int page = 1, int limit = 10)
         {
-            var result = await _bizNhanvien.Gets(workFromDate, workToDate, freetext, page, limit);
+            var result = await _bizNhanvien.Gets(workFromDate, workToDate, freetext,roleId, page, limit);
             return ToResponse(DataPaging.Create(result.datas, result.totalRecord));
         }
         [HttpGet]

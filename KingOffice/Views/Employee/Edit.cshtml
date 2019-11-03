@@ -167,36 +167,29 @@
         $('.chosen-select').chosen({ width: '100%', allow_single_deselect: true });
         setDateTimeInput("#txtWorkDate");
         $("#txtPhone").ForceNumericOnly();
-        getProvinces("#ddlProvince", employee.ProvinceId);
-        getDistricts(employee.ProvinceId, employee.DistrictId, "#ddlDistrict");
+        getProvinces("#ddlProvince", employee.ProvinceId, employee.DistrictId);
         $('#ddlProvince').on('change', function () {
-            debugger
-            getDistricts(employee.ProvinceId, employee.DistrictId, "#ddlDistrict");
+            getDistricts(this.value, "#ddlDistrict", 0);
         });
-        debugger
         bindToControl(employee)
         $('#btnSave').click(function (e) {
             updateUser();
         })
-        getRoles("#ddlRole", true);
+        getRoles("#ddlRole", true, "Vui lòng chọn", employee.RoleId);
     })
 
     function bindToControl(employee) {
         $("#txtFullName").val(employee.FullName);
         $("#txtEmail").val(employee.Email);
         $("#txtPhone").val(employee.Phone);
-        $("#txtWorkDate").val(SetFormatDateTimeDMY(employee.WorkDate));
+        $("#txtWorkDate").val(FormatDateTimeDMY(employee.WorkDate));
         $("#txtUserName").val(employee.UserName);
-        $("#ddlProvince").val(employee.ProvinceId);
-        $("#ddlDistrict").val(employee.DistrictId);
-        $("#ddlRole").val(employee.RoleId);
-
     }
     function updateUser() {
         employee.FullName = $("#txtFullName").val();
         employee.Email = $("#txtEmail").val();
         employee.Phone = $("#txtPhone").val();
-        employee.WorkDate = $("#txtWorkDate").val();
+        employee.WorkDate = FormatDateTimeDMY($("#txtWorkDate").val());
         employee.RoleId = (!isNullOrWhiteSpace($("#ddlRole").val()) && !isNullOrUndefined($("#ddlRole").val())) ? parseInt($("#ddlRole").val()) : 0;
         employee.ProvinceId = (!isNullOrWhiteSpace($("#ddlProvince").val()) && !isNullOrUndefined($("#ddlProvince").val())) ? parseInt($("#ddlProvince").val()) : 0;
         employee.DistrictId = (!isNullOrWhiteSpace($("#ddlDistrict").val()) && !isNullOrUndefined($("#ddlDistrict").val())) ? parseInt($("#ddlDistrict").val()) : 0;
@@ -300,36 +293,11 @@
             },
         });
     }
-    function getProvinces(controlId, value) {
+    function getProvinces(controlId, value = null, districtValue = 0) {
         $.ajax({
             type: "GET",
             url: '/locations/provinces',
             success: function (data) {
-                //$(controlId).empty();
-                //$(controlId).append("<option value='0'></option>");
-                if (data !== null) {
-                    $.each(data.data, function (index, optionData) {
-                        $(controlId).append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
-                    });
-                }
-                $(controlId).val(value)
-                $(controlId).chosen().trigger("chosen:updated");
-                
-            },
-            complete: function () {
-
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            }
-        });
-    }
-    function getDistricts(provinceId, value, controlId) {
-        $.ajax({
-            type: "GET",
-            url: '/locations/districts/' + provinceId,
-            success: function (data) {
-                debugger
                 $(controlId).empty();
                 $(controlId).append("<option value='0'></option>");
                 if (data !== null) {
@@ -337,7 +305,33 @@
                         $(controlId).append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
                     });
                 }
-                $(controlId).val(value);
+                if (value !== null)
+                    $(controlId).val(value);
+                $(controlId).chosen().trigger("chosen:updated");
+
+            },
+            complete: function () {
+                getDistricts(value, "#ddlDistrict", districtValue)
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+    function getDistricts(provinceId, controlId, value = null) {
+        $.ajax({
+            type: "GET",
+            url: '/locations/districts/' + provinceId,
+            success: function (data) {
+                $(controlId).empty();
+                $(controlId).append("<option value='0'></option>");
+                if (data !== null) {
+                    $.each(data.data, function (index, optionData) {
+                        $(controlId).append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
+                    });
+                }
+                if (value !== null)
+                    $(controlId).val(value);
                 $(controlId).chosen().trigger("chosen:updated");
             },
             complete: function () {

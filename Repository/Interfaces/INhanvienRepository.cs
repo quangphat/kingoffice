@@ -15,12 +15,12 @@ namespace Repository.Interfaces
         Task<int> Count(
             DateTime workFromDate,
             DateTime workToDate,
-            int dateFilterType,
+            int roleId,
             string freeText);
         Task<List<EmployeeViewModel>> Gets(
             DateTime workFromDate,
             DateTime workToDate,
-            int dateFilterType,
+            int roleId,
             string freeText,
             int offset,
             int limit);

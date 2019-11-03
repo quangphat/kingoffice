@@ -1,13 +1,14 @@
-﻿function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format= 'dd/mm/yy') {
+﻿function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format = 'dd/mm/yy') {
+    
     $(controlId).datepicker({
-        dateFormat: format
+        dateFormat: format//'mm-dd-yy'
     }).next().on(ace.click_event, function () {
         $(this).prev().focus();
     });
     if (isSetDefaultDate === true) {
         if (isNullOrUndefined(day))
             day = 0;
-        $(controlId).datepicker({ dateFormat: format }).datepicker("setDate", new Date().getDay + day);
+        $(controlId).datepicker({ dateFormat: 'yy/mm/dd' }).datepicker("setDate", new Date().getDay + day);
     }
 }
 function getTotalPage(totalRecord, limit =10) {
@@ -299,9 +300,18 @@ function addAlert(elementId, message, success = false) {
            + '</div>');
     }
 }
-function convertStringToDate(strDatetime, format = "DD-MM-yyyy") {
-    var dte = moment(strDatetime, format);
-    return dte.local();
+function convertMDYToDMYFromStr(input) {
+    var mydate = moment(input, 'MM/DD/YYYY');
+    return moment(mydate).format("DD/MM/YYYY");
+}
+function convertDMYToMDYFromStr(input) {
+    var mydate = moment(input, 'DD/MM/YYYY');
+    return moment(mydate).format("MM/DD/YYYY");
+}
+function convertStringToDate(strDatetime, format = "MM-DD-YYYY") {
+    var mydate = moment(strDatetime, 'DD/MM/YYYY');
+
+    return moment(mydate).format("MM/DD/YYYY");
 }
 function FormatDateTimeDMYHM(datetime) {
     try {
@@ -317,11 +327,105 @@ function FormatDateTimeDMYHM(datetime) {
         return "";
     }
 }
+function getDateShort(inputDate, defaultFormat = 'DD/MM/YYYY hh:mm A'){
+    let date = new Date(inputDate);
 
+    var utcDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+
+    return moment(utcDate).format(defaultFormat);
+}
+function convertStringtoShortDate (inputDate, format = "DD/MM/YYYY") {
+    let s = inputDate.substring(0, 10)
+    let d = moment(inputDate, format).toDate();
+    return getDateShort(d, format).toString();
+}
+function formatDateFromString(input, format = "DD/MM/YYYY") {
+    let date = convertStringtoShortDate(input);
+    let d = moment(date, format).toDate();
+    return getDateShortFromDate(d, false, format);
+}
+function getDateShortFromDate (inputDate, fromNow = false, defaultFormat = 'DD/MM/YYYY hh:mm:ss A') {
+    return formatDate(inputDate, fromNow, defaultFormat)
+}
+function formatDate(inputDate, timeNow = false, defaultFormat = 'DD/MM/YYYY hh:mm A') {
+    
+    let date = new Date(inputDate);
+
+    let today = new Date();
+    today.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+
+    let yesterday = new Date();
+    yesterday.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    yesterday.setDate(today.getDate() - 1);
+
+    let tomorrow = new Date();
+    tomorrow.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    tomorrow.setDate(today.getDate() + 1);
+
+    let lastWeek = new Date();
+    lastWeek.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    lastWeek.setDate(today.getDate() - 7);
+
+    let lastMonth = new Date();
+    lastMonth.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    lastMonth.setDate(today.getMonth() - 1);
+
+    let result = null;
+    
+    switch (date.getTime()) {
+
+        case today.getTime():
+            if (timeNow) {
+                result = MomentLocale(today, 'vi').fromNow();
+            } else {
+                result = MomentLocale(today, 'vi').calendar();
+            }
+            break;
+        case yesterday.getTime():
+            result = MomentLocale(yesterday, 'vi').calendar();
+            break;
+        case tomorrow.getTime():
+            result = MomentLocale(tomorrow, 'vi').calendar();
+            break;
+        case lastWeek.getTime():
+            result = MomentLocale(lastWeek, 'vi').calendar();
+            break;
+        case lastMonth.getTime():
+            result = MomentLocale(lastMonth, 'vi').calendar();
+            break;
+        default:
+            result = MomentLocale(inputDate, 'vi').format(defaultFormat);
+            break;
+    }
+    return result;
+}
+function formartDatetimeWithMomentJs(datetime, format) {
+    var dateMomentObject = moment("11-29-2019", "dd/mm/yy"); // 1st argument - string, 2nd argument - format
+    var dateObject = dateMomentObject.toDate();
+    
+    //return dateObject.getDate() + "-" + dateObject.getMonth() + "-" + dateObject.getFullYear();
+    return dateObject;
+}
+function MomentLocale(date = new Date(), locale = 'vi') {
+    let m = moment(date).locale(locale);
+    m['_locale']._invalidDate = 'Ngày không hợp lệ'
+    m['_locale']._meridiemParse = /SA|CH/i
+    m['_locale']._longDateFormat.LT = 'hh:mm A'
+    if (m['_locale']._abbr === 'vi') {
+
+        m['_locale']._calendar.sameDay = '[Hôm nay lúc] LT'
+        m['_locale']._calendar.nextDay = '[Ngày mai]'
+        m['_locale']._calendar.nextWeek = '[Tuần tới]'
+        m['_locale']._calendar.lastDay = '[Hôm qua lúc] LT'
+        m['_locale']._calendar.lastWeek = '[Tuần rồi]'
+    }
+    return m
+}
 function FormatDateTimeDMY(datetime) {
     if (isNullOrUndefined(datetime))
         return "";
     try {
+        
         var d = new Date(datetime);
         return d.toLocaleDateString();
         //var valueDate = parseInt(datetime.substr(6));
@@ -353,6 +457,7 @@ function SetFormatDateTime(datetime) {
 }
 function SetFormatDateTimeDMY(datetime) {
     try {
+        
         var valueDate = parseInt(datetime.substr(6));
         if (valueDate < 0)
             return "";
@@ -365,6 +470,7 @@ function SetFormatDateTimeDMY(datetime) {
         return "";
     }
 }
+
 $('.num').keyup(function () {
     this.value = this.value.replace(/[^0-9\.]/g, '');
 });

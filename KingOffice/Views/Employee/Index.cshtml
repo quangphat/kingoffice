@@ -183,6 +183,7 @@
         setTimeout(function () {
 
         }, 500);
+        
         setDateTimeInput("#txtFromWorkDate", true, -30);
         setDateTimeInput("#txtToWorkDate", true);
         setDateTimeInput("#txtFromCreatedDate", false);
@@ -192,8 +193,6 @@
         window.addEventListener('popstate', function (e) {
 
             queries = new URLSearchParams(window.location.search)
-            bindQueries()
-
             page = queries.get("page");
             if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
                 page = 1;
@@ -213,8 +212,11 @@
 
     var strLoading = '@Global.Message_Loading';
     $('#btnSearch').click(function (e) {
-        showBlock($('#panel_body'), strLoading);
+       // showBlock($('#panel_body'), strLoading);
         getData(page, limit);
+        let date = convertStringToDate($("#txtFromWorkDate").val())
+        debugger
+        console.log(date)
     });
     function onClickPage(page) {
         page = page;
@@ -235,6 +237,16 @@
         else
             limit = parseInt(limit)
         $("#ddlLimit").val(limit)
+        let workFromDate = queries.get("workFromDate");
+        if (isNullOrWhiteSpace(workFromDate)) {
+            workFromDate = new Date().getDay + -7;
+        }
+        let workToDate = queries.get("workToDate");
+        if (isNullOrWhiteSpace(workToDate)) {
+            workToDate = new Date().getDay + -7;
+        }
+        $("#txtFromWorkDate").val(convertMDYToDMYFromStr(workFromDate));
+        $("#txtToWorkDate").val(convertMDYToDMYFromStr(workToDate));
     }
     function renderStatus(statusId) {
         var statusString = "";
@@ -286,15 +298,19 @@
     }
     function getData(page, limit,memberId=0, isPopState = false)
     {
-        showBlock($('#panel_body'), strLoading);
-
+        //showBlock($('#panel_body'), strLoading);
+        //console.log($("#txtFromWorkDate").val())
+        //console.log(formatDateFromString('29/11/2019'));
         $.ajax( {
                 url: '/Employee/list',
                 type: "GET",
-                contentType: "application/json",
+            contentType: "application/json",
+           
             data: {
                 'page': page,
                 'limit': limit,
+                'workFromDate': convertDMYToMDYFromStr($("#txtFromWorkDate").val()),
+                'workToDate': convertDMYToMDYFromStr($("#txtToWorkDate").val()),
                 'roleId': isNullOrUndefined($("#ddlRole").val())? 0: parseInt($("#ddlRole").val()),
                 'freetext': $("#txtFreeText").val(),
 

@@ -12,6 +12,7 @@ namespace Business.Interfaces
         Task<EmployeeEditModel> GetById(int id);
         Task<(int totalRecord, List<EmployeeViewModel> datas)> Gets(DateTime? fromDate, DateTime? toDate,
             string freetext = "",
+            int roleId =0,
             int page = 1, int limit = 10);
         Task<int> Create(UserModel entity);
         Task<List<OptionSimpleModelOld>> GetCourierList();

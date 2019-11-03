@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -76,7 +78,21 @@ namespace KingOffice
             services.AddSingleton(mapper);
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+            services.Configure<RequestLocalizationOptions>(
+                        opts =>
+                        {
+                            var supportedCultures = new[]
+                            {
 
+                        new CultureInfo("vi-VN"),
+                            };
+
+                            opts.DefaultRequestCulture = new RequestCulture("vi-VN");
+                            // Formatting numbers, dates, etc.
+                            opts.SupportedCultures = supportedCultures;
+                            // UI strings that we have localized.
+                            opts.SupportedUICultures = supportedCultures;
+                        });
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
