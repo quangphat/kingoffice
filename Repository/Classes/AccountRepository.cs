@@ -29,6 +29,16 @@ namespace Repository.Classes
                 $"where Ten_Dang_Nhap = '{userName}' and Trang_Thai = 1 and Xoa <> 1");
             return result;
         }
+        public async Task<bool> ResetPassword(int id, string newPass)
+        {
+            await _connection.ExecuteAsync($"update NHAN_VIEN set Mat_Khau = @pass where Id = @id  and Trang_Thai = 1 and Xoa <> 1",
+                new {
+                    pass = new DbString() { Value = newPass, IsAnsi = false,Length = 50 },
+                    id = id
+
+                },commandType: CommandType.Text);
+            return true;
+        }
     }
 }
 

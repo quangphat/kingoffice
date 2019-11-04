@@ -8,7 +8,7 @@
     if (isSetDefaultDate === true) {
         if (isNullOrUndefined(day))
             day = 0;
-        $(controlId).datepicker({ dateFormat: 'yy/mm/dd' }).datepicker("setDate", new Date().getDay + day);
+        $(controlId).datepicker({ dateFormat: format }).datepicker("setDate", new Date().getDay() + day);
     }
 }
 function getTotalPage(totalRecord, limit =10) {

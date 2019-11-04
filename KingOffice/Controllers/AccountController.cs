@@ -9,6 +9,8 @@ using Entity.Infrastructures;
 using Entity.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -82,6 +84,18 @@ namespace KingOffice.Controllers
         {
             HttpContext.Session.Clear();
             return new SignOutResult(new[] { "Cookies" });
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("account/reset")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPassModel model)
+        {
+            if (model == null)
+            {
+                return ToResponse(false);
+            }
+            var result = await _bizAccount.ResetPassword(model.Id, model.OldPass, model.NewPass, model.ConfirmPass);
+            return ToResponse(result);
         }
         private bool isValidAccount(Account account)
         {

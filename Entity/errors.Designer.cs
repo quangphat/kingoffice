@@ -142,15 +142,6 @@ namespace Entity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dữ liệu không hợp lệ.
-        /// </summary>
-        public static string missing_data {
-            get {
-                return ResourceManager.GetString("missing_data", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Vui lòng nhập địa chỉ.
         /// </summary>
         public static string missing_diachi {
@@ -255,6 +246,15 @@ namespace Entity {
         public static string note_length_cannot_more_than_200 {
             get {
                 return ResourceManager.GetString("note_length_cannot_more_than_200", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dữ liệu không tồn tại.
+        /// </summary>
+        public static string notfound {
+            get {
+                return ResourceManager.GetString("notfound", resourceCulture);
             }
         }
         

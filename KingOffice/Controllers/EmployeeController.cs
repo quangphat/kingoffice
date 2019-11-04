@@ -52,6 +52,7 @@ namespace KingOffice.Controllers
         {
             var result = await _bizNhanvien.GetById(id);
             ViewBag.employee = result;
+            ViewBag.account = _process.User;
             return View();
         }
         [HttpGet]

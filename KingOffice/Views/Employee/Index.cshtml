@@ -212,11 +212,7 @@
 
     var strLoading = '@Global.Message_Loading';
     $('#btnSearch').click(function (e) {
-       // showBlock($('#panel_body'), strLoading);
-        getData(page, limit);
-        let date = convertStringToDate($("#txtFromWorkDate").val())
-        debugger
-        console.log(date)
+        getData(page, limit);  
     });
     function onClickPage(page) {
         page = page;
@@ -238,15 +234,16 @@
             limit = parseInt(limit)
         $("#ddlLimit").val(limit)
         let workFromDate = queries.get("workFromDate");
-        if (isNullOrWhiteSpace(workFromDate)) {
-            workFromDate = new Date().getDay + -7;
+        
+        if (!isNullOrWhiteSpace(workFromDate)) {
+            $("#txtFromWorkDate").val(convertMDYToDMYFromStr(workFromDate));
         }
         let workToDate = queries.get("workToDate");
-        if (isNullOrWhiteSpace(workToDate)) {
-            workToDate = new Date().getDay + -7;
+        if (!isNullOrWhiteSpace(workToDate)) {
+            $("#txtToWorkDate").val(convertMDYToDMYFromStr(workToDate));
         }
-        $("#txtFromWorkDate").val(convertMDYToDMYFromStr(workFromDate));
-        $("#txtToWorkDate").val(convertMDYToDMYFromStr(workToDate));
+       
+        
     }
     function renderStatus(statusId) {
         var statusString = "";

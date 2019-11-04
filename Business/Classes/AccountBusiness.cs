@@ -20,16 +20,19 @@ namespace Business.Classes
     public class AccountBusiness : BaseBusiness, IAccountBusiness
     {
         protected readonly IAccountRepository _rpAccount;
+        protected readonly INhanvienRepository _rpNhanvien;
         protected readonly IUserRoleMenuRepository _rpUserRoleMenu;
         private readonly AppSettings _appSettings;
         public AccountBusiness(IAccountRepository accountRepository,
             IUserRoleMenuRepository userRoleMenuRepository,
+            INhanvienRepository nhanvienRepository,
             IOptions<AppSettings> appSettings,
             CurrentProcess process, IMapper mapper) : base(mapper, process)
         {
             _rpAccount = accountRepository;
             _rpUserRoleMenu = userRoleMenuRepository;
             _appSettings = appSettings.Value;
+            _rpNhanvien = nhanvienRepository;
         }
         public async Task<Account> Login(string username, string password)
         {
@@ -58,6 +61,56 @@ namespace Business.Classes
                 account.MenuIds = menus.Select(p => p.MenuId).ToList();
             }
             return account;
+        }
+        public async Task<bool> ResetPassword(int id, string oldPass, string newPass, string confirmPass)
+        {
+            //for dev
+            if (id <= 0 )
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+
+            //if (id <= 0 || id != _process.User.Id)
+            //{
+            //    AddError(errors.invalid_data);
+            //    return false;
+            //}
+            if (string.IsNullOrWhiteSpace(oldPass)
+                || string.IsNullOrWhiteSpace(newPass)
+                || string.IsNullOrWhiteSpace(confirmPass))
+            {
+                AddError(errors.username_or_password_must_not_be_empty);
+                return false;
+            }
+            if (newPass != confirmPass)
+            {
+                AddError(errors.password_not_match);
+                return false;
+            }
+            if (newPass.Trim().Length < Constanst.PasswordMinLengthRequire)
+            {
+                AddError(errors.password_not_match_min_length);
+                return false;
+            }
+            var user = await _rpNhanvien.GetById(id);
+            if(user ==null)
+            {
+                AddError(errors.not_found_user);
+                return false;
+            }
+            if(Utils.getMD5(oldPass.Trim()) != user.Mat_Khau)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            string pass = Utils.getMD5(newPass.Trim());
+            var result = await _rpAccount.ResetPassword(id, pass);
+            if(result)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
