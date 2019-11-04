@@ -78,6 +78,7 @@ namespace KingOffice
             services.AddSingleton(mapper);
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+            services.Configure<F88Api>(Configuration.GetSection("F88Api"));
             services.Configure<RequestLocalizationOptions>(
                         opts =>
                         {

@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KingOffice", "KingOffice\KingOffice.csproj", "{2D41F7FB-79F2-4C57-9865-694DD35813AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KingOffice", "KingOffice\KingOffice.csproj", "{2D41F7FB-79F2-4C57-9865-694DD35813AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{D8BE2EE5-52CE-4019-9E4F-376446218C53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{D8BE2EE5-52CE-4019-9E4F-376446218C53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{2875CDBE-4875-4F5D-AC99-DC7F7ECC73FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{2875CDBE-4875-4F5D-AC99-DC7F7ECC73FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{FBEF0C23-E566-400E-9D65-3DB6E8EA2379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "Entity\Entity.csproj", "{FBEF0C23-E566-400E-9D65-3DB6E8EA2379}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F88ServiceApi", "F88ServiceApi\F88ServiceApi.csproj", "{7A690354-3519-48C9-9740-E64C900B9E52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FBEF0C23-E566-400E-9D65-3DB6E8EA2379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBEF0C23-E566-400E-9D65-3DB6E8EA2379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBEF0C23-E566-400E-9D65-3DB6E8EA2379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A690354-3519-48C9-9740-E64C900B9E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A690354-3519-48C9-9740-E64C900B9E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A690354-3519-48C9-9740-E64C900B9E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A690354-3519-48C9-9740-E64C900B9E52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
