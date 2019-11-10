@@ -92,6 +92,16 @@ namespace KingOffice.Controllers
             var result = await _bizHoso.UploadHoso(hosoId, files, _hosting.WebRootPath);
             return ToResponse(result);
         }
-
+        [Authorize]
+        [HttpPost("files/{hosoId}/{key}")]
+        public async Task<IActionResult> UploadFile(int hosoId,string key, List<IFormFile> files)
+        {
+            if (Request.Form != null && Request.Form.Files.Any())
+            {
+               
+                return Json(1);
+            }
+            return ToResponse(string.Empty);
+        }
     }
 }

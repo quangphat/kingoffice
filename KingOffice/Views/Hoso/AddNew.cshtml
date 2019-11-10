@@ -258,9 +258,12 @@
                         <a class="btn btn-sm btn-primary" id="btn_Save">
                             Nộp hồ sơ
                         </a>
+                        <a class="btn btn-sm btn-primary" id="btn_Upload">
+                            Upload Hồ sơ
+                        </a>
                         @*<a class="btn btn-sm btn-primary" href="/HoSo/AddNew" id="btn_addNew">
-                                Tạo mới
-                            </a>*@
+            Tạo mới
+        </a>*@
                     </div>
                 </form>
             </div>
@@ -580,6 +583,7 @@
                 }
             })
         }
+        var files =[]
         function generateDropzone(controlId) {
             var removeButton = Dropzone.createElement('<a class="dz-remove" href="javascript:undefined;" data-dz-remove>Xóa</a>');
             var dropzone = new Dropzone('#' + controlId, {
@@ -605,6 +609,7 @@
                     _this.removeFile(file);
                 });
                 file.previewElement.appendChild(removeButton);
+                files.push(file)
             });
         }
     //function LayDSTaiLieu() {
@@ -871,7 +876,49 @@
         });
         }
     });
+        $("#btn_Upload").click(function (e) {
+            var formData = new FormData();
 
+            for (var i = 0; i != files.length; i++) {
+                formData.append("files", files[i]);
+            }
+            $.ajax({
+                url: '/hoso/files/2/3',
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+            success: function (data) {
+                if (data.success == true && data.data>0) {
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: data.Message.ErrorMessage,
+                        type: "success",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    }, function () {
+                            uploadHoso(hoso.ID,true);
+
+                    });
+                }
+                else {
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: data.error.code,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
+                }
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            },
+            complete: function () {
+                $('#panel_body').unblock();
+            },
+        });
+        })
     $('#btn_Save').click(function (e) {
         let model = getModel();
         if (isNullOrUndefined(hoso))
