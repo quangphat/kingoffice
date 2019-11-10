@@ -4,6 +4,57 @@
 /*.form-group input, .form-group label, .form-group select, .form-group textarea {
   font-size: 11px !important;
 }*/
+.header-hoso {
+    margin-bottom: 16px;
+}
+.dz-preview ,.dz-image-preview {
+    margin: 10px !important;
+    border: 1px solid #36a3f7;
+}
+.dz-details{
+    /*display:none*/
+}
+.dz-error-mark, .dz-error-message, .dz-success-mark, .dz-progress, .dz-size {
+    display: none;
+}
+.ui-information {
+    padding: 16px;
+}
+.ui-product-photo-item{
+    margin-top:15px;
+}
+.ui-product-photo {
+    position: relative;
+    padding: 16px 0;
+}
+    .ui-product-photo .ui-product-photo-grid {
+        list-style-type: none;
+        padding: 0;
+        margin: 0 0 -10px -10px;
+    }
+@media (min-width: 992px) .ui-product-photo .ui-product-photo-grid .ui-product-photo-item {
+    width: 16.66%;
+}
+
+.d-block {
+    display: block !important;
+}
+.dz-image img{
+    max-width:120px;
+    max-height:120px;
+}
+.file-upload {
+    word-break: break-all;
+    border: 1px dashed #36a3f7;
+    position: relative;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 4px;
+    min-width: 370px;
+}
 .form-group label{
   color: #060606
 }
