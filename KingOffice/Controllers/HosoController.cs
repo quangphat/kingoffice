@@ -93,7 +93,7 @@ namespace KingOffice.Controllers
             return ToResponse(result);
         }
         [Authorize]
-        [HttpPost("files/{hosoId}/{key}")]
+        [HttpPost("uploadhoso/{hosoId}/{key}")]
         public async Task<IActionResult> UploadFile(int hosoId,string key, List<IFormFile> files)
         {
             if (Request.Form != null && Request.Form.Files.Any())

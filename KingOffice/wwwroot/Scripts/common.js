@@ -1,4 +1,22 @@
-﻿function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format = 'dd/mm/yy') {
+﻿function isNotValidFileSize(file, imageMaxSize = 2) {
+    //in MB
+    if (file.type) {
+        let size = file.size, maxSize = imageMaxSize * 1024 * 1024;
+        if (size > maxSize)
+            return true;
+    }
+    return false;
+}
+function showMessage(title, message, success = false, showConfirmButton = true,callback) {
+    swal({
+        title: title,
+        text: message,
+        type: success === true ? "success" : "error",
+        timer: 4000,
+        showConfirmButton: showConfirmButton
+    }, callback());
+}
+function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format = 'dd/mm/yy') {
     
     $(controlId).datepicker({
         dateFormat: format//'mm-dd-yy'

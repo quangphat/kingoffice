@@ -262,8 +262,8 @@
                             Upload Hồ sơ
                         </a>
                         @*<a class="btn btn-sm btn-primary" href="/HoSo/AddNew" id="btn_addNew">
-            Tạo mới
-        </a>*@
+                                Tạo mới
+                            </a>*@
                     </div>
                 </form>
             </div>
@@ -283,69 +283,6 @@
     <script>
         Dropzone.autoDiscover = false;
         $(document).ready(function e() {
-            //var dropzone = new Dropzone('#upload-area', {
-            //    url: "/file/post",
-            //    createImageThumbnails: true,
-            //    autoProcessQueue: false,
-            //    autoDiscover: false,
-            //    thumbnailHeight: 120,
-            //    thumbnailWidth: 120,
-            //    init: function () {
-            //        var myDropzone = this;
-
-            //        var mockFile = {
-            //            name: "myimage.jpg",
-            //            type: 'image/jpeg',
-            //            size: 245329,
-            //            thumbnailHeight: 120,
-            //            thumbnailWidth: 120,
-            //            status: Dropzone.ADDED,
-            //            url: "https://product.hara.vn/1000000046/product/website_6_06f82459153f4024ba42ae3f462fe678.jpg"
-            //        };
-
-            //        // Call the default addedfile event handler
-            //        myDropzone.emit("addedfile", mockFile);
-
-            //        // And optionally show the thumbnail of the file:
-            //        myDropzone.emit("thumbnail", mockFile, "https://product.hara.vn/1000000046/product/website_6_06f82459153f4024ba42ae3f462fe678.jpg");
-            //        myDropzone.files.push(mockFile);
-            //    }
-
-            //});
-            //dropzone.on("addedfile", function (file) {
-            //});
-            //var dropzone2 = new Dropzone('#upload-area2', {
-            //    url: "/file/post",
-            //    createImageThumbnails: true,
-            //    autoProcessQueue: false,
-            //    autoDiscover: false,
-            //    thumbnailHeight: 120,
-            //    thumbnailWidth: 120,
-            //    init: function () {
-            //        var myDropzone = this;
-
-            //        var mockFile = {
-            //            name: "myimage.jpg",
-            //            type: 'image/jpeg',
-            //            size: 245329,
-            //            thumbnailHeight: 120,
-            //            thumbnailWidth: 120,
-            //            status: Dropzone.ADDED,
-            //            url: "https://product.hara.vn/1000000046/product/55708876_2179766748765962_4578422690720776192_n_a160c4c2182843ea9ec1b7b69948f74a.png"
-            //        };
-
-            //        // Call the default addedfile event handler
-            //        myDropzone.emit("addedfile", mockFile);
-
-            //        // And optionally show the thumbnail of the file:
-            //        myDropzone.emit("thumbnail", mockFile, "https://product.hara.vn/1000000046/product/55708876_2179766748765962_4578422690720776192_n_a160c4c2182843ea9ec1b7b69948f74a.png");
-            //        myDropzone.files.push(mockFile);
-            //    }
-
-            //});
-            //dropzone2.on("addedfile", function (file) {
-            //});
-
             setTimeout(function () {
                 $('#sidebar li[id="4"]').addClass('active');
             }, 500);
@@ -373,6 +310,30 @@
         });
     </script>
     <script>
+        var hoso = {
+            ID: 0,
+            MaHoSo: null,
+            CourierCode: 0,
+            TenKhachHang: null,
+            CMND: null,
+            DiaChi: null,
+            MaKhuVuc: 0,
+            SDT: null,
+            SDT2: null,
+            GioTinh: 0,
+            MaNguoiTao: 0,
+            HoSoCuaAi: 0,
+            KetQuaHS: null,
+            NgayNhanDon: null,
+            MaTrangThai: 0,
+            Sanphamvay: 0,
+            Doitac: 0,
+            CoBaoHiem: 0,
+            SoTienVay: 0,
+            HanVay: 0,
+            TenCuaHang: null,
+            Ghichu: null
+        };
     $(document).ready(function () {
         LayDSTaiLieu();
         getPartners();
@@ -539,7 +500,7 @@
             }
         });
     }
-    let filesUpload = [];
+    var filesUpload = [];
         var lstFile = null;
         function LayDSTaiLieu() {
             $.ajax({
@@ -577,15 +538,15 @@
                         $('#ds-hoso').append(htmlContent);
                         $.each(data.data, function (index, item) {
                             let controlId = "upload-area-" + item.ID;
-                            generateDropzone(controlId);
+                            generateDropzone(controlId, item.ID,index);
                         });
                     }
                 }
             })
         }
         var files =[]
-        function generateDropzone(controlId) {
-            var removeButton = Dropzone.createElement('<a class="dz-remove" href="javascript:undefined;" data-dz-remove>Xóa</a>');
+        function generateDropzone(controlId, key,index) {
+
             var dropzone = new Dropzone('#' + controlId, {
                 url: "/file/post",
                 createImageThumbnails: true,
@@ -593,144 +554,62 @@
                 autoDiscover: false,
                 thumbnailHeight: 120,
                 thumbnailWidth: 120,
-                //addRemoveLinks: true,
-                //previewTemplate: document.getElementById('preview-template').innerHTML,
+                maxFiles:5,
                 init: function () {
 
                 }
 
             });
+            dropzone.on("maxfilesexceeded", function (file) {
+                alert("Chỉ được upload tối đa 5 file cho 1 loại hồ sơ");
+                return;
+            })
             dropzone.on("addedfile", function (file) {
                 var _this = this;
-                console.log(file.previewElement)
+
+                let removeButton = Dropzone.createElement('<a class="dz-remove" id="' + index + '" href="javascript:undefined;" data-dz-remove>Xóa</a>');
                 removeButton.addEventListener("click", function (e) {
+
                     e.preventDefault();
                     e.stopPropagation();
+                    let index = filesUpload.findIndex(p => p.key == key);
+                    if (index >= 0) {
+                        filesUpload[index].files = filesUpload[index].files.filter(p => p.upload.uuid != file.upload.uuid);
+                        if (isNullOrNoItem(filesUpload[index].files)) {
+                            filesUpload.splice(index, 1);
+                        }
+                    }
                     _this.removeFile(file);
                 });
                 file.previewElement.appendChild(removeButton);
-                files.push(file)
+                let sameFilesKey = filesUpload.find(p => p.key == key)
+                if (!isNullOrUndefined(sameFilesKey) && sameFilesKey.files.length == _this.options.maxFiles) {
+                    _this.removeFile(file);
+                    return;
+                }
+                if (isNotValidFileSize(file)) {
+                    alert("File vượt quá kích thước cho phép là 20 MB");
+                    _this.removeFile(file);
+                    return;
+                }
+                    if (isNullOrNoItem(filesUpload)) {
+                        filesUpload = []
+                    }
+                    let existKeyIndex = filesUpload.findIndex(p => p.key == key)
+                    if (existKeyIndex < 0) {
+                        filesUpload.push({ key: key, files: [file] })
+                    }
+                    else {
+                        if (filesUpload[existKeyIndex].files == null)
+                            filesUpload[existKeyIndex].files = []
+                        filesUpload[existKeyIndex].files.push(file);
+                    }
+
+
+
             });
         }
-    //function LayDSTaiLieu() {
-    //    $.ajax({
-    //        type: "GET",
-    //        url: '/hoso/tailieu',
-    //        success: function (data) {
-    //            if (data.data != null)
-    //            {
-    //                var i = 0;
-    //                var htmlContent = "";
-    //                $.each(data.data, function (index, optionData) {
-    //                    if (i < 4) {
-    //                        htmlContent += "<div class='col-sm-3'>"
-    //                        if (optionData.BatBuoc > 0)
-    //                            htmlContent += "<h5 style='padding: 0px;margin-top: -0px;' class=\"header green\">" + optionData.Ten + "<span class=\"required\">(*)</span></h5>";
-    //                        else
-    //                            htmlContent += "<h5 style='padding: 0px;margin-top: -0px;' class=\"header green\">" + optionData.Ten + "</h5>";
-    //                        htmlContent += "<div class=\"file-loading\">";
-    //                        htmlContent += "<input class='attachFile' key=" + optionData.ID + " id=\"fileCVUngTuyen_" + optionData.ID + "\" type=\"file\">";
-    //                        htmlContent += "</div>";
-    //                        htmlContent += "</div>";
-    //                        i++;
-    //                    }
-    //                    if (i == 4 || index == data.data.length - 1) {
-    //                        i = 0;
-    //                        $('#tbDoc').append("<div class=\"form-group\">" + htmlContent + "</div>");
-    //                        htmlContent = "";
-    //                    }
 
-    //                });
-    //                lstFile = $(".attachFile");
-    //                $.each(lstFile, function (index, option) {
-    //                    let key = parseInt($(option).attr("key"));
-    //                    $(option).fileinput({
-
-    //                        uploadUrl: '/media/uploadtemp/'+ $(option).attr("key") ,
-    //                        validateInitialCount: true,
-    //                        maxFileSize: 25 * 1024,
-    //                        msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>)'
-    //                            + 'exceeds maximum allowed upload size of <b>{25} MB</b>. '
-    //                            + 'Please retry your upload!',
-    //                        allowedFileExtensions: ['png', 'jpg', 'pdf'],
-    //                        initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
-    //                        initialPreviewFileType: 'image',
-    //                        overwriteInitial: false,
-    //                        showUpload: false,
-    //                        showUploadedThumbs: false,
-    //                        uploadAsync: false,
-    //                        showClose: false,
-    //                        showCaption: false,
-    //                        showBrowse: false,
-    //                        showUpload: false, // hide upload button
-    //                        showRemove: false, // hide remove button
-    //                        browseOnZoneClick: true,
-    //                        removeLabel: '',
-    //                        dropZoneTitle: 'Kéo và thả tập tin vào đây',
-    //                        dropZoneClickTitle: '<br>(hoặc nhấp để chọn)',
-    //                        removeIcon: '<i class="glyphicon glyphicon-remove" id ="' + "btn-remove-" + key + '"></i>',
-    //                        removeTitle: 'Cancel or reset changes',
-    //                        elErrorContainer: '#kv-avatar-errors-2',
-    //                        msgErrorClass: 'alert alert-block alert-danger',
-    //                        //layoutTemplates: { main2: '{preview} ' + btnCust + ' {remove} {browse}' },
-    //                        //layoutTemplates: { footer: '' },
-
-    //                        append: true
-
-    //                    }).on("filebatchselected", function (event, files) {
-
-    //                        $(option).fileinput("upload");
-    //                    }).on("filebeforedelete", function (event, files) {
-    //                        filesUpload = filesUpload.filter(p => p.Key != key)
-
-    //                    }).on('filebatchuploadsuccess', function (event, data) {
-    //                        var form = data.form, files = data.files, extra = data.extra,
-    //                            response = data.response, reader = data.reader;
-    //                        filesUpload.push({
-    //                            Key: response.initialPreviewConfig[0].key,
-    //                            FileName: response.initialPreviewConfig[0].caption,
-    //                            FileUrl: response.initialPreview
-    //                        })
-    //                    });
-
-    //                });
-    //            }
-
-    //        },
-    //        complete: function () {
-    //        },
-    //        error: function (jqXHR, exception) {
-    //            showError(jqXHR, exception);
-    //        }
-    //    });
-    //}
-    function removeImage() {
-        alert("add remove")
-    }
-    var hoso = {
-        ID: 0,
-        MaHoSo: null,
-        CourierCode: 0,
-        TenKhachHang: null,
-        CMND: null,
-        DiaChi: null,
-        MaKhuVuc: 0,
-        SDT: null,
-        SDT2: null,
-        GioTinh: 0,
-        MaNguoiTao: 0,
-        HoSoCuaAi: 0,
-        KetQuaHS: null,
-        NgayNhanDon: null,
-        MaTrangThai: 0,
-        Sanphamvay: 0,
-        Doitac:0,
-        CoBaoHiem: 0,
-        SoTienVay: 0,
-        HanVay: 0,
-        TenCuaHang: null,
-        Ghichu: null
-    };
     function renderGhichu(noidung) {
         if (isNullOrWhiteSpace(noidung))
             return
@@ -766,38 +645,20 @@
     }
     $('#btn_Temp').click(function (e) {
         let model = getModel();
-        if (isNullOrUndefined(hoso))
+        @*if (isNullOrUndefined(hoso))
             return;
         if (isNullOrWhiteSpace(model.TenKhachHang)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng nhập tên",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", "Vui lòng nhập tên")
             return;
         }
         if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng chọn đối tác",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", "Vui lòng chọn đối tác")
             return;
         }
         if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng chọn sản phẩm vay",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", "Vui lòng chọn sản phẩm vay")
             return;
-        }
+        }*@
 
 
         $.ajax({
@@ -808,8 +669,11 @@
             dataType: 'json',
             data: JSON.stringify(model),
             success: function (data) {
-                if (data.success == true && data.data>0) {
-                    swal({
+                if (data.success == true && data.data > 0) {
+                    showMessage("@Html.Raw(Global.Message_Title)", 'Thành công', true, true, function () {
+                        alert("success")
+                    })
+                    @*swal({
                         title: "@Html.Raw(Global.Message_Title)",
                         text: 'Thành công',
                         type: "success",
@@ -820,8 +684,10 @@
                             renderGhichu(hoso.Ghichu)
                             hoso.Ghichu =''
                             $("#txtGhiChu").val('')
-                            uploadHoso(hoso.ID)
-                    });
+                            $.each(filesUpload, function (i, item) {
+                                uploadHoso(hoso.ID, item.key, item.files);
+                            })
+                    });*@
 
                 }
                 else {
@@ -842,25 +708,28 @@
                 $('#panel_body').unblock();
             },
         });
-        function uploadHoso(hosoId, reloadOnSuccess = false) {
-            if (isNullOrNoItem(filesUpload))
-                return;
+
+    });
+        function uploadHoso(hosoId, key, files) {
+            var formData = new FormData();
+
+            for (var i = 0; i != files.length; i++) {
+                formData.append("files", files[i]);
+            }
             $.ajax({
-                url: `/HoSo/UploadHoso/${hosoId}`,
+                url: '/hoso/uploadhoso/' + hosoId + "/" + key,
+                data: formData,
+                processData: false,
+                contentType: false,
                 type: "POST",
-                contentType: "application/json;",
-                dataType: 'json',
-                data: JSON.stringify(filesUpload),
-                success: function (data) {
-                    if (data.success == true) {
-                        if (reloadOnSuccess == true) {
-                            window.location = window.location;
-                        }
+            success: function (data) {
+                if (data.success == true && data.data>0) {
+
                 }
                 else {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
-                        text: data.Message.ErrorMessage,
+                        text: data.error.code,
                         type: "error",
                         timer: 4000,
                         showConfirmButton: true,
@@ -875,7 +744,6 @@
             },
         });
         }
-    });
         $("#btn_Upload").click(function (e) {
             var formData = new FormData();
 
@@ -883,7 +751,7 @@
                 formData.append("files", files[i]);
             }
             $.ajax({
-                url: '/hoso/files/2/3',
+                url: '/hoso/uploadhoso/2/3',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -1005,7 +873,10 @@
                         timer: 4000,
                         showConfirmButton: true,
                     }, function () {
-                            uploadHoso(hoso.ID,true);
+                            $.each(filesUpload, function (i, item) {
+                                uploadHoso(data.ID, item.key,item.files);
+                            })
+
 
                     });
                 }
