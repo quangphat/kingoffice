@@ -110,11 +110,28 @@ namespace KingOffice.Controllers
             return ToResponse(result);
         }
         [Authorize]
-        [HttpGet]
+        [HttpGet("DanhsachHoso")]
         public async Task<IActionResult> DanhsachHoso()
         {
-            ViewBag.formindex = LstRole[RouteData.Values["action"].ToString()]._formindex;
+            ViewBag.formindex = "2_2";
             return View();
+        }
+        [Authorize]
+        [HttpGet("search")]
+        public async Task<IActionResult> Search(string maHs,
+            string cmnd,
+            DateTime? fromDate,
+            DateTime? toDate,
+            int loaiNgay = 1,
+            int nhomId = 0,
+            int userId = 0,
+            string freetext = null,
+            string status = null,
+            int page = 1, int limit = 10)
+        {
+            var data = await _bizHoso.GetDanhsachHoso(maHs, cmnd, fromDate, toDate, loaiNgay, nhomId, userId, freetext, status, page, limit);
+            var result = DataPaging.Create(data.datas, data.totalRecord);
+            return ToResponse(result);
         }
     }
 }

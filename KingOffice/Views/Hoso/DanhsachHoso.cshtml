@@ -1,8 +1,611 @@
-﻿
+﻿@using KingOffice.Resources;
 @{
-    ViewData["Title"] = "DanhsachHoso";
+    ViewBag.Title = Global.Home_Index_Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>DanhsachHoso</h2>
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="#">Danh sách hồ sơ</a>
+            </li>
+        </ul>
+    </div>
+    <div class="page-content" id="panel_body">
+        <div class="row">
+            <div class="col-xs-12">
+                <form class="form-horizontal" role="form">
+                    <div class="space-4"></div>
+                    @if (ViewBag.DSNhom != null && ViewBag.DSNhom.Count > 0)
+                    {
+                        <div class="form-group">
+                            <label class="col-sm-1  col-xs-12 control-label no-padding-right" for="form-field-1">Nhóm</label>
+                            <div class="col-sm-5 col-xs-12 ">
+                                <select id="ddlNhom" class="chosen-select form-control" data-placeholder="Chọn nhóm">
+                                    <option value="0"></option>
+                                </select>
+                            </div>
+                            <label class="col-sm-1  col-xs-12 control-label no-padding-right" for="form-field-1">Thành viên</label>
+                            <div class="col-sm-5 col-xs-12 ">
+                                <select id="ddlThanhVienNhom" class="chosen-select form-control" data-placeholder="Chọn thành viên nhóm">
+                                    <option value="0"></option>
+                                </select>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <div class="col-sm-2 col-xs-12 ">
+                            <label class="control-label no-padding-right">
+                                <input name="radio-ngay" type="radio" checked="checked" value="1" class="ace">
+                                <span class="lbl"> Ngày tạo</span>
+                            </label>
+                            <label class="control-label no-padding-right">
+                                <input name="radio-ngay" type="radio" value="2" class="ace">
+                                <span class="lbl"> Ngày cập nhật</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-xs-12 ">
+                            <div class="input-group">
+                                <input class="form-control date-picker" id="txtFromDate" />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar bigger-110"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-12 ">
+                            <div class="input-group">
+                                <input class="form-control date-picker" id="txtToDate" />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar bigger-110"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <label class="col-sm-1 col-xs-12  control-label no-padding-right">Mã hồ sơ</label>
+                        <div class="col-sm-2 col-xs-12">
+                            <input type="text" class="form-control" id="txtMaHS" placeholder="Nhập mã hồ sơ" />
+                        </div>
+                        <label class="col-sm-1 col-xs-12  control-label no-padding-right">CMND</label>
+                        <div class="col-sm-2 col-xs-12">
+                            <input type="text" class="form-control" id="txtCMND" placeholder="Nhập CMND" />
+                        </div>
 
+
+                    </div>
+                    <div class="form-group">
+
+                        <label class="col-sm-1  col-xs-12 control-label no-padding-right" for="form-field-1">Tìm kiếm</label>
+                        <div class="col-sm-5 col-xs-12 ">
+                            <input type="text" class="form-control" id="txtFreeText" placeholder="Tìm kiếm" />
+                        </div>
+                        <label class="col-sm-1  col-xs-12 control-label no-padding-right" for="form-field-1">Trạng thái</label>
+                        <div class="col-sm-5 col-xs-12 ">
+                            <select id="ddlStatus" class="chosen-select form-control" multiple data-placeholder="Chọn nhóm"></select>
+                        </div>
+
+                    </div>
+                    <div class="form-group text-right">
+                        <div class="col-xs-12 ">
+                            <a class="btn btn-primary" id="btn_search">
+                                Tìm kiếm
+                            </a>
+                        </div>
+
+
+                    </div>
+                </form>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div class="table-header">
+                    Danh sách hồ sơ
+                </div>
+                <div class="dataTables_wrapper form-inline no-footer">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label>
+                                Hiển thị
+                                <select id="ddlLimit" class="form-control input-sm" onchange="onSelectLimit()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> dòng mỗi trang
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- div.table-responsive -->
+                <!-- div.dataTables_borderWrap -->
+                <div class="col">
+                    <div class="report-table-custom--overflow">
+                        <table id="dtSource" class="report-table-custom table table-striped table-bordered table-hover">
+                            <thead class="table-header">
+                                <tr>
+                                    <th class="center w-45">STT</th>
+                                    <th class="w-98">ID</th>
+                                    <th class="w-94">Ngày tạo</th>
+                                    <th class="w-84">Đối tác</th>
+                                    <th class="w-105">CMND</th>
+                                    <th class="m-w-150">Tên khách hàng</th>
+                                    <th style="width: 150px">Trạng thái</th>
+                                    <th class="m-w-300">Ghi chú</th>
+                                    <th class="w-94">Ngày cập nhật cuối</th>
+                                    <th class="w-150">Tên sản phẩm</th>
+                                    <th class="w-84">Mã nhân viên</th>
+                                    <th class="m-w-150">Nhân viên bán hàng</th>
+                                    <th class="w-130">Đội ngũ bán hàng</th>
+                                    <th class="m-w-150">Nhân viên nhập liệu</th>
+                                    <th class="w-60">Bảo hiểm</th>
+                                    <th class="w-130">Khu vực</th>
+                                    <th class="w-84">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="clearfix" />
+                <div class="one-row no-gutters justify-content-between paginate">
+                    <div class="col-auto">
+                        <div class="dataTables_info" id="dtSource_info" role="status" aria-live="polite"></div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="one-row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <span id="totalPage"></span>
+                            </div>
+                            <div class="col">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dtSource_paginate">
+                                    <ul class="pagination" id="paging"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="row">
+            <div class="space-6" style="background-color: #d5e3ef;"></div>
+            <div class="col-xs-12" style="margin-bottom:40px;">
+                <div class="pull-right">
+                    <a id="btnDownReport" onclick="DownloadReport(this)" class="btn btn-sm btn-primary "><i class="ace-icon fa fa-download"></i>@Global.Button_Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var queries = new URLSearchParams(window.location.search);
+    var page = 1;
+    var limit = 10;
+    var pageMargin = 2;
+    var totalPage = 1;
+    var totalRecord = 0;
+    var lstStatus = [
+        { value: "0", display: "Lưu tạm" },
+        { value: "1", display: "Nhập liệu" },
+        { value: "2", display: "Thẩm định" },
+        { value: "3", display: "Từ chối" },
+        { value: "4", display: "Bổ sung hồ sơ" },
+        { value: "5", display: "Giải ngân" },
+        { value: "6", display: "Đã đối chiếu" },
+        { value: "7", display: "Hủy" },
+        { value: "8", display: "PCB" },
+    ]
+    var user = document['account']
+    $(document).ready(function e() {
+        setTimeout(function () {
+            SetActiveMenu('@ViewBag.formindex', 2)
+        }, 500);
+        renderStatusList();
+        setDateTimeInput("#txtFromDate", true, -7);
+        setDateTimeInput("#txtToDate", true,0);
+        window.addEventListener('popstate', function (e) {
+
+            queries = new URLSearchParams(window.location.search)
+            bindQueries()
+            var maNhom = queries.get("maNhom");
+            $('#ddlNhom').val(maNhom)
+            $('#ddlNhom').chosen().trigger("chosen:updated").change();
+
+
+            var memberId = queries.get("maThanhVien");
+            if (isNullOrWhiteSpace(maNhom) || parseInt(maNhom) === 0 || isNullOrWhiteSpace(memberId) || parseInt(memberId) === 0) {
+                $('#ddlThanhVienNhom').empty();
+                $('#ddlThanhVienNhom').append("<option value='0'></option>");
+                $('#ddlThanhVienNhom').val('0');
+                $('#ddlThanhVienNhom').chosen().trigger("chosen:updated");
+            }
+            else {
+                $('#ddlThanhVienNhom').val(memberId)
+                $('#ddlThanhVienNhom').chosen().trigger("chosen:updated");
+            }
+
+            page = queries.get("page");
+            if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+                page = 1;
+            else
+                page = parseInt(page)
+            limit = queries.get("limit")
+            if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+                limit = 10;
+            else
+                limit = parseInt(limit)
+            getData(page, limit, memberId, true)
+        });
+        var input = document.getElementById("txtFreeText");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                $("#btn_search").click();
+            }
+        });
+        function bindQueries() {
+            
+            
+            var dateType = queries.get("loaiNgay");
+            setCheckedValueOfRadioButtonGroup("radio-ngay", dateType)
+            var maHS = queries.get("maHS");
+            $('#txtMaHS').val(maHS)
+            $('#txtFreeText').val(queries.get("freetext"))
+            var cmnd = queries.get("cmnd");
+            $('#txtCMND').val(cmnd)
+            page = queries.get("page");
+            if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+                page = 1;
+            else
+                page = parseInt(page)
+            limit = queries.get("limit")
+            if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+                limit = 10;
+            else
+                limit = parseInt(limit)
+            $("#ddlLimit").val(limit)
+            let fromDate = queries.get("fromDate");
+
+            if (!isNullOrWhiteSpace(fromDate)) {
+                $("#txtFromDate").val(convertMDYToDMYFromStr(fromDate));
+            }
+            
+            let toDate = queries.get("toDate");
+            if (!isNullOrWhiteSpace(toDate)) {
+                
+                $("#txtToDate").val(convertMDYToDMYFromStr(toDate));
+            }
+            getData(page, limit);
+        }
+        $('#ddlThanhVienNhom').chosen({ width: '100%', allow_single_deselect: true });
+        $('#ddlNhom').chosen({ width: '100%', allow_single_deselect: true });
+        $('#ddllimit').chosen({ width: '100%', allow_single_deselect: true });
+        
+        var status = decodeURI(queries.get("status"))
+        if (!isNullOrWhiteSpace(status)) {
+            let arrStatus = status.split(',')
+            $('#ddlStatus').val(arrStatus).chosen().trigger("chosen:updated")
+        }
+
+        bindQueries()
+    });
+    var strLoading = '@Global.Message_Loading';
+    $('#btn_search').click(function (e) {
+        showBlock($('#panel_body'), strLoading);
+        getData(page, limit);
+        //$('#dtSource').DataTable().ajax.reload();
+        //$('#dtSource').DataTable().columns.adjust().draw();
+    });
+    function renderStatusList() {
+        $("#ddlStatus").empty();
+        $.each(lstStatus, function (index, item) {
+            $("#ddlStatus").append("<option value='" + item.value + "'>" + item.display + "</option>")
+        })
+        $('#ddlStatus').chosen().trigger("chosen:updated");
+        $('#ddlStatus').trigger("change");
+
+    }
+    function getTotalPage(totalRecord, limit) {
+        return totalRecord > limit ? Math.ceil(totalRecord / limit) : 1
+    }
+    function onClickPage(page) {
+        page = page;
+        getData(page, limit);
+    }
+
+
+
+    function onSelectLimit() {
+        limit = $("#ddlLimit").val()
+        getData(page, limit)
+        //alert(limit)
+    }
+
+        function renderStatus(MaTrangThai, TrangThaiHS) {
+        var statusString = "";
+        if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.Nhap)')
+            statusString = "<span class='label label-sm label-light arrowed arrowed-righ'>Nháp</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.NhapLieu)')
+            statusString = "<span class='label label-sm label-purple arrowed arrowed-righ'>Nhập liệu</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.ThamDinh)')
+            statusString = "<span class='label label-sm label-danger arrowed arrowed-righ'>Thẩm định</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.DaDoiChieu)')
+            statusString = "<span class='label label-sm label-dadoichieu arrowed arrowed-righ'>Đã đối chiếu</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.TuChoi)')
+            statusString = "<span class='label label-sm label-inverse arrowed arrowed-righ'>Từ chối</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.Cancel)')
+            statusString = "<span class='label label-sm label-cancel arrowed arrowed-righ'>Hủy  bỏ</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.PCB)')
+            statusString = "<span class='label label-sm label-pcb arrowed arrowed-righ'>PCB</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)')
+            statusString = "<span class='label label-sm label-info arrowed arrowed-righ'>Bổ sung hồ sơ</span>";
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.GiaiNgan)')
+            statusString = "<span class='label label-sm label-success arrowed arrowed-righ'>Giải ngân</span>";
+        return "<td class='text-left'>" + statusString + "</td>";;
+    }
+    function renderAction(id, MaTrangThai, MaNV) {
+        var thaoTac = "<div class='action-buttons'>"
+            + "<a title='@Global.Button_View' class=\"blue\" style='cursor: pointer' id='" + id+ "' onClick='XemHS(this)'>"
+            + "<i class=\"ace-icon fa fa-eye bigger-130\">"
+            + "</i></a>"
+        if ((MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.TuChoi)
+            || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)
+            || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.Nhap))
+            && MaNV == user.id)
+        {
+                thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='SuaHS(this)' >";
+                thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
+                thaoTac += "</i>";
+                thaoTac += "</a>";
+                thaoTac += "</a>";
+        }
+        else if ((MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.NhapLieu)
+                 || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo))
+                 && 'teamlead' == 'teamlead') {
+            thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='SuaHS(this)' >";
+            thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
+            thaoTac += "</i>";
+            thaoTac += "</a>";
+            thaoTac += "</span>";
+        }
+        else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)'
+
+            && 'sale' == 'sale') {
+            thaoTac += "<a title='@Global.Button_Edit' >";
+            thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
+            thaoTac += "</i>";
+            thaoTac += "</a>";
+            thaoTac += "</span>";
+        }
+        thaoTac += "</div>";
+        return "<td class='text-center'>" + thaoTac + "</td>"
+    }
+    function renderCoBaoHiem(CoBaoHiem) {
+        var value = ""
+        if (CoBaoHiem == true)
+            value = "<td class='text-left'> <div class='orange bolder' title='Không có bảo hiểm' ><i class=\"ace-icon fa fa-ban bigger-130\"></i></div> </td>";
+        else
+            value = "<td class='text-left'> <div class='green bolder'title = 'Có bảo hiểm' > <i class=\"ace-icon glyphicon glyphicon-ok bigger-130\"></i></div> </td>";
+        return value;
+    }
+    function renderRow(index, rowData) {
+        page = queries.get("page");
+        if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+            page = 1;
+        else
+            page = parseInt(page)
+        limit = queries.get("limit")
+        if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+            limit = 10;
+        else
+            limit = parseInt(limit)
+        var stt = (page - 1) * limit + index + 1;
+        return "<tr role='row' class = 'odd'>"
+            + renderTextCenter(stt)
+            + renderTextLeft(rowData.MaHoSo)
+            + renderTextLeft(rowData.NgayTao, 'datetime')
+            + renderTextLeft(rowData.DoiTac)
+            + renderTextLeft(rowData.CMND)
+            + renderTextLeft(rowData.TenKH)
+            + renderStatus(rowData.MaTrangThai, rowData.TrangThaiHS)
+            + renderTextLeft(rowData.GhiChu, '', 'tb-row-breakword')
+            + renderTextLeft(rowData.NgayCapNhat, 'datetime')
+            + renderTextLeft(rowData.TenSanPham)
+            + renderTextLeft(rowData.MaNV)
+            + renderTextLeft(rowData.NhanVienBanHang)
+            + renderTextLeft(rowData.DoiNguBanHang)
+            + renderTextLeft(rowData.MaNVLayHS)
+            + renderCoBaoHiem(rowData.CoBaoHiem)
+            + renderTextLeft(rowData.KhuVucText)
+            + renderAction(rowData.ID, rowData.MaTrangThai, rowData.MaNV)
+            + "</tr>";
+    }
+    function renderTableBody(datas) {
+        var table = $("#dtSource")
+        var tableBody = $("#dtSource").find("tbody");
+        tableBody.empty();
+        if (isNullOrNoItem(datas))
+            return;
+        $.each(datas, function (index, item) {
+            tableBody.append(renderRow(index, item));
+        });
+
+    }
+    //var dsNhom = Html.Raw(Json.Encode(@ViewBag.DSNhom));
+
+    function getData(page, limit, memberId = 0, isPopState = false)
+    {
+        if (isNaN(memberId) || memberId == 0) {
+            memberId = 0;
+        }
+
+        (isNaN(memberId) || memberId == 0) ? $('#ddlThanhVienNhom').val() : memberId
+        showBlock($('#panel_body'), strLoading);
+        $.ajax( {
+                url: '@Url.Action("search", "Hoso")',
+                type: "GET",
+                contentType: "application/json",
+            data: {
+                'page': page,
+                'limit': limit,
+                'maNhom':  0,
+                'userId': memberId,
+                'fromDate': convertDMYToMDYFromStr($("#txtFromDate").val()),
+                'toDate': convertDMYToMDYFromStr($("#txtToDate").val()),
+                'maHs': $('#txtMaHS').val(),
+                'cmnd': $('#txtCMND').val(),
+                'freetext': $("#txtFreeText").val(),
+                'loaiNgay': $('input[name="radio-ngay"]:checked').val(),
+                'status': !isNullOrNoItem($("#ddlStatus").val()) ? $("#ddlStatus").val().toString() : ""
+            },
+            success: function (response) {
+                if (response.Message == null) {
+                    totalRecord = response.data.TotalRecord;
+                    var search = this.url.replace("/Hoso/search", "");
+                    //search = search.replace("/Hoso/TimHSQL","")
+                    queries = new URLSearchParams(search)
+
+                    page = queries.get("page");
+                    if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+                        page = 1;
+                    else
+                        page = parseInt(page)
+                    limit = queries.get("limit")
+
+                    if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+                        limit = 10;
+                    else
+                        limit = parseInt(limit)
+                    renderTableBody(response.data.Datas)
+                    //renderGoPreviousPage(page);
+                    renderPageList(page, limit, totalRecord)
+                    $("#dtSource_info").text("Tổng: " + totalRecord + " items");
+                    $("#totalPage").text("Tổng: " + totalPage + " trang");
+                }
+                else {
+                    swal({
+                        title: "",
+                        text: response.Message.ErrorMessage,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
+                }
+
+            },
+                error: function (jqXHR, exception) {
+                    showError(jqXHR, exception);
+                },
+                complete: function () {
+                    $('#panel_body').unblock();
+                    if (!isPopState) {
+                        var requestUrl = this.url.replace("search", "DanhsachHoso")
+                        window.history.pushState(requestUrl, this.title, requestUrl)
+                    }
+
+            }
+        })
+
+    }
+
+    function LayNhom() {
+        $('#ddlNhom').empty();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LayDSNhom", "QuanLyHoSo")',
+            data: {},
+            success: function (data) {
+                $('#ddlNhom').append("<option value='0'></option>");
+                if (data.DSNhom != null) {
+                    $.each(data.DSNhom, function (index, item) {
+                        $('#ddlNhom').append("<option value='" + item.ID + "'>" + item.Ten + "(" + item.TenQL + ")</option>");
+                    });
+                    $('#ddlNhom').chosen().trigger("chosen:updated").change();
+                }
+                queries = new URLSearchParams(window.location.search)
+                var memberId = queries.get("maThanhVien");
+                getData(page, limit, memberId);
+            },
+            complete: function () {
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+
+    $('#ddlNhom').change(function () {
+        $('#ddlThanhVienNhom').empty();
+        $('#ddlThanhVienNhom').append("<option value='0'></option>");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LayDSThanhVienNhom", "QuanLyHoSo")',
+            data: { "maNhom": $('#ddlNhom').val() },
+            success: function (data) {
+                if (data.DSThanhVienNhom != null) {
+                    $.each(data.DSThanhVienNhom, function (index, item) {
+                        $('#ddlThanhVienNhom').append("<option value='" + item.ID + "'>" + item.Ten + "</option>");
+                    });
+                }
+            },
+            complete: function () {
+                $('#ddlThanhVienNhom').chosen().trigger("chosen:updated");
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    });
+
+    function XemHS(e) {
+        window.location = "/QuanLyHoSo/XemHSByID?id=" + $(e).attr("ID") + "&fromdate=" + $('#txtFromDate').val() + "&todate=" + $('#txtToDate').val() + "&mahs=" + $('#txtMaHS').val();
+    }
+    function SuaHS(e) {
+        window.location = "/QuanLyHoSo/SuaHSByID?id=" + $(e).attr("ID") + "&fromdate=" + $('#txtFromDate').val() + "&todate=" + $('#txtToDate').val();
+    }
+    function DownloadReport(e) {
+        var maNhom = 0;
+        var maThanhVien = 0;
+        if ($('#ddlNhom').val() != undefined) {
+            maNhom = $('#ddlNhom').val();
+        }
+        if ($('#ddlThanhVienNhom').val() != undefined) {
+            maThanhVien = $('#ddlThanhVienNhom').val();
+        }
+        var objectSend = JSON.stringify({ 'maNhom': maNhom, 'maThanhVien': maThanhVien, 'fromDate': $('#txtFromDate').val(), 'toDate': $('#txtToDate').val(), 'maHS': $('#txtMaHS').val(), 'cmnd': $('#txtCMND').val(), 'loaiNgay': $('input[name="radio-ngay"]:checked').val() });
+        $.ajax({
+            traditional: true,
+            url: '/QuanLyHoSo/DownloadReport',
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: objectSend,
+            success: function (data) {
+                if (data.Message.Result == true) {
+                    var link = document.createElement("a");
+                    link.href = data.newurl;
+                    link.click();
+                }
+                else {
+                    swal({
+                        title: "",
+                        text: data.Message.ErrorMessage,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
+                }
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            },
+            complete: function () {
+
+            },
+        });
+    }
+</script>

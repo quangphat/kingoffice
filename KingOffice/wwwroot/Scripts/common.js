@@ -338,7 +338,9 @@ function addAlert(elementId, message, success = false) {
     }
 }
 function convertMDYToDMYFromStr(input) {
+    
     var mydate = moment(input, 'MM/DD/YYYY');
+    
     return moment(mydate).format("DD/MM/YYYY");
 }
 function convertDMYToMDYFromStr(input) {
