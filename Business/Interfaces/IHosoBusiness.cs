@@ -1,4 +1,5 @@
 ﻿using Entity.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,5 +21,7 @@ namespace Business.Interfaces
         Task<List<HosoDuyet>> GetHosoNotApprove();
         Task<long> Save(HosoRequestModel model, bool isDraft);
         Task<bool> UploadHoso(int hosoId, List<FileUploadModel> files, string rootPath);
+        //Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath);
+        Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath, bool deleteExist = false);
     }
 }

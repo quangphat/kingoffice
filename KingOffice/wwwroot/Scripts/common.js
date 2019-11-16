@@ -7,7 +7,17 @@
     }
     return false;
 }
-function showMessage(title, message, success = false, showConfirmButton = true,callback) {
+function showMessage(title, message, success = false, showConfirmButton = true, callback = null) {
+    if (callback === null) {
+        swal({
+            title: title,
+            text: message,
+            type: success === true ? "success" : "error",
+            timer: 4000,
+            showConfirmButton: showConfirmButton
+        });
+        return;
+    }
     swal({
         title: title,
         text: message,
@@ -180,21 +190,7 @@ function setCheckedValueOfRadioButtonGroup(name, vValue) {
         }
     }
 }
-function isNullOrNoItem(arr) {
-    if (arr === null || arr === undefined || arr.length === 0)
-        return true;
-    return false;
-}
-function isNullOrUndefined(value) {
-    if (value === null || value === undefined)
-        return true;
-    return false;
-}
-function isNullOrWhiteSpace(text) {
-    if (text === null || text === undefined || text === '' || text.toString().trim() === '')
-        return true;
-    return false;
-}
+
 
 function showBlock(div, text) {
     div.block({

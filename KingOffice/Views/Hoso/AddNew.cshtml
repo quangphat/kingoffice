@@ -645,22 +645,20 @@
     }
     $('#btn_Temp').click(function (e) {
         let model = getModel();
-        @*if (isNullOrUndefined(hoso))
+        if (isNullOrUndefined(hoso))
             return;
         if (isNullOrWhiteSpace(model.TenKhachHang)) {
-            showMessage("@Html.Raw(Global.Message_Title)", "Vui lòng nhập tên")
+            showMessage("@Html.Raw(Global.Message_Title)", customer_name_must_not_be_empty)
             return;
         }
         if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
-            showMessage("@Html.Raw(Global.Message_Title)", "Vui lòng chọn đối tác")
+            showMessage("@Html.Raw(Global.Message_Title)", select_partner)
             return;
         }
         if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
-            showMessage("@Html.Raw(Global.Message_Title)", "Vui lòng chọn sản phẩm vay")
+            showMessage("@Html.Raw(Global.Message_Title)", select_product)
             return;
-        }*@
-
-
+        }
         $.ajax({
             traditional: true,
             url: '/hoso/draft',
@@ -670,34 +668,18 @@
             data: JSON.stringify(model),
             success: function (data) {
                 if (data.success == true && data.data > 0) {
-                    showMessage("@Html.Raw(Global.Message_Title)", 'Thành công', true, true, function () {
-                        alert("success")
+                    showMessage("@Html.Raw(Global.Message_Title)", success_message, true, true, function () {
+                        hoso.ID = data.data;
+                        renderGhichu(hoso.Ghichu)
+                        hoso.Ghichu = ''
+                        $("#txtGhiChu").val('')
+                        $.each(filesUpload, function (i, item) {
+                            uploadHoso(hoso.ID, item.key, item.files, true);
+                        })
                     })
-                    @*swal({
-                        title: "@Html.Raw(Global.Message_Title)",
-                        text: 'Thành công',
-                        type: "success",
-                        timer: 4000,
-                        showConfirmButton: true,
-                    }, function () {
-                            hoso.ID = data.data;
-                            renderGhichu(hoso.Ghichu)
-                            hoso.Ghichu =''
-                            $("#txtGhiChu").val('')
-                            $.each(filesUpload, function (i, item) {
-                                uploadHoso(hoso.ID, item.key, item.files);
-                            })
-                    });*@
-
                 }
                 else {
-                    swal({
-                        title: "@Html.Raw(Global.Message_Title)",
-                        text: data.error.code,
-                        type: "error",
-                        timer: 4000,
-                        showConfirmButton: true,
-                    });
+                    showMessage("@Html.Raw(Global.Message_Title)", data.error.code)
                 }
 
             },
@@ -710,150 +692,38 @@
         });
 
     });
-        function uploadHoso(hosoId, key, files) {
-            var formData = new FormData();
 
-            for (var i = 0; i != files.length; i++) {
-                formData.append("files", files[i]);
-            }
-            $.ajax({
-                url: '/hoso/uploadhoso/' + hosoId + "/" + key,
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: "POST",
-            success: function (data) {
-                if (data.success == true && data.data>0) {
-
-                }
-                else {
-                    swal({
-                        title: "@Html.Raw(Global.Message_Title)",
-                        text: data.error.code,
-                        type: "error",
-                        timer: 4000,
-                        showConfirmButton: true,
-                    });
-                }
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            },
-            complete: function () {
-                $('#panel_body').unblock();
-            },
-        });
-        }
-        $("#btn_Upload").click(function (e) {
-            var formData = new FormData();
-
-            for (var i = 0; i != files.length; i++) {
-                formData.append("files", files[i]);
-            }
-            $.ajax({
-                url: '/hoso/uploadhoso/2/3',
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: "POST",
-            success: function (data) {
-                if (data.success == true && data.data>0) {
-                    swal({
-                        title: "@Html.Raw(Global.Message_Title)",
-                        text: data.Message.ErrorMessage,
-                        type: "success",
-                        timer: 4000,
-                        showConfirmButton: true,
-                    }, function () {
-                            uploadHoso(hoso.ID,true);
-
-                    });
-                }
-                else {
-                    swal({
-                        title: "@Html.Raw(Global.Message_Title)",
-                        text: data.error.code,
-                        type: "error",
-                        timer: 4000,
-                        showConfirmButton: true,
-                    });
-                }
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            },
-            complete: function () {
-                $('#panel_body').unblock();
-            },
-        });
-        })
     $('#btn_Save').click(function (e) {
         let model = getModel();
         if (isNullOrUndefined(hoso))
             return;
         if (isNullOrWhiteSpace(model.TenKhachHang)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng nhập tên",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", customer_name_must_not_be_empty)
             return;
         }
         if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng chọn đối tác",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", select_partner)
+
             return;
         }
         if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng chọn sản phẩm vay",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", select_product)
             return;
         }
-
-
         if (isNullOrWhiteSpace(model.SDT)
             || model.SDT.length != 10) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Số điện thoại di động phải đúng 10 số!",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", invalid_phone)
+
             return;
         }
         if (isNullOrWhiteSpace(model.SDT2)
             || model.SDT2.length != 10) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Số điện thoại nhân viên phải đúng 10 số!",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", invalid_employee_phone);
             return;
         }
         if (isNullOrWhiteSpace(model.CMND) ||
             (model.CMND.length != 9 && model.CMND.length != 12)) {
-            swal({
-                title: "@Html.Raw(Global.Message_Title)",
-                text: "Số CMND chỉ 9 hoặc 12 số!",
-                type: "error",
-                timer: 4000,
-                showConfirmButton: true,
-            });
+            showMessage("@Html.Raw(Global.Message_Title)", invalid_id_number);
             return;
         }
         model.files = filesUpload
@@ -873,21 +743,11 @@
                         timer: 4000,
                         showConfirmButton: true,
                     }, function () {
-                            $.each(filesUpload, function (i, item) {
-                                uploadHoso(data.ID, item.key,item.files);
-                            })
-
-
+                        uploadHoso(data.ID, item.key, item.files, false);
                     });
                 }
                 else {
-                    swal({
-                        title: "@Html.Raw(Global.Message_Title)",
-                        text: data.error.code,
-                        type: "error",
-                        timer: 4000,
-                        showConfirmButton: true,
-                    });
+                    showMessage("@Html.Raw(Global.Message_Title)", data.error.code)
                 }
             },
             error: function (jqXHR, exception) {
@@ -897,5 +757,47 @@
                 $('#panel_body').unblock();
             },
         });
+    });
+        function uploadHoso(hosoId, key, files, isDraft) {
+            if (isNullOrUndefined(hosoId) || isNullOrWhiteSpace(key))
+                return;
+            if (isNullOrNoItem(filesUpload))
+                return;
+            let formData = new FormData();
+            for (let i = 0; i != filesUpload.length; i++) {
+                if (!isNullOrNoItem(filesUpload[i].files)) {
+                    for (let j = 0; j < filesUpload[i].files.length; j++) {
+                        formData.append("files",filesUpload[i].files[j] );
+                        formData.append("files",  filesUpload[i].key);
+                    }
+                }
+
+            }
+            let model = filesUpload
+            $.ajax({
+                url: '/hoso/uploadhoso/' + hosoId + "/test",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+            success: function (data) {
+                if (data.success == true) {
+
+                }
+                else {
+                    showMessage("@Html.Raw(Global.Message_Title)", data.error.code)
+                }
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            },
+            complete: function () {
+                $('#panel_body').unblock();
+            },
+        });
+        }
+        $('#btn_Upload').click(function (e) {
+            uploadHoso(12, "2", null, false)
+
     });
     </script>

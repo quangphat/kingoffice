@@ -11,4 +11,10 @@ namespace Entity.ViewModels
         public string FileName { get; set; }
         public string FileUrl { get; set; }
     }
+
+    public class HosoFilesModel
+    {
+        public int key { get; set; }
+        public IFormFile file { get; set; }
+    }
 }

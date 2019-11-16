@@ -18,6 +18,18 @@ namespace Business.Classes
         {
 
         }
+        public async Task<string> Upload(Stream stream, string key, string name, string webRootPath)
+        {
+            stream.Position = 0;
+            string fileUrl = string.Empty;
+            var file = BusinessExtension.GetFileUploadUrl(name, webRootPath);
+            using (var fileStream = System.IO.File.Create(file.FullPath))
+            {
+                await stream.CopyToAsync(fileStream);
+                fileStream.Close();
+                return file.FileUrl;
+            }
+        }
         public async Task<MediaUploadConfig> UploadSingle(Stream stream, string key, string name, string webRootPath)
         {
             stream.Position = 0;

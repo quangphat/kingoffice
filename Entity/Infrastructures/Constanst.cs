@@ -8,5 +8,6 @@ namespace Entity.Infrastructures
     {
         public const int Limit_Max_Page = 100;
         public const int PasswordMinLengthRequire = 6;
+        public const int MaxFileSize = 20;// MB
     }
 }

@@ -167,5 +167,11 @@ namespace Business.Infrastructures
             };
 
         }
+        public static bool IsNotValidFileSize(long fileLength)
+        {
+            if (fileLength > Constanst.MaxFileSize * 1024 * 1024)
+                return true;
+            return false;
+        }
     }
 }

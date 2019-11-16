@@ -21,14 +21,17 @@ namespace KingOffice.Controllers
         protected readonly IHosoBusiness _bizHoso;
         protected readonly ITailieuBusiness _bizLoaiTl;
         protected readonly IHostingEnvironment _hosting;
+        
         public HosoController(CurrentProcess process,
             ITailieuBusiness loaiTailieuBusiness,
             IHostingEnvironment hosting,
+            
         IHosoBusiness hosoBusiness) : base(process)
         {
             _bizHoso = hosoBusiness;
             _bizLoaiTl = loaiTailieuBusiness;
             _hosting = hosting;
+            
         }
         public static Dictionary<string, ActionInfo> LstRole
         {
@@ -93,15 +96,18 @@ namespace KingOffice.Controllers
             return ToResponse(result);
         }
         [Authorize]
-        [HttpPost("uploadhoso/{hosoId}/{key}")]
-        public async Task<IActionResult> UploadFile(int hosoId,string key, List<IFormFile> files)
+        [HttpPost("uploadhoso/{hosoId}/{key}/{isDraft}")]
+        public async Task<IActionResult> UploadFile(int hosoId,int key,bool isDraft, List<IFormFile> files)
         {
-            if (Request.Form != null && Request.Form.Files.Any())
-            {
-               
-                return Json(1);
-            }
-            return ToResponse(string.Empty);
+            var result = await _bizHoso.UploadHoso(hosoId, key, files, _hosting.WebRootPath, !isDraft);
+            return ToResponse(result);
+        }
+        [Authorize]
+        [HttpPost("uploadhoso/{hosoId}/test")]
+        public async Task<IActionResult> UploadFile(int hosoId, HosoFilesModel files)
+        {
+            var result = true;// await _bizHoso.UploadHoso(hosoId, key, files, _hosting.WebRootPath, !isDraft);
+            return ToResponse(result);
         }
     }
 }

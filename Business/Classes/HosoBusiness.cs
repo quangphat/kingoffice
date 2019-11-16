@@ -6,12 +6,15 @@ using Entity.DatabaseModels;
 using Entity.Enums;
 using Entity.Infrastructures;
 using Entity.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace Business.Classes
 {
@@ -23,11 +26,13 @@ namespace Business.Classes
         protected readonly IAutoIdRepository _rpAuto;
         protected readonly INotesRepository _rpNotes;
         protected readonly ITailieuRepository _rpTailieu;
+        protected IServiceProvider _serviceProvider;
         public HosoBusiness(CurrentProcess process,
             IHosoRepository hosoRepository,
             IProductRepository productRepository,
             IAutoIdRepository autoIdRepository,
             INotesRepository notesRepository,
+            IServiceProvider serviceProvider,
             ITailieuRepository tailieuRepository,
             IMapper mapper) : base(mapper, process)
         {
@@ -37,6 +42,7 @@ namespace Business.Classes
             _rpAuto = autoIdRepository;
             _rpTailieu = tailieuRepository;
             _rpNotes = notesRepository;
+            _serviceProvider = serviceProvider;
         }
         public async Task<long> Save(HosoRequestModel model, bool isDraft)
         {
@@ -45,25 +51,25 @@ namespace Business.Classes
                 AddError(errors.note_length_cannot_more_than_200);
                 return 0;
             }
-            if(model.Doitac <=0)
+            if (model.Doitac <= 0)
             {
                 AddError(errors.missing_partner);
                 return 0;
             }
             if (!isDraft)
             {
-                var lstLoaiTailieu =await _rpTailieu.GetLoaiTailieuList();
-                if(lstLoaiTailieu!=null)
+                var lstLoaiTailieu = await _rpTailieu.GetLoaiTailieuList();
+                if (lstLoaiTailieu != null)
                 {
                     var missingNames = BusinessExtension.GetFilesMissing(lstLoaiTailieu, model.files);
-                   if(missingNames.Length>0)
+                    if (missingNames.Length > 0)
                     {
                         AddError($"{errors.missing_must_have_files} {missingNames.ToString()}");
                         return 0;
                     }
                 }
             }
-            
+
             var hoso = _mapper.Map<HosoModel>(model);
             var validate = validateHoso(hoso, isDraft);
 
@@ -87,7 +93,7 @@ namespace Business.Classes
             {
                 await AddNote(hosoId, model.Ghichu);
             }
-            if(!isDraft)
+            if (!isDraft)
             {
 
             }
@@ -116,7 +122,7 @@ namespace Business.Classes
             var result = await _rpHoso.Update(hoso);
             if (result)
             {
-               
+
             }
             return hoso.ID;
         }
@@ -222,6 +228,46 @@ namespace Business.Classes
                     TypeId = Convert.ToInt32(item.Key)
                 };
                 await _rpTailieu.Add(tailieu);
+            }
+            return true;
+        }
+        public async Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath, bool deleteExist = false)
+        {
+            if (files == null || !files.Any())
+            {
+                return true;
+            }
+            if(hosoId <=0 || key<=0)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            var deleted = false;
+            deleted = deleteExist ? await _rpTailieu.RemoveAllTailieu(hosoId) : true;
+            if (!deleted)
+                return false;
+            IMediaBusiness bizMedia = _serviceProvider.GetService<IMediaBusiness>();
+            foreach(var file in files)
+            {
+                if(!BusinessExtension.IsNotValidFileSize(file.Length))
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(stream);
+                        var result = await bizMedia.Upload(stream, key.ToString(), file.FileName, rootPath);
+                        if(!string.IsNullOrWhiteSpace(result))
+                        {
+                            var tailieu = new TaiLieu
+                            {
+                                FileName = file.FileName,
+                                FilePath = result,
+                                HosoId = hosoId,
+                                TypeId = key
+                            };
+                            await _rpTailieu.Add(tailieu);
+                        }
+                    }
+                }
             }
             return true;
         }
