@@ -380,17 +380,17 @@
 }
 
 .file-drop-zone {
-    border: 1px dashed #aaa;
-    border-radius: 4px;
+    /* border: 1px dashed #aaa; */
+    /* border-radius: 4px; */
     height: 100%;
     text-align: center;
     vertical-align: middle;
-    margin: 12px 15px 12px 12px;
+    /* margin: 12px 15px 12px 12px; */
     padding: 5px;
 }
 
 .file-drop-zone.clickable:hover {
-    border: 2px dashed #999;
+    /*border: 2px dashed #999;*/
 }
 
 .file-drop-zone.clickable:focus {

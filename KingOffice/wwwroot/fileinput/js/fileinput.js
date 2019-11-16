@@ -695,7 +695,7 @@
                 '<div class="clearfix"></div>';
             //noinspection HtmlUnknownAttribute
             tActionDelete = '<button type="button" class="kv-file-remove {removeClass}" ' +
-                'title="{removeTitle}" {dataUrl}{dataKey}>{removeIcon}</button>\n';
+                'title="{removeTitle}" {dataUrl}{dataKey} {dataId}>{removeIcon}</button>\n';
             tActionUpload = '<button type="button" class="kv-file-upload {uploadClass}" title="{uploadTitle}">' +
                 '{uploadIcon}</button>';
             tActionDownload = '<a class="kv-file-download {downloadClass}" title="{downloadTitle}" ' +
@@ -864,6 +864,8 @@
                     showDownload: true,
                     showZoom: true,
                     showDrag: true,
+                    fileId:'0',
+                    btnDeleteId:'',
                     removeIcon: '<i class="glyphicon glyphicon-trash"></i>',
                     removeClass: 'btn btn-sm btn-kv btn-default btn-outline-secondary',
                     removeErrorClass: 'btn btn-sm btn-kv btn-danger',
@@ -2678,7 +2680,8 @@
                         return false;
                     }
                     self.ajaxAborted = false;
-                    self._raise('filebeforedelete', [vKey, extraData]);
+                    
+                    self._raise('filebeforedelete', [vKey, self.fileId]);
                     //noinspection JSUnresolvedVariable,JSHint
                     if (self.ajaxAborted instanceof Promise) {
                         self.ajaxAborted.then(function (result) {
@@ -2938,6 +2941,7 @@
             }
         },
         _setFileDropZoneTitle: function () {
+            
             var self = this, $zone = self.$container.find('.file-drop-zone'), title = self.dropZoneTitle, strFiles;
             if (self.isClickable) {
                 strFiles = $h.isEmpty(self.$element.attr('multiple')) ? self.fileSingle : self.filePlural;
@@ -3366,13 +3370,16 @@
                 btnZoom = '', btnDrag = '', css, template = self._getLayoutTemplate('actions'),
                 config = self.fileActionSettings,
                 otherButtons = self.otherActionButtons.setTokens({'dataKey': vKey, 'key': key}),
+                btnDeleteId = self.btnDeleteId !='' ? "id='" + self.btnDeleteId +"'" :'',
                 removeClass = disabled ? config.removeClass + ' disabled' : config.removeClass;
+                
             if (showDel) {
                 btnDelete = self._getLayoutTemplate('actionDelete').setTokens({
                     'removeClass': removeClass,
                     'removeIcon': config.removeIcon,
                     'removeTitle': config.removeTitle,
                     'dataUrl': vUrl,
+                    'dataId':btnDeleteId,
                     'dataKey': vKey,
                     'key': key
                 });
@@ -4220,6 +4227,7 @@
         uploadIcon: '<i class="glyphicon glyphicon-upload"></i>',
         uploadClass: 'btn btn-default btn-secondary',
         uploadUrl: null,
+        btnDeleteId:'',
         uploadUrlThumb: null,
         uploadAsync: true,
         uploadExtraData: {},

@@ -9,6 +9,7 @@ namespace Entity.ViewModels
         public string initialPreview { get; set; }
         public PreviewConfig[] initialPreviewConfig { get; set; }
         public bool append { get; set; }
+        public Guid Id { get; set; }
     }
     public class PreviewConfig
     {

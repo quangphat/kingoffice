@@ -79,17 +79,17 @@
                         </div>
                     </div>
                     @*<div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">Sale Code</label>
-                            <div class="col-sm-4">
-                                <select id="ddlInternalCode" class="chosen-select form-control" data-placeholder="Chọn Sale Code">
-                                    <option value="0"></option>
-                                </select>
-                            </div>
-                            <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên nhân viên</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="txtTenNV" data-toggle-tt="tooltip" placeholder="Tên nhân viên" class="form-control" />
-                            </div>
-                        </div>*@
+                        <label class="col-sm-2 control-label no-padding-right">Sale Code</label>
+                        <div class="col-sm-4">
+                            <select id="ddlInternalCode" class="chosen-select form-control" data-placeholder="Chọn Sale Code">
+                                <option value="0"></option>
+                            </select>
+                        </div>
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên nhân viên</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="txtTenNV" data-toggle-tt="tooltip" placeholder="Tên nhân viên" class="form-control" />
+                        </div>
+                    </div>*@
                     <div class="form-group">
                         <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Courier Code</label>
                         <div class="col-sm-4">
@@ -152,94 +152,15 @@
                 <h3 class="header smaller lighter blue">3.Hồ sơ đính kèm:</h3>
                 <div class="row">
                     <div class="col-xs-12" style="overflow-y: scroll;max-height:400px;">
-                        @*<form class="form-horizontal" role="form" id="tbDoc"></form>*@
-                        @*<ul class="nav nav-tabs padding-16" id="ds-hoso">
-
-                            </ul>*@
+                        <form class="form-horizontal" role="form" id="lstTailieu"></form>
                     </div>
                 </div>
 
             </div>
 
         </div>
-        <div class="ui-information">
-            <div class="ui-information-head">
-                @*<span class="ui-information-title">Hình ảnh sản phẩm</span>*@
-            </div>
-            <div class="ui-information-body">
-                <div class="form-group p-0">
 
-                </div>
-                <div class="ui-product-photo productInfoNew-uploadImage">
-                    <ul class="ui-product-photo-grid clearfix" id="ds-hoso">
-                        @*<li class="ui-product-photo-item d-block">
-                                <div class="file-upload position-relative is-dragging" id="upload-area">
-                                    <DIV class="dz-message needsclick">
-                                        <div class="fileupload-text text-center">
-                                            <svg class="svg-next-icon svg-next-icon-size-30" width="30" height="30">
-                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 490.667 490.667" fill="#6C798F">
-                                                    <path d="M448,128h-67.627l-39.04-42.667H192v64h-64v64H64v213.333c0,23.467,19.2,42.667,42.667,42.667H448c23.467,0,42.667-19.2,42.667-42.667v-256C490.667,147.2,471.467,128,448,128z M277.333,405.333c-58.88,0-106.667-47.787-106.667-106.667S218.453,192,277.333,192S384,239.787,384,298.667S336.213,405.333,277.333,405.333z">
-                                                    </path>
-                                                    <polygon points="64,192 106.667,192 106.667,128 170.667,128 170.667,85.333 106.667,85.333 106.667,21.333 64,21.333 64,85.333 0,85.333 0,128 64,128 			">
-                                                    </polygon>
-                                                    <path d="M277.333,230.4c-37.76,0-68.267,30.507-68.267,68.267h0c0,37.76,30.507,68.267,68.267,68.267c37.76,0,68.267-30.507,68.267-68.267S315.093,230.4,277.333,230.4z"></path>
-                                                </svg>
-                                            </svg>
-                                            <p class="mb-0 mt-2 text-secondary">Thêm hình ảnh</p>
-                                        </div>
-                                    </DIV>
-
-                                </div>
-                            </li>*@
-                        @*<li class="ui-product-photo-item d-block">
-                                <div class="file-upload position-relative is-dragging" id="upload-area2">
-                                    <DIV class="dz-message needsclick">
-                                        <div class="fileupload-text text-center">
-                                            <svg class="svg-next-icon svg-next-icon-size-30" width="30" height="30">
-                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 490.667 490.667" fill="#6C798F">
-                                                    <path d="M448,128h-67.627l-39.04-42.667H192v64h-64v64H64v213.333c0,23.467,19.2,42.667,42.667,42.667H448c23.467,0,42.667-19.2,42.667-42.667v-256C490.667,147.2,471.467,128,448,128z M277.333,405.333c-58.88,0-106.667-47.787-106.667-106.667S218.453,192,277.333,192S384,239.787,384,298.667S336.213,405.333,277.333,405.333z">
-                                                    </path>
-                                                    <polygon points="64,192 106.667,192 106.667,128 170.667,128 170.667,85.333 106.667,85.333 106.667,21.333 64,21.333 64,85.333 0,85.333 0,128 64,128 			">
-                                                    </polygon>
-                                                    <path d="M277.333,230.4c-37.76,0-68.267,30.507-68.267,68.267h0c0,37.76,30.507,68.267,68.267,68.267c37.76,0,68.267-30.507,68.267-68.267S315.093,230.4,277.333,230.4z"></path>
-                                                </svg>
-                                            </svg>
-                                            <p class="mb-0 mt-2 text-secondary">Thêm hình ảnh</p>
-                                        </div>
-                                    </DIV>
-
-                                </div>
-                            </li>*@
-                    </ul>
-                </div>
-                @*<div class="dz-preview dz-image-preview" id="preview-template">
-                        <div class="dz-image">
-
-                        </div>
-                        <div class="dz-details">
-                            <div class="dz-size"></div>
-                            <div class="dz-filename"></div>
-                        </div>
-                        <div class="dz-error-mark">
-                            <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Xóa</a>
-                        </div>
-                    </div>*@
-                <div id="preview-template">
-                    <div class="dz-preview dz-file-preview well" id="dz-preview-template">
-                        <div class="dz-details">
-                            <div class="dz-filename"><span data-dz-name></span></div>
-                            <div class="dz-size" data-dz-size></div>
-                        </div>
-                        <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-                        <div class="dz-success-mark"><span></span></div>
-                        <div class="dz-error-mark"><span><a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Xóa</a></span></div>
-                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
+        
         <div class="row">
             <div class="col-xs-12">
                 <hr />
@@ -258,12 +179,9 @@
                         <a class="btn btn-sm btn-primary" id="btn_Save">
                             Nộp hồ sơ
                         </a>
-                        <a class="btn btn-sm btn-primary" id="btn_Upload">
-                            Upload Hồ sơ
-                        </a>
                         @*<a class="btn btn-sm btn-primary" href="/HoSo/AddNew" id="btn_addNew">
-                                Tạo mới
-                            </a>*@
+                            Tạo mới
+                        </a>*@
                     </div>
                 </form>
             </div>
@@ -283,6 +201,7 @@
     <script>
         Dropzone.autoDiscover = false;
         $(document).ready(function e() {
+
             setTimeout(function () {
                 $('#sidebar li[id="4"]').addClass('active');
             }, 500);
@@ -310,30 +229,8 @@
         });
     </script>
     <script>
-        var hoso = {
-            ID: 0,
-            MaHoSo: null,
-            CourierCode: 0,
-            TenKhachHang: null,
-            CMND: null,
-            DiaChi: null,
-            MaKhuVuc: 0,
-            SDT: null,
-            SDT2: null,
-            GioTinh: 0,
-            MaNguoiTao: 0,
-            HoSoCuaAi: 0,
-            KetQuaHS: null,
-            NgayNhanDon: null,
-            MaTrangThai: 0,
-            Sanphamvay: 0,
-            Doitac: 0,
-            CoBaoHiem: 0,
-            SoTienVay: 0,
-            HanVay: 0,
-            TenCuaHang: null,
-            Ghichu: null
-        };
+        let filesUpload = [];
+        var lstFile = null;
     $(document).ready(function () {
         LayDSTaiLieu();
         getPartners();
@@ -499,117 +396,187 @@
                 showError(jqXHR, exception);
             }
         });
-    }
-    var filesUpload = [];
-        var lstFile = null;
-        function LayDSTaiLieu() {
-            $.ajax({
-                type: "GET",
-                url: '/hoso/tailieu',
-                success: function (data) {
-                    if (data.data != null) {
-                        var i = 0;
-                        let iconSvg = '<svg class="svg-next-icon svg-next-icon-size-30" width="30" height="30">'
-                             +'<svg xmlns = "http://www.w3.org/2000/svg" x = "0px" y = "0px" viewBox = "0 0 490.667 490.667" fill = "#6C798F" >'
-                               + '<path d="M448,128h-67.627l-39.04-42.667H192v64h-64v64H64v213.333c0,23.467,19.2,42.667,42.667,42.667H448c23.467,0,42.667-19.2,42.667-42.667v-256C490.667,147.2,471.467,128,448,128z M277.333,405.333c-58.88,0-106.667-47.787-106.667-106.667S218.453,192,277.333,192S384,239.787,384,298.667S336.213,405.333,277.333,405.333z">'
-                                +'</path>'
-                                +'<polygon points="64,192 106.667,192 106.667,128 170.667,128 170.667,85.333 106.667,85.333 106.667,21.333 64,21.333 64,85.333 0,85.333 0,128 64,128">'
-                                +'</polygon>'
-                               +'<path d="M277.333,230.4c-37.76,0-68.267,30.507-68.267,68.267h0c0,37.76,30.507,68.267,68.267,68.267c37.76,0,68.267-30.507,68.267-68.267S315.093,230.4,277.333,230.4z"></path>'
-                                            +'</svg ></svg >'
-                        var htmlContent = "";
-                        $.each(data.data, function (index, optionData) {
-                            let controlId = "upload-area-" + optionData.ID;
-                            let display =''
+        }
+        function generateAttachFile(item) {
+            let key = parseInt($(item).attr("key"));
+            let newAttachhFileId = getNewGuid();
+            $(item).fileinput({
+
+                uploadUrl: '/media/uploadtemp/' + key,
+                validateInitialCount: true,
+                maxFileSize: 25 * 1024,
+                msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>)'
+                    + 'exceeds maximum allowed upload size of <b>{25} MB</b>. '
+                    + 'Please retry your upload!',
+                allowedFileExtensions: ['png', 'jpg', 'pdf'],
+                initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                initialPreviewFileType: 'image',
+                
+                showUpload: false,
+                showUploadedThumbs: false,
+                uploadAsync: false,
+                showClose: false,
+                showCaption: false,
+                showBrowse: false,
+                showUpload: false, // hide upload button
+                showRemove: true, // hide remove button
+                browseOnZoneClick: true,
+                removeLabel: 'dddd',
+                fileId: newAttachhFileId,
+                btnDeleteId: 'btn-remove-file-' + newAttachhFileId,
+                dropZoneTitle: 'Kéo và thả tập tin vào đây',
+                dropZoneClickTitle: '<br>(hoặc nhấp để chọn)',
+                removeIcon: '<i class="glyphicon glyphicon-edit" id ="' + "btn-remove-" + key + '"></i>',
+                removeTitle: 'Cancel or reset changes',
+                elErrorContainer: '#kv-avatar-errors-2',
+                msgErrorClass: 'alert alert-block alert-danger',
+                //layoutTemplates: { main2: '{preview} ' + btnCust + ' {remove} {browse}' },
+                //layoutTemplates: { footer: '' },
+                overwriteInitial: true,
+                append: false
+
+            }).on("filebatchselected", function (event, files) {
+
+                if (countFilesByKey(key) >= 5)
+                    return;
+                $(item).fileinput("upload");
+            }).on("filebeforedelete", function (event, key,fileId) {
+                $("#btn-remove-file-" + newAttachhFileId).on("click", function () { alert(newAttachhFileId) });
+                filesUpload = filesUpload.filter(p => p.Key != key)
+
+            }).on('filebatchuploadsuccess', function (event, data) {
+                if (isReach5Files(key))
+                    return;
+                let response = data.response;
+                if (isNullOrNoItem(filesUpload)) {
+                    filesUpload = []
+                }
+                let file = {
+                    Key: response.initialPreviewConfig[0].key,
+                    FileName: response.initialPreviewConfig[0].caption,
+                    FileUrl: response.initialPreview,
+                    Id: response.Id
+                }
+                let existKeyIndex = filesUpload.findIndex(p => p.key == key)
+                if (existKeyIndex < 0) {
+                    filesUpload.push({ key: key, files: [file] })
+                }
+                else {
+                    if (filesUpload[existKeyIndex].files == null)
+                        filesUpload[existKeyIndex].files = []
+                    filesUpload[existKeyIndex].files.push(file);
+                }
+                if (isReach5Files(key) === false) {
+                    let content = "<div class='col-sm-3' style='width:20%'>"
+                    content += "<h5 style='margin-top: 23px;' class=\"header green\"><span> </span></h5>"
+                    content += "<input class='attachFile' key=" + key + " id=\"attachFile-" + newAttachhFileId + "\" type=\"file\">";
+                    content += "</div>";
+                    $('#tailieu-' + key).append(content);
+                    let newAttachFile = $("#attachFile-" + newAttachhFileId)
+                    generateAttachFile(newAttachFile);
+                }
+                
+                 
+            });
+            
+           
+        }
+
+        function removeFiles(key) {
+
+        }
+        function isReach5Files(key) {
+            if (isNullOrWhiteSpace(key))
+                return true;
+            if (isNullOrNoItem(filesUpload))
+                return false;
+            let sameKeyFile = filesUpload.find(p => p.key == key);
+            if (isNullOrUndefined(sameKeyFile))
+                return false;
+            if (isNullOrNoItem(sameKeyFile.files))
+                return 0;
+            if (sameKeyFile.files.length == 5)
+                return true;
+            return false;
+        }
+        function countFilesByKey(key) {
+            if (isNullOrWhiteSpace(key))
+                return 0;
+            let sameKeyFile = filesUpload.find(p => p.key == key);
+            if (isNullOrUndefined(sameKeyFile))
+                return 0;
+            if (isNullOrNoItem(sameKeyFile.files))
+                return 0;
+            return sameKeyFile.files.length;
+        }
+    function LayDSTaiLieu() {
+        $.ajax({
+            type: "GET",
+            url: '/hoso/tailieu',
+            success: function (data) {
+                if (data.data != null)
+                {
+                    var i = 0;
+                    var htmlContent = "";
+                    $.each(data.data, function (index, optionData) {
+                        $("#lstTailieu").append("<div class='form-group'><div id='tailieu-" + optionData.ID + "'></div></div > ");
+                        htmlContent = "<div class='col-sm-3' style='width:20%'>"
                             if (optionData.BatBuoc > 0)
-                                display = '<p class="mb-0 mt-2 text-secondary">' + optionData.Ten + '<span class=\"required\">(*)</span></p>';
+                                htmlContent += "<h5 style='padding: 0px;margin-top: -0px;' class=\"header green\">" + optionData.Ten + "<span class=\"required\">(*)</span></h5>";
                             else
-                                display = '<p class="mb-0 mt-2 text-secondary">' + optionData.Ten + '</p>';
-                            htmlContent += '<li class="ui-product-photo-item d-block">'
-                                + '<div class="file-upload position-relative is-dragging" id="' + controlId +'"> '
-                                + '<div class="dz-message needsclick" > '
-                                + ' <div class="fileupload-text text-center">'
-                                + iconSvg
-                                + display
-                                + '</div></div></div></li>'
-
-
-                        });
-                        $('#ds-hoso').append(htmlContent);
-                        $.each(data.data, function (index, item) {
-                            let controlId = "upload-area-" + item.ID;
-                            generateDropzone(controlId, item.ID,index);
-                        });
-                    }
-                }
-            })
-        }
-        var files =[]
-        function generateDropzone(controlId, key,index) {
-
-            var dropzone = new Dropzone('#' + controlId, {
-                url: "/file/post",
-                createImageThumbnails: true,
-                autoProcessQueue: false,
-                autoDiscover: false,
-                thumbnailHeight: 120,
-                thumbnailWidth: 120,
-                maxFiles:5,
-                init: function () {
-
+                                htmlContent += "<h5 style='padding: 0px;margin-top: -0px;' class=\"header green\">" + optionData.Ten + "</h5>";
+                            htmlContent += "<div class=\"file-loading\">";
+                            htmlContent += "<input class='attachFile' key=" + optionData.ID + " id=\"fileCVUngTuyen_" + optionData.ID + "\" type=\"file\">";
+                            htmlContent += "</div>";
+                            htmlContent += "</div>";
+                        i++;
+                        $('#tailieu-' + optionData.ID).append(htmlContent);
+                    });
+                    lstFile = $(".attachFile");
+                    $.each(lstFile, function (index, option) {
+                        
+                        generateAttachFile(option)
+                        
+                    });
+                    generateAttachFile("#input-20")
+                    
                 }
 
-            });
-            dropzone.on("maxfilesexceeded", function (file) {
-                alert("Chỉ được upload tối đa 5 file cho 1 loại hồ sơ");
-                return;
-            })
-            dropzone.on("addedfile", function (file) {
-                var _this = this;
-
-                let removeButton = Dropzone.createElement('<a class="dz-remove" id="' + index + '" href="javascript:undefined;" data-dz-remove>Xóa</a>');
-                removeButton.addEventListener("click", function (e) {
-
-                    e.preventDefault();
-                    e.stopPropagation();
-                    let index = filesUpload.findIndex(p => p.key == key);
-                    if (index >= 0) {
-                        filesUpload[index].files = filesUpload[index].files.filter(p => p.upload.uuid != file.upload.uuid);
-                        if (isNullOrNoItem(filesUpload[index].files)) {
-                            filesUpload.splice(index, 1);
-                        }
-                    }
-                    _this.removeFile(file);
-                });
-                file.previewElement.appendChild(removeButton);
-                let sameFilesKey = filesUpload.find(p => p.key == key)
-                if (!isNullOrUndefined(sameFilesKey) && sameFilesKey.files.length == _this.options.maxFiles) {
-                    _this.removeFile(file);
-                    return;
-                }
-                if (isNotValidFileSize(file)) {
-                    alert("File vượt quá kích thước cho phép là 20 MB");
-                    _this.removeFile(file);
-                    return;
-                }
-                    if (isNullOrNoItem(filesUpload)) {
-                        filesUpload = []
-                    }
-                    let existKeyIndex = filesUpload.findIndex(p => p.key == key)
-                    if (existKeyIndex < 0) {
-                        filesUpload.push({ key: key, files: [file] })
-                    }
-                    else {
-                        if (filesUpload[existKeyIndex].files == null)
-                            filesUpload[existKeyIndex].files = []
-                        filesUpload[existKeyIndex].files.push(file);
-                    }
-
-
-
-            });
-        }
-
+            },
+            complete: function () {
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+    function removeImage() {
+        alert("add remove")
+    }
+    var hoso = {
+        ID: 0,
+        MaHoSo: null,
+        CourierCode: 0,
+        TenKhachHang: null,
+        CMND: null,
+        DiaChi: null,
+        MaKhuVuc: 0,
+        SDT: null,
+        SDT2: null,
+        GioTinh: 0,
+        MaNguoiTao: 0,
+        HoSoCuaAi: 0,
+        KetQuaHS: null,
+        NgayNhanDon: null,
+        MaTrangThai: 0,
+        Sanphamvay: 0,
+        Doitac:0,
+        CoBaoHiem: 0,
+        SoTienVay: 0,
+        HanVay: 0,
+        TenCuaHang: null,
+        Ghichu: null
+    };
     function renderGhichu(noidung) {
         if (isNullOrWhiteSpace(noidung))
             return
@@ -648,17 +615,37 @@
         if (isNullOrUndefined(hoso))
             return;
         if (isNullOrWhiteSpace(model.TenKhachHang)) {
-            showMessage("@Html.Raw(Global.Message_Title)", customer_name_must_not_be_empty)
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng nhập tên",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
         if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
-            showMessage("@Html.Raw(Global.Message_Title)", select_partner)
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng chọn đối tác",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
         if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
-            showMessage("@Html.Raw(Global.Message_Title)", select_product)
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng chọn sản phẩm vay",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
+
+
         $.ajax({
             traditional: true,
             url: '/hoso/draft',
@@ -667,19 +654,30 @@
             dataType: 'json',
             data: JSON.stringify(model),
             success: function (data) {
-                if (data.success == true && data.data > 0) {
-                    showMessage("@Html.Raw(Global.Message_Title)", success_message, true, true, function () {
-                        hoso.ID = data.data;
-                        renderGhichu(hoso.Ghichu)
-                        hoso.Ghichu = ''
-                        $("#txtGhiChu").val('')
-                        $.each(filesUpload, function (i, item) {
-                            uploadHoso(hoso.ID, item.key, item.files, true);
-                        })
-                    })
+                if (data.success == true && data.data>0) {
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: 'Thành công',
+                        type: "success",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    }, function () {
+                            hoso.ID = data.data;
+                            renderGhichu(hoso.Ghichu)
+                            hoso.Ghichu =''
+                            $("#txtGhiChu").val('')
+                            uploadHoso(hoso.ID)
+                    });
+
                 }
                 else {
-                    showMessage("@Html.Raw(Global.Message_Title)", data.error.code)
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: data.error.code,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
                 }
 
             },
@@ -690,7 +688,39 @@
                 $('#panel_body').unblock();
             },
         });
-
+        function uploadHoso(hosoId, reloadOnSuccess = false) {
+            if (isNullOrNoItem(filesUpload))
+                return;
+            $.ajax({
+                url: `/HoSo/UploadHoso/${hosoId}`,
+                type: "POST",
+                contentType: "application/json;",
+                dataType: 'json',
+                data: JSON.stringify(filesUpload),
+                success: function (data) {
+                    if (data.success == true) {
+                        if (reloadOnSuccess == true) {
+                            window.location = window.location;
+                        }
+                }
+                else {
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: data.Message.ErrorMessage,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
+                }
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            },
+            complete: function () {
+                $('#panel_body').unblock();
+            },
+        });
+        }
     });
 
     $('#btn_Save').click(function (e) {
@@ -698,32 +728,68 @@
         if (isNullOrUndefined(hoso))
             return;
         if (isNullOrWhiteSpace(model.TenKhachHang)) {
-            showMessage("@Html.Raw(Global.Message_Title)", customer_name_must_not_be_empty)
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng nhập tên",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
         if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
-            showMessage("@Html.Raw(Global.Message_Title)", select_partner)
-
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng chọn đối tác",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
         if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
-            showMessage("@Html.Raw(Global.Message_Title)", select_product)
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Vui lòng chọn sản phẩm vay",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
+
+
         if (isNullOrWhiteSpace(model.SDT)
             || model.SDT.length != 10) {
-            showMessage("@Html.Raw(Global.Message_Title)", invalid_phone)
-
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Số điện thoại di động phải đúng 10 số!",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
         if (isNullOrWhiteSpace(model.SDT2)
             || model.SDT2.length != 10) {
-            showMessage("@Html.Raw(Global.Message_Title)", invalid_employee_phone);
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Số điện thoại nhân viên phải đúng 10 số!",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
         if (isNullOrWhiteSpace(model.CMND) ||
             (model.CMND.length != 9 && model.CMND.length != 12)) {
-            showMessage("@Html.Raw(Global.Message_Title)", invalid_id_number);
+            swal({
+                title: "@Html.Raw(Global.Message_Title)",
+                text: "Số CMND chỉ 9 hoặc 12 số!",
+                type: "error",
+                timer: 4000,
+                showConfirmButton: true,
+            });
             return;
         }
         model.files = filesUpload
@@ -743,11 +809,18 @@
                         timer: 4000,
                         showConfirmButton: true,
                     }, function () {
-                        uploadHoso(data.ID, item.key, item.files, false);
+                            uploadHoso(hoso.ID,true);
+
                     });
                 }
                 else {
-                    showMessage("@Html.Raw(Global.Message_Title)", data.error.code)
+                    swal({
+                        title: "@Html.Raw(Global.Message_Title)",
+                        text: data.error.code,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
                 }
             },
             error: function (jqXHR, exception) {
@@ -757,47 +830,5 @@
                 $('#panel_body').unblock();
             },
         });
-    });
-        function uploadHoso(hosoId, key, files, isDraft) {
-            if (isNullOrUndefined(hosoId) || isNullOrWhiteSpace(key))
-                return;
-            if (isNullOrNoItem(filesUpload))
-                return;
-            let formData = new FormData();
-            for (let i = 0; i != filesUpload.length; i++) {
-                if (!isNullOrNoItem(filesUpload[i].files)) {
-                    for (let j = 0; j < filesUpload[i].files.length; j++) {
-                        formData.append("files",filesUpload[i].files[j] );
-                        formData.append("files",  filesUpload[i].key);
-                    }
-                }
-
-            }
-            let model = filesUpload
-            $.ajax({
-                url: '/hoso/uploadhoso/' + hosoId + "/test",
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: "POST",
-            success: function (data) {
-                if (data.success == true) {
-
-                }
-                else {
-                    showMessage("@Html.Raw(Global.Message_Title)", data.error.code)
-                }
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            },
-            complete: function () {
-                $('#panel_body').unblock();
-            },
-        });
-        }
-        $('#btn_Upload').click(function (e) {
-            uploadHoso(12, "2", null, false)
-
     });
     </script>
