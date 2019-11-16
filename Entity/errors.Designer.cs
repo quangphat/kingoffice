@@ -232,6 +232,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Không tìm thấy rootpath.
+        /// </summary>
+        public static string missing_rootpath {
+            get {
+                return ResourceManager.GetString("missing_rootpath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không tìm thấy người dùng.
         /// </summary>
         public static string not_found_user {

@@ -215,9 +215,7 @@ namespace Business.Classes
                 AddError(errors.invalid_data);
                 return false;
             }
-            var deleteAll = await _rpTailieu.RemoveAllTailieu(hosoId);
-            if (!deleteAll)
-                return false;
+            
             foreach (var item in files)
             {
                 var tailieu = new TaiLieu
@@ -230,6 +228,28 @@ namespace Business.Classes
                 await _rpTailieu.Add(tailieu);
             }
             return true;
+        }
+        public async Task<bool> UploadHoso(int hosoId, List<FileUploadModelGroupByKey> fileGroups, string rootPath)
+        {
+            if (fileGroups == null || !fileGroups.Any())
+                return true;
+            if(string.IsNullOrWhiteSpace(rootPath))
+            {
+                AddError(errors.missing_rootpath);
+                return false;
+            }
+            var deleteAll = await _rpTailieu.RemoveAllTailieu(hosoId);
+            if (!deleteAll)
+                return false;
+            var result = false;
+            foreach(var item in fileGroups)
+            {
+                if(item.files.Any())
+                {
+                    result = await UploadHoso(hosoId, item.files, rootPath);
+                }
+            }
+            return result;
         }
         public async Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath, bool deleteExist = false)
         {

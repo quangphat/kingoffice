@@ -10,8 +10,13 @@ namespace Entity.ViewModels
         public string Key { get; set; }
         public string FileName { get; set; }
         public string FileUrl { get; set; }
+        public int Id { get; set; }
     }
-
+    public class FileUploadModelGroupByKey
+    {
+        public int key { get; set; }
+        public List<FileUploadModel> files { get; set; }
+    }
     public class HosoFilesModel
     {
         public int key { get; set; }

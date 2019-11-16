@@ -7,6 +7,23 @@
     }
     return false;
 }
+function renderOneItemFile(key, id, name, isNotNull = false, className = '') {
+    let content = "<div class='col-sm-3' style='width:20%'>"
+    if (!isNullOrUndefined(name)) {
+        if (isNotNull) {
+            content += '<h5  class="header green ' + className + '">' + name + '<span class="required">(*)</span></h5>';
+        }
+        else {
+            content += '<h5  class="header green ' + className + '">' + name + '<span > </span></h5>';
+        }
+    }
+
+    content += "<div class=\"file-loading\">";
+    content += "<input class='attachFile' key=" + key + " id=\"attachFile-" + id + "\" type=\"file\">";
+    content += "</div>";
+    content += "</div>";
+    $('#tailieu-' + key).append(content);
+}
 function getNewGuid() {
     const s4 = () => {
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);

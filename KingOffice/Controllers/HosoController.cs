@@ -90,7 +90,7 @@ namespace KingOffice.Controllers
         }
         [Authorize]
         [HttpPost("UploadHoso/{hosoId}")]
-        public async Task<IActionResult> UploadHoso(int hosoId, [FromBody] List<FileUploadModel> files)
+        public async Task<IActionResult> UploadHoso(int hosoId, [FromBody] List<FileUploadModelGroupByKey> files)
         {
             var result = await _bizHoso.UploadHoso(hosoId, files, _hosting.WebRootPath);
             return ToResponse(result);
@@ -108,6 +108,13 @@ namespace KingOffice.Controllers
         {
             var result = true;// await _bizHoso.UploadHoso(hosoId, key, files, _hosting.WebRootPath, !isDraft);
             return ToResponse(result);
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> DanhsachHoso()
+        {
+            ViewBag.formindex = LstRole[RouteData.Values["action"].ToString()]._formindex;
+            return View();
         }
     }
 }

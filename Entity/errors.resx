@@ -198,4 +198,7 @@
   <data name="username_or_password_must_not_be_empty" xml:space="preserve">
     <value>Tên đăng nhập hoặc mật khẩu không được để trống</value>
   </data>
+  <data name="missing_rootpath" xml:space="preserve">
+    <value>Không tìm thấy rootpath</value>
+  </data>
 </root>

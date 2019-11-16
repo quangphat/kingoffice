@@ -182,6 +182,8 @@ namespace Repository.Classes
             p.Add("SoTienVay", model.SoTienVay);
             p.Add("HanVay", model.HanVay);
             p.Add("TenCuaHang", model.TenCuaHang);
+            p.Add("birthDay", DateTime.Now);
+            p.Add("cmndDay", DateTime.Now);
             return p;
         }
     }
