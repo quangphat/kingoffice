@@ -9,6 +9,7 @@ using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,61 @@ namespace Repository.Classes
         public HosoRepository(IConfiguration configuration) : base(configuration)
         {
 
+        }
+        public async Task<List<OptionSimpleModelOld>> GetResultList()
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimpleModelOld>("sp_KET_QUA_HS_LayDSKetQua",
+
+               commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<List<OptionSimpleModelOld>> GetStatusList(bool isTeamlead)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimpleModelOld>("sp_TRANG_THAI_HS_LayDSTrangThai",
+              new
+              {
+                  isTeamlead = isTeamlead
+              },
+              commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+           
+        }
+        public async Task<List<GhichuViewModel>> GetComments(int hosoId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<GhichuViewModel>("sp_GetGhichuByHosoId",
+               new
+               {
+                   hosoId
+               },
+               commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task Daxem(int hosoId)
+        {
+            await _connection.ExecuteAsync("sp_HO_SO_XEM_DaXem",
+               new
+               {
+                   ID = hosoId
+               },
+               commandType: CommandType.StoredProcedure);
+        }
+        public async Task AddHosoDaxem(int hosoId)
+        {
+            await _connection.ExecuteAsync("sp_HO_SO_XEM_Them",
+               new
+               {
+                   ID = hosoId
+               },
+               commandType: CommandType.StoredProcedure);
         }
         public async Task<HoSoInfoModel> GetHosoById(int hosoId)
         {

@@ -43,6 +43,15 @@ namespace Repository.Classes
             var result = await _connection.QueryAsync<LoaiTaiLieuModel>("sp_LOAI_TAI_LIEU_LayDS",null,commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
+        public async Task<List<FileUploadModel>> GetTailieuByHosoId(int hosoId)
+        {
+            var p = new DynamicParameters();
+            p.Add("hosoId", hosoId);
+            
+            var result = await _connection.QueryAsync<FileUploadModel>("getTailieuByHosoId", p,
+                commandType: CommandType.StoredProcedure);
+            return result.ToList();
+        }
     }
 }
 

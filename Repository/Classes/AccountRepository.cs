@@ -39,6 +39,16 @@ namespace Repository.Classes
                 },commandType: CommandType.Text);
             return true;
         }
+        public async Task<bool> CheckIsTeamLead(int userId)
+        {
+            var result = await _connection.ExecuteScalarAsync<bool>("sp_CheckIsTeamlead",
+                new
+                {
+                   userId
+
+                }, commandType: CommandType.StoredProcedure);
+            return result;
+        }
     }
 }
 

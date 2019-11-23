@@ -11,6 +11,7 @@ namespace Repository.Interfaces
         Task<Nhanvien> Login(string userName);
         Task<List<string>> GetPermissionByUserId(int userId);
         Task<bool> ResetPassword(int id, string newPass);
+        Task<bool> CheckIsTeamLead(int userId);
     }
 }
 

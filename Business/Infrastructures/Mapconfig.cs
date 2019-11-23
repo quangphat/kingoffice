@@ -39,6 +39,9 @@ namespace Business.Infrastructures
                 .ForMember(d => d.NgayNhanDon, map => map.MapFrom((s, d) => {
                     return BusinessExtension.ConvertddMMyyyyToDateTime(s.ngaynhandon);
                 }));
+            CreateMap<OptionSimpleModelOld, OptionSimple>()
+               .ForMember(a => a.Id, b => b.MapFrom(c => c.ID))
+               .ForMember(a => a.Name, b => b.MapFrom(c => c.Ten));
         }
     }
 }

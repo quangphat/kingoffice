@@ -51,5 +51,16 @@ namespace Entity.ViewModels
 
         public string TenTrangThai { get; set; }
         public string KetQuaText { get; set; }
+        public string Doitac { get; set; }
+        public string ProvinceName { get; set; }
+        public string DistrictName { get; set; }
+        public string ProductName { get; set; }
+        public string SaleCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string EmployeePhone { get; set; }
+        public int ProvinceId { get; set; }
+        public DateTime BirthDay { get; set; }
+        public DateTime CmndDay { get; set; }
+        public int PartnerId { get; set; }
     }
 }

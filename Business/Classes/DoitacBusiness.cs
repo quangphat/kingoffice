@@ -1,3 +1,4 @@
+using AutoMapper;
 using Business.Interfaces;
 using Entity.Infrastructures;
 using Entity.ViewModels;
@@ -12,13 +13,14 @@ namespace Business.Classes
     public class DoitacBusiness : BaseBusiness,IDoitacBusiness
     {
         protected readonly IDoitacRepository _rpDoitac;
-        public DoitacBusiness(CurrentProcess process,IDoitacRepository doitacRepository):base(null,process)
+        public DoitacBusiness(CurrentProcess process,IDoitacRepository doitacRepository, IMapper mapper):base(mapper,process)
         {
             _rpDoitac = doitacRepository;
         }
-        public async Task<List<OptionSimpleModelOld>> GetListSimple()
+        public async Task<List<OptionSimple>> GetListSimple()
         {
-            return await _rpDoitac.GetListSimple();
+            var datas = await _rpDoitac.GetListSimple();
+            return _mapper.Map<List<OptionSimple>>(datas);
         }
     }
 }

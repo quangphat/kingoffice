@@ -8,7 +8,7 @@ namespace Business.Interfaces
 {
     public interface IProductBusiness
     {
-        Task<List<ProductViewModel>> GetListByDoitacId(int doitacId);
-        Task<List<ProductViewModel>> GetListByHosoId(int doitacId, int hosoId);
+        Task<List<OptionSimple>> GetListByDoitacId(int doitacId);
+        
     }
 }

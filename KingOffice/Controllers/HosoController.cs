@@ -19,7 +19,7 @@ namespace KingOffice.Controllers
     public class HosoController : BaseController
     {
         protected readonly IHosoBusiness _bizHoso;
-        protected readonly ITailieuBusiness _bizLoaiTl;
+        protected readonly ITailieuBusiness _bizTailieu;
         protected readonly IHostingEnvironment _hosting;
         
         public HosoController(CurrentProcess process,
@@ -29,7 +29,7 @@ namespace KingOffice.Controllers
         IHosoBusiness hosoBusiness) : base(process)
         {
             _bizHoso = hosoBusiness;
-            _bizLoaiTl = loaiTailieuBusiness;
+            _bizTailieu = loaiTailieuBusiness;
             _hosting = hosting;
             
         }
@@ -65,7 +65,7 @@ namespace KingOffice.Controllers
         [HttpGet("tailieu")]
         public async Task<IActionResult> LayDSTaiLieu()
         {
-            var result = await _bizLoaiTl.GetList();
+            var result = await _bizTailieu.GetList();
             return ToResponse(result);
         }
 
@@ -131,6 +131,50 @@ namespace KingOffice.Controllers
         {
             var data = await _bizHoso.GetDanhsachHoso(maHs, cmnd, fromDate, toDate, loaiNgay, nhomId, userId, freetext, status, page, limit);
             var result = DataPaging.Create(data.datas, data.totalRecord);
+            return ToResponse(result);
+        }
+        [Authorize]
+        [HttpGet("chitiethoso/{hosoId}")]
+        public async Task<IActionResult> ChitietHoso(int hosoId)
+        {
+            var result = await _bizHoso.GetById(hosoId);
+            ViewBag.hoso = result;
+            return View();
+        }
+        [Authorize]
+        [HttpGet("tailieu/{hosoId}")]
+        public async Task<IActionResult> GetTailieu(int hosoId)
+        {
+            var result = await _bizTailieu.GetTailieuByHosoId(hosoId);
+            return ToResponse(result);
+        }
+        [Authorize]
+        [HttpGet("DuyetHoso/{hosoId}")]
+        public async Task<IActionResult> DuyetHoso(int hosoId)
+        {
+            var result = await _bizHoso.GetById(hosoId);
+            ViewBag.hoso = result;
+            return View();
+        }
+        [Authorize]
+        [HttpGet("comments/{hosoId}")]
+        public async Task<IActionResult> GetComment(int hosoId)
+        {
+            var result = await _bizHoso.GetComments(hosoId);
+            return ToResponse(result);
+        }
+        [Authorize]
+        [HttpGet("statuses")]
+        public async Task<IActionResult> GetStatusList()
+        {
+            var result = await _bizHoso.GetStatusList();
+            return ToResponse(result);
+        }
+        [Authorize]
+        [HttpGet("results")]
+        public async Task<IActionResult> GetResultList()
+        {
+            var result = await _bizHoso.GetResultList();
             return ToResponse(result);
         }
     }

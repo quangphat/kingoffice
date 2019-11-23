@@ -11,14 +11,18 @@ namespace Business.Classes
 {
     public class TailieuBusiness :BaseBusiness, ITailieuBusiness
     {
-        protected readonly ITailieuRepository _rpLoaiTailieu;
+        protected readonly ITailieuRepository _rpTailieu;
         public TailieuBusiness(CurrentProcess process, ITailieuRepository loaiTailieuRepository):base(null,process)
         {
-            _rpLoaiTailieu = loaiTailieuRepository;
+            _rpTailieu = loaiTailieuRepository;
         }
         public async Task<List<LoaiTaiLieuModel>> GetList()
         {
-            return await _rpLoaiTailieu.GetLoaiTailieuList();
+            return await _rpTailieu.GetLoaiTailieuList();
+        }
+        public async Task<List<FileUploadModel>> GetTailieuByHosoId(int hosoId)
+        {
+            return await _rpTailieu.GetTailieuByHosoId(hosoId);
         }
     }
 }

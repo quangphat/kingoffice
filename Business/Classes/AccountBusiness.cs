@@ -53,8 +53,14 @@ namespace Business.Classes
             if (nhanvien.Mat_Khau != Utils.getMD5(password))
                 return null;
             var scope = await _rpAccount.GetPermissionByUserId(nhanvien.ID);
+            var isTeamlead = await _rpAccount.CheckIsTeamLead(nhanvien.ID);
+            if (isTeamlead)
+            {
+                scope.Add("teamlead");
+            }
             var account = _mapper.Map<Account>(nhanvien);
             account.Permissions = scope.ToArray();
+            
             var menus = await _rpUserRoleMenu.GetMenuByRoleId(account.RoleId);
             if (menus != null)
             {

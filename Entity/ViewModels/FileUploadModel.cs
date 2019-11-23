@@ -7,10 +7,13 @@ namespace Entity.ViewModels
 {
     public class FileUploadModel
     {
-        public string Key { get; set; }
+        public int Key { get; set; }
+        public string KeyName { get; set; }
         public string FileName { get; set; }
         public string FileUrl { get; set; }
-        public int Id { get; set; }
+        public int FileId { get; set; }
+        public string Id { get; set; }
+        public bool? IsRequire { get; set; }
     }
     public class FileUploadModelGroupByKey
     {

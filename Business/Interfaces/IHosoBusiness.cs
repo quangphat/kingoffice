@@ -9,6 +9,9 @@ namespace Business.Interfaces
 {
     public interface IHosoBusiness
     {
+        Task<List<OptionSimple>> GetResultList();
+        Task<List<OptionSimple>> GetStatusList();
+        Task<List<GhichuViewModel>> GetComments(int hosoId);
         Task<(List<HosoDuyet> datas, int TotalRecord)> GetHosoDuyet(string fromDate,
             string toDate,
             string maHS = "",
@@ -34,5 +37,7 @@ namespace Business.Interfaces
             string freetext = null,
             string status = null,
             int page = 1, int limit = 10);
+        Task<HoSoInfoModel> GetById(int hosoId);
+        //Task UpdateDaxem(int hosoId)
     }
 }

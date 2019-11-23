@@ -12,6 +12,7 @@ namespace Repository.Interfaces
         Task<List<LoaiTaiLieuModel>> GetLoaiTailieuList();
         Task<bool> Add(TaiLieu model);
         Task<bool> RemoveAllTailieu(int hosoId);
+        Task<List<FileUploadModel>> GetTailieuByHosoId(int hosoId);
     }
 }
 

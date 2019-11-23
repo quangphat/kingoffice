@@ -7,8 +7,147 @@
     }
     return false;
 }
-function renderOneItemFile(key, id, name, isNotNull = false, className = '') {
-    let content = "<div class='col-sm-3' style='width:20%'>"
+function LayDanhsachGhichu(hosoId) {
+    //$('#ddlTrangThai').empty();
+    $.ajax({
+        type: "GET",
+        url: '/hoso/comments/' + hosoId,
+        success: function (data) {
+            if (data.data !== null) {
+                $.each(data.data, function (index, item) {
+                    $('#dsGhichu').append(
+                        '<div class="timeline-event-content  active">' +
+                        '<div class="timeline-item">' +
+                        '<div class="timeline-body">' +
+                        '<div class="timeline__message-container">' +
+                        '<strong>' + item.Commentator + ' (' + FormatDateTimeDMY(item.CommentTime) + '): </strong><span>' + item.Noidung + '</span>' +
+                        '</div></div></div></div>'
+                    );
+                });
+            }
+
+        },
+        complete: function () {
+        },
+        error: function (jqXHR, exception) {
+            showError(jqXHR, exception);
+        }
+    });
+}
+function LayTrangThai(value, control) {
+    $(control).empty();
+    $.ajax({
+        type: "GET",
+        url: '/hoso/statuses',
+        success: function (data) {
+            $(control).append("<option value='0'></option>");
+            if (data.data !== null) {
+                $.each(data.data, function (index, item) {
+                    $(control).append(renderOptionItem(item.Id, item.Name));
+                });
+                $(control).val(value);
+                $(control).chosen().trigger("chosen:updated");
+            }
+        },
+        complete: function () {
+        },
+        error: function (jqXHR, exception) {
+            showError(jqXHR, exception);
+        }
+    });
+}
+
+function getPartners(controlId, value = null, productId = null, callbackControl = null) {
+    $.ajax({
+        type: "GET",
+        url: '/partners',
+        success: function (data) {
+            $(controlId).empty();
+            $(controlId).append("<option value='0'></option>");
+            if (data !== null) {
+                $.each(data.data, function (index, item) {
+                    $(controlId).append(renderOptionItem(item.Id, item.Name));
+                });
+            }
+            if (!isNullOrUndefined(value)) {
+                $(controlId).val(value);
+            }
+            $(controlId).chosen().trigger("chosen:updated");
+        },
+        complete: function () {
+            setTimeout(function () {
+                getProductByPartnetId(value, callbackControl, productId);
+            }, 1000);
+            
+        },
+        error: function (jqXHR, exception) {
+            showError(jqXHR, exception);
+        }
+    });
+}
+
+
+function getProductByPartnetId(madoitac, controlId, value = null) {
+    if (isNullOrUndefined(madoitac) || isNullOrUndefined(controlId))
+        return;
+    let partnerId = parseInt(madoitac);
+    $.ajax({
+        type: "GET",
+        url: `/products/${partnerId}`,
+        success: function (data) {
+            $(controlId).empty();
+            $(controlId).append("<option value='0'></option>");
+            if (data !== null) {
+                $.each(data.data, function (index, item) {
+                    $(controlId).append(renderOptionItem(item.Id, item.Name));
+                });
+            }
+            if (!isNullOrUndefined(value)) {
+                $(controlId).val(value);
+            }
+            $(controlId).chosen().trigger("chosen:updated");
+
+        },
+        complete: function () {
+        },
+        error: function (jqXHR, exception) {
+            showError(jqXHR, exception);
+        }
+    });
+}
+function LayDsKetQua(value,controlId) {
+    $(controlId).empty();
+    $.ajax({
+        type: "GET",
+        url: '/hoso/results',
+        data: {},
+        success: function (data) {
+            $(controlId).append("<option value='1'></option>");
+            if (data.data !== null) {
+                $.each(data.data, function (index, item) {
+                    $(controlId).append(renderOptionItem(item.Id,item.Name));
+                });
+                if (!isNullOrUndefined(value)) {
+                    $(controlId).val(value);
+                }
+                $(controlId).chosen().trigger("chosen:updated");
+            }
+        },
+        complete: function () {
+        },
+        error: function (jqXHR, exception) {
+            showError(jqXHR, exception);
+        }
+    });
+}
+function renderOptionItem(id, name) {
+    if (isNullOrUndefined(id) || isNullOrUndefined(name))
+        return;
+    return "<option value='" + id + "'>" + name + "</option>"
+}
+function renderOneItemFile(key, id, name, isNotNull = false, className = '', generateInput = false, _initialPreview = [], _initialPreviewConfig = []) {
+
+    let content = "<div class='col-sm-3' style='width:20%'>";
     if (!isNullOrUndefined(name)) {
         if (isNotNull) {
             content += '<h5  class="header green ' + className + '">' + name + '<span class="required">(*)</span></h5>';
@@ -23,6 +162,60 @@ function renderOneItemFile(key, id, name, isNotNull = false, className = '') {
     content += "</div>";
     content += "</div>";
     $('#tailieu-' + key).append(content);
+    if (generateInput === true) {
+        let item = $("#attachFile-" + id);
+
+        let fileId = getNewGuid();
+        $(item).fileinput({
+
+            validateInitialCount: true,
+            maxFileSize: 25 * 1024,
+            msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>)'
+                + 'exceeds maximum allowed upload size of <b>{25} MB</b>. '
+                + 'Please retry your upload!',
+            allowedFileExtensions: ['png', 'jpg', 'pdf'],
+            initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+            initialPreviewFileType: 'image',
+            overwriteInitial: false,
+            showUploadedThumbs: false,
+            uploadAsync: false,
+            showClose: false,
+            showCaption: false,
+            showBrowse: false,
+            showUpload: false, // hide upload button
+            showRemove: false, // hide remove button
+            browseOnZoneClick: true,
+            removeLabel: '',
+            dropZoneTitle: 'Kéo và thả tập tin vào đây',
+            dropZoneClickTitle: '<br>(hoặc nhấp để chọn)',
+            removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
+            removeTitle: 'Cancel or reset changes',
+            elErrorContainer: '#kv-avatar-errors-2',
+            msgErrorClass: 'alert alert-block alert-danger',
+            //layoutTemplates: { main2: '{preview} ' + btnCust + ' {remove} {browse}' },
+            //layoutTemplates: { footer: '' },
+            initialPreview: _initialPreview,
+            initialPreviewDownloadUrl: _initialPreview,
+            initialPreviewConfig: _initialPreviewConfig,
+            fileActionSettings: {
+                showDownload: true,
+                showRemove: false,
+                showUpload: true,
+                showZoom: true,
+                showDrag: false
+            },
+            append: true
+
+        }).on("filebatchselected", function (event, files) {
+
+            $(item).fileinput("upload");
+        }).on("filebeforedelete", function (event, key, fileId) {
+
+        }).on('filebatchuploadsuccess', function (event, data) {
+        });
+
+    }
+
 }
 function getNewGuid() {
     const s4 = () => {
@@ -50,7 +243,7 @@ function showMessage(title, message, success = false, showConfirmButton = true, 
     }, callback());
 }
 function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format = 'dd/mm/yy') {
-    
+
     $(controlId).datepicker({
         dateFormat: format//'mm-dd-yy'
     }).next().on(ace.click_event, function () {
@@ -62,7 +255,7 @@ function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format = 
         $(controlId).datepicker({ dateFormat: format }).datepicker("setDate", new Date().getDay() + day);
     }
 }
-function getTotalPage(totalRecord, limit =10) {
+function getTotalPage(totalRecord, limit = 10) {
     return totalRecord > limit ? Math.ceil(totalRecord / limit) : 1;
 }
 function renderGoPreviousPage(page) {
@@ -158,7 +351,7 @@ function renderTextCenter(value, type) {
     return "<td class='text-center'>" + getValueDisplay(value, type) + "</td>";
 }
 function renderAction(id) {
-    let thaoTac = "<div class='action-buttons'><a title='Chỉnh sửa' class='green' style='cursor: pointer'  onclick='onEdit("  + id +")' >";
+    let thaoTac = "<div class='action-buttons'><a title='Chỉnh sửa' class='green' style='cursor: pointer'  onclick='onEdit(" + id + ")' >";
     thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
     thaoTac += "</i>";
     thaoTac += "</a>";
@@ -250,8 +443,8 @@ function addDefaultOption(selectList, objectText) {
     selectList.empty();
     selectList
         .append($("<option></option>")
-                .attr("value", "-1")
-                .text("Chọn " + objectText));
+            .attr("value", "-1")
+            .text("Chọn " + objectText));
 }
 
 function addSelectListWithDefaultValue(selectList, results, defaultValue) {
@@ -277,7 +470,7 @@ function addSelectListItems(selectList, results) {
     }
     if (results.length === 1) {
         selectList
-                .append($("<option></option>")
+            .append($("<option></option>")
                 .attr("value", results[0].Value)
                 .attr("selected", true)
                 .text(results[0].Text));
@@ -286,7 +479,7 @@ function addSelectListItems(selectList, results) {
     }
     $.each(results, function (i, value) {
         selectList
-                .append($("<option></option>")
+            .append($("<option></option>")
                 .attr("value", value.Value)
                 .text(value.Text));
     });
@@ -329,18 +522,18 @@ function addAlert(elementId, message, success = false) {
         $('#' + elementId).append(
             '<div class="alert alert-block alert-success"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
             + '<p><strong><i class="ace-icon fa fa-check"></i></strong> ' + message + '</p>'
-          + '</div>');
+            + '</div>');
     } else {
         $('#' + elementId).append(
             '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'
             + '<p><strong><i class="ace-icon fa fa-times"></i></strong> ' + message + '</p>'
-           + '</div>');
+            + '</div>');
     }
 }
 function convertMDYToDMYFromStr(input) {
-    
+
     var mydate = moment(input, 'MM/DD/YYYY');
-    
+
     return moment(mydate).format("DD/MM/YYYY");
 }
 function convertDMYToMDYFromStr(input) {
@@ -366,14 +559,14 @@ function FormatDateTimeDMYHM(datetime) {
         return "";
     }
 }
-function getDateShort(inputDate, defaultFormat = 'DD/MM/YYYY hh:mm A'){
+function getDateShort(inputDate, defaultFormat = 'DD/MM/YYYY hh:mm A') {
     let date = new Date(inputDate);
 
     var utcDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
 
     return moment(utcDate).format(defaultFormat);
 }
-function convertStringtoShortDate (inputDate, format = "DD/MM/YYYY") {
+function convertStringtoShortDate(inputDate, format = "DD/MM/YYYY") {
     let s = inputDate.substring(0, 10)
     let d = moment(inputDate, format).toDate();
     return getDateShort(d, format).toString();
@@ -383,11 +576,11 @@ function formatDateFromString(input, format = "DD/MM/YYYY") {
     let d = moment(date, format).toDate();
     return getDateShortFromDate(d, false, format);
 }
-function getDateShortFromDate (inputDate, fromNow = false, defaultFormat = 'DD/MM/YYYY hh:mm:ss A') {
+function getDateShortFromDate(inputDate, fromNow = false, defaultFormat = 'DD/MM/YYYY hh:mm:ss A') {
     return formatDate(inputDate, fromNow, defaultFormat)
 }
 function formatDate(inputDate, timeNow = false, defaultFormat = 'DD/MM/YYYY hh:mm A') {
-    
+
     let date = new Date(inputDate);
 
     let today = new Date();
@@ -410,7 +603,7 @@ function formatDate(inputDate, timeNow = false, defaultFormat = 'DD/MM/YYYY hh:m
     lastMonth.setDate(today.getMonth() - 1);
 
     let result = null;
-    
+
     switch (date.getTime()) {
 
         case today.getTime():
@@ -441,7 +634,7 @@ function formatDate(inputDate, timeNow = false, defaultFormat = 'DD/MM/YYYY hh:m
 function formartDatetimeWithMomentJs(datetime, format) {
     var dateMomentObject = moment("11-29-2019", "dd/mm/yy"); // 1st argument - string, 2nd argument - format
     var dateObject = dateMomentObject.toDate();
-    
+
     //return dateObject.getDate() + "-" + dateObject.getMonth() + "-" + dateObject.getFullYear();
     return dateObject;
 }
@@ -464,7 +657,7 @@ function FormatDateTimeDMY(datetime) {
     if (isNullOrUndefined(datetime))
         return "";
     try {
-        
+
         var d = new Date(datetime);
         return d.toLocaleDateString();
         //var valueDate = parseInt(datetime.substr(6));
@@ -496,7 +689,7 @@ function SetFormatDateTime(datetime) {
 }
 function SetFormatDateTimeDMY(datetime) {
     try {
-        
+
         var valueDate = parseInt(datetime.substr(6));
         if (valueDate < 0)
             return "";
@@ -519,14 +712,14 @@ function GetDiffDate(startDate, endDate) {
     var diff_date = Math.round(temp / (24 * 60 * 60 * 1000));
     return diff_date;
 }
-function strip(html,numchar) {
+function strip(html, numchar) {
     var tmp = document.createElement("DIV");
     tmp.innerHTML = html.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, '<br/>');
     //var result = tmp.textContent || tmp.innerText || "";
     var result = tmp.textContent;
     if (result.length > numchar)
         return result.substring(0, numchar) + "...";
-     return result
+    return result
 }
 function formatCurrency(number) {
     var n = number.toString().split('').reverse().join("");

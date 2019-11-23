@@ -8,6 +8,6 @@ namespace Business.Interfaces
 {
     public interface IDoitacBusiness
     {
-        Task<List<OptionSimpleModelOld>> GetListSimple();
+        Task<List<OptionSimple>> GetListSimple();
     }
 }

@@ -10,7 +10,7 @@ namespace Business.Classes
     public abstract class BaseBusiness
     {
         public readonly CurrentProcess _process;
-        protected readonly IMapper _mapper;
+        protected IMapper _mapper;
         public BaseBusiness(IMapper mapper,CurrentProcess process)
         {
             _process = process;

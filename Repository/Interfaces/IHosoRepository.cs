@@ -10,7 +10,9 @@ namespace Repository.Interfaces
 {
     public interface IHosoRepository
     {
-        
+        Task<List<OptionSimpleModelOld>> GetResultList();
+        Task<List<OptionSimpleModelOld>> GetStatusList(bool isTeamlead);
+        Task<List<GhichuViewModel>> GetComments(int hosoId);
         Task<bool> Update(HosoModel model);
         Task<HoSoInfoModel> GetHosoById(int hosoId);
         Task<int> Create(HosoModel model);
@@ -71,5 +73,7 @@ namespace Repository.Interfaces
                 int offset = 0,
                 int limit = 10,
                 bool isDownload = false);
+        Task Daxem(int hosoId);
+        Task AddHosoDaxem(int hosoId);
     }
 }

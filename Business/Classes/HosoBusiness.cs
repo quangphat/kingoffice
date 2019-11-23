@@ -20,7 +20,6 @@ namespace Business.Classes
 {
     public class HosoBusiness : BaseBusiness, IHosoBusiness
     {
-        protected readonly IMapper _mapper;
         protected readonly IHosoRepository _rpHoso;
         protected readonly IProductRepository _rpProduct;
         protected readonly IAutoIdRepository _rpAuto;
@@ -43,6 +42,52 @@ namespace Business.Classes
             _rpTailieu = tailieuRepository;
             _rpNotes = notesRepository;
             _serviceProvider = serviceProvider;
+        }
+        public async Task<List<GhichuViewModel>> GetComments(int hosoId)
+        {
+            if (hosoId <= 0)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            return await _rpHoso.GetComments(hosoId);
+        }
+        public async Task<List<OptionSimple>> GetStatusList()
+        {
+            if (_process.User ==null || _process.User.Permissions == null || !_process.User.Permissions.Any())
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var isTeamlead = _process.User.Permissions.Contains("teamlead") && !_process.User.Permissions.Contains("admin") ? true : false;
+            var statusList = await _rpHoso.GetStatusList(isTeamlead);
+            var result = _mapper.Map<List<OptionSimple>>(statusList);
+            return result;
+        }
+        public async Task<List<OptionSimple>> GetResultList()
+        {
+            if (_process.User == null || _process.User.Permissions == null || !_process.User.Permissions.Any())
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var resultList = await _rpHoso.GetResultList();
+            var result = _mapper.Map<List<OptionSimple>>(resultList);
+            return result;
+        }
+        public async Task<HoSoInfoModel> GetById(int hosoId)
+        {
+            if(hosoId<=0)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var result = await _rpHoso.GetHosoById(hosoId);
+            if(result!=null)
+            {
+                await _rpHoso.Daxem(hosoId);
+            }
+            return result;
         }
         public async Task<long> Save(HosoRequestModel model, bool isDraft)
         {

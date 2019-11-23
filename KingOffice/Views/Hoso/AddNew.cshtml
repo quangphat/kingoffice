@@ -233,12 +233,12 @@
         var lstFile = null;
     $(document).ready(function () {
         LayDSTaiLieu();
-        getPartners();
+        getPartners('#ddlDoiTac');
         LayDSTinh();
         LayDSCourier();
         @*LayDSale('@ViewBag.MaNV');*@
         $('#ddlDoiTac').on('change', function () {
-            getProductByPartnetId(this.value);
+            getProductByPartnetId(this.value, '#ddlSanPhamVay');
         });
         $('#ddlTinh').on('change', function () {
             LayDSHuyen(this.value);
@@ -314,54 +314,6 @@
                     });
                 }
                 $('#ddlHuyen').chosen().trigger("chosen:updated");
-            },
-            complete: function () {
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            }
-        });
-    }
-
-    function getPartners() {
-        $.ajax({
-            type: "GET",
-            url: '/partners',
-            success: function (data) {
-                $('#ddlDoiTac').empty();
-                $('#ddlDoiTac').append("<option value='0'></option>");
-                if (data != null) {
-                    $.each(data.data, function (index, optionData) {
-                        $('#ddlDoiTac').append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
-                    });
-                }
-                $('#ddlDoiTac').chosen().trigger("chosen:updated");
-            },
-            complete: function () {
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            }
-        });
-    }
-
-
-    function getProductByPartnetId(maDoiTac) {
-
-        let doitacId = parseInt(maDoiTac)
-        $.ajax({
-            type: "GET",
-            url: `/products/${doitacId}`,
-            success: function (data) {
-                $('#ddlSanPhamVay').empty();
-                $('#ddlSanPhamVay').append("<option value='0'></option>");
-                if (data != null) {
-                    $.each(data.data, function (index, optionData) {
-                        $('#ddlSanPhamVay').append("<option value='" + optionData.ID + "'>" + optionData.Ten + "</option>");
-                    });
-                }
-                $('#ddlSanPhamVay').chosen().trigger("chosen:updated");
-
             },
             complete: function () {
             },
@@ -449,9 +401,10 @@
                     filesUpload = []
                 }
                 let file = {
-                    Key: response.initialPreviewConfig[0].key,
+                    Key: parseInt(response.initialPreviewConfig[0].key),
                     FileName: response.initialPreviewConfig[0].caption,
                     FileUrl: response.initialPreview,
+                    KeyName:"",
                     Id: fileId
                 }
                 let existKeyIndex = filesUpload.findIndex(p => p.key == key)
@@ -524,7 +477,7 @@
                     var content = "";
                     $.each(data.data, function (index, item) {
                         $("#lstTailieu").append("<div class='form-group'><div id='tailieu-" + item.ID + "'></div></div > ");
-                        renderOneItemFile(item.ID,item.ID,item.Ten,item.BatBuoc)
+                        renderOneItemFile(item.ID, item.ID, item.Ten, item.BatBuoc, '', false)
                     });
                     lstFile = $(".attachFile");
                     $.each(lstFile, function (index, option) {
@@ -684,6 +637,7 @@
             if (isNullOrNoItem(filesUpload))
                 return;
             $.ajax({
+                traditional: true,
                 url: `/HoSo/UploadHoso/${hosoId}`,
                 type: "POST",
                 contentType: "application/json;",

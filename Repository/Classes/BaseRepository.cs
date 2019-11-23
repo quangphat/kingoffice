@@ -10,7 +10,7 @@ namespace Repository.Classes
     public abstract class BaseRepository
     {
         protected IDbConnection _connection;
-        private IConfiguration _configuration;
+        protected readonly IConfiguration _configuration;
 
         public BaseRepository(IConfiguration configuration)
         {
@@ -21,6 +21,11 @@ namespace Repository.Classes
         {
             if(_connection.State == ConnectionState.Closed)
                 _connection = new SqlConnection(_configuration.GetConnectionString("kingoffice"));
+        }
+        protected IDbConnection GetConnection()
+        {
+            _connection.Open();
+            return _connection;
         }
         protected DynamicParameters AddOutputParam(string name, DbType type = DbType.Int32)
         {

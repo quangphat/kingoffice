@@ -18,15 +18,20 @@ namespace Repository.Classes
         {
 
         }
-        public async Task<List<ProductViewModel>> GetListByDoitacId(int doitacId)
+        public async Task<List<OptionSimpleModelOld>> GetListByDoitacId(int doitacId)
         {
-            var result = await _connection.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new {
-                @MaDoiTac = doitacId
-            }, commandType: CommandType.StoredProcedure);
-            return result.ToList();
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimpleModelOld>("sp_SAN_PHAM_VAY_LayDSByID", new
+                {
+                    @MaDoiTac = doitacId
+                }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
         }
         public async Task<List<ProductViewModel>> GetListByHosoId(int doitaId, int hosoId)
         {
+            NewConnection();
             var result = await _connection.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new
             {
                 @MaHS = hosoId,

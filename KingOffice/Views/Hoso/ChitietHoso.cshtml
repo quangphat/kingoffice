@@ -1,0 +1,364 @@
+﻿@using KingOffice.Resources;
+@{
+    ViewBag.Title = Global.Home_Index_Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    SetActiveMenu('@ViewBag.formindex', 2);
+</script>
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="/QuanLyHoSo/DanhSachHoSo">Danh sách hồ sơ</a>
+            </li>
+
+            <li class="active">
+                Chi tiết hồ sơ
+            </li>
+        </ul>
+    </div>
+    <div class="page-content" id="panel_body">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4 class="header lighter orange"><i class="ace-icon fa fa-bell"></i>Trình trạng hồ sơ</h4>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">Trạng thái</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled id="txtTrangThai" class="form-control" />
+                        </div>
+                        <label class="col-sm-2 control-label no-padding-right">Kết quả hoạt động</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled id="txtKetQuaHoatDong" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">Ghi chú</label>
+                        <div class="col-sm-10">
+                            <textarea disabled class="form-control limited" id="txtGhiChu" maxlength="50"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="header smaller lighter blue">1.Thông tin khách hàng:</h3>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Họ và tên</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled id="txtHoTen" placeholder="Nhập họ tên" class="form-control">
+                        </div>
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Ngày nhận đơn đề nghị</label>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input class="form-control" disabled id="txtToDate" />
+                               
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Điện thoại khách hàng</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled id="txtDienThoai" placeholder="Nhập số điện thoại khách hàng" class="form-control">
+                        </div>
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Điện thoại nhân viên</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled id="txtEmployeePhone" placeholder="Nhập số điện thoại nhân viên" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Số CMND</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="txtCMND" disabled placeholder="Nhập số CMND" class="form-control" />
+                        </div>
+                        <label class="col-sm-2 control-label no-padding-right">Giới tính</label>
+                        <div class="col-sm-4">
+                            <select id="ddlGioiTinh" disabled class="chosen-select form-control">
+                                <option value="1">Nam</option>
+                                <option value="2">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">Sale Code</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="ddlInternalCode" disabled placeholder="Sale code" class="form-control" />
+                            
+                        </div>
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên nhân viên</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="txtTenNV" disabled data-toggle-tt="tooltip" placeholder="Tên nhân viên" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">Tỉnh/TP</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="ddlTinh" disabled data-toggle-tt="tooltip" placeholder="Tên nhân viên" class="form-control" />
+                            
+                        </div>
+                        <label class="col-sm-2 control-label no-padding-right">Quận/huyện</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="ddlHuyen" disabled data-toggle-tt="tooltip"  class="form-control" />
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Địa chỉ</label>
+                        <div class="col-sm-10">
+                            <textarea type="text" disabled id="txtDiaChi" placeholder="Nhập địa chỉ" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Data Entry Code</label>
+                        <div class="col-sm-4">
+                            <select id="ddlCourier" disabled class="chosen-select form-control" data-placeholder="Chọn Data Entry code">
+                                <option value="0"></option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="header smaller lighter blue">2.Thông tin khoản vay và sản phẩm:</h3>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">Tên ngân hàng</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="ddlDoitac" disabled placeholder="Chọn đối tác" class="form-control" />
+                            
+                        </div>
+                        <label class="col-sm-2 control-label no-padding-right">Sản phẩm vay</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="ddlSanPhamVay" disabled placeholder="Chọn sản phẩm vay" class="form-control" />
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-4  col-md-offset-2">
+                            <div class="checkbox">
+                                <label>
+                                    <input disabled name="form-field-checkbox" id="cbbaohiem" checked type="checkbox" class="ace">
+                                    <span class="lbl">Không đề nghị mua bảo hiểm dư TD cá nhân</span>
+                                </label>
+                            </div>
+                        </div>
+                        <label style="display:none" for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên cửa hàng</label>
+                        <div style="display:none" class="col-sm-4">
+                            <input type="text" disabled id="txtTenCuaHang" placeholder="Nhập tên của hàng" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Số tiền đề nghị vay</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled id="txtTienDeNghiVay" placeholder="Nhập số tiền đề nghị vay" class="form-control">
+                        </div>
+                        <label class="col-sm-2 control-label no-padding-right">Thời hạn vay</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled id="spnThoiHanVay" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="header smaller lighter blue">3.Hồ sơ đính kèm:</h3>
+                <div class="row">
+                    <div class="col-xs-12" style="overflow-y: scroll;max-height:400px;">
+                        <form class="form-horizontal" role="form" id="lstTailieu"></form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+                <div class="pull-right">
+                    <a>Trở về</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var strLoading = '@Global.Message_Loading';
+    var hoso = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.hoso));
+    var account = document['account'];
+    $(document).ready(function () { 
+        $('.chosen-select').chosen({ width: '100%', allow_single_deselect: true });
+        
+        if(hoso!=null)
+        {
+            hoSoID=hoso.ID;
+            $('#txtHoTen').val(hoso.TenKhachHang);
+            $('#txtDienThoai').val(hoso.SDT);
+            $("#txtToDate").val(FormatDateTimeDMY(hoso.NgayNhanDon));
+            $('#txtCMND').val(hoso.CMND);
+            $('#txtDiaChi').val(hoso.DiaChi);
+            $('#txtTenCuaHang').val(hoso.TenCuaHang);
+            $('#txtTienDeNghiVay').val(formatCurrency(hoso.SoTienVay.toString()));
+            $('#spnThoiHanVay').val(hoso.HanVay);
+            $('#ddlDoitac').val(hoso.Doitac);
+            $('#ddlTinh').val(hoso.ProvinceName);
+            $('#ddlHuyen').val(hoso.DistrictName);
+            $('#ddlSanPhamVay').val(hoso.ProductName);
+            $('#ddlInternalCode').val(hoso.SaleCode);
+            if(hoso.CoBaoHiem > 0)
+                $('#cbbaohiem').attr('checked', true);
+            else
+                $('#cbbaohiem').attr('checked', false);
+            $('#txtGhiChu').val(hoso.GhiChu);
+            $('#txtTrangThai').val(hoso.TenTrangThai);
+            $('#txtKetQuaHoatDong').val(hoso.KetQuaText);
+            $('#txtTenNV').val(hoso.EmployeeName);
+            $('#txtEmployeePhone').val(hoso.EmployeePhone);
+
+        }
+        LayDSTaiLieu();
+        
+        var courierCode = hoso.CourierCode;
+       
+    });
+    
+    function LayDSTaiLieu() {
+        $.ajax({
+            type: "GET",
+            url: '/hoso/tailieu/' + hoso.ID,
+            success: function (data) {
+                if (data.data != null)
+                {
+                    
+                    var i = 0;
+                    var content = "";
+                    let keys = [];
+                    $.each(data.data, function (index, item) {
+                        
+                        $("#lstTailieu").append("<div class='form-group'><div id='tailieu-" + item.Key + "'></div></div > ");
+                        var _imgExts = ["jpg", "jpeg", "png", "pdf"];
+                        var extn = item.FileUrl.split('.').pop();
+                        var isImg = isExtension(extn, _imgExts);
+                        _initialPreview = [];
+                        _initialPreviewConfig = [];
+                        if (isImg) {
+                            _initialPreview.push(item.FileUrl);
+                            _initialPreviewConfig.push({
+                                caption: item.FileName,
+                                url: "dsd",
+                                type: extn.indexOf('pdf') > -1 ? "pdf" : "jpg",
+                                width: "120px"
+                            });
+                        }
+                        let name =  '',
+                            isrequire = false,
+                            className =''
+                        if (keys.indexOf(item.Key) < 0) {
+                            name = item.KeyName;
+                            isrequire = true
+                        }
+                        else {
+                            className = 'mt-46'
+                        }
+
+                        renderOneItemFile(item.Key, item.FileId, name, isrequire, className, true, _initialPreview, _initialPreviewConfig);
+                        keys.push(item.Key)
+                    });
+                    //lstFile = $(".attachFile");
+                    //$.each(lstFile, function (index, option) {
+                        
+                    //    generateAttachFile(option)                       
+                    //});
+                    
+                }
+
+            },
+            complete: function () {
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+    function generateAttachFile(item, _initialPreview= [], _initialPreviewConfig =[]) {
+        let key = parseInt($(item).attr("key"));
+        let fileId = getNewGuid();
+
+        $(item).fileinput({
+
+            uploadUrl: '/media/uploadtemp/' + key,
+            validateInitialCount: true,
+            maxFileSize: 25 * 1024,
+            msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>)'
+                + 'exceeds maximum allowed upload size of <b>{25} MB</b>. '
+                + 'Please retry your upload!',
+            allowedFileExtensions: ['png', 'jpg', 'pdf'],
+            initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+            initialPreviewFileType: 'image',
+
+            showUpload: false,
+            showUploadedThumbs: false,
+            uploadAsync: false,
+            showClose: false,
+            showCaption: false,
+            showBrowse: false,
+            showUpload: false, // hide upload button
+            showRemove: false, // hide remove button
+            browseOnZoneClick: true,
+            removeLabel: '',
+            fileId: fileId,
+            btnDeleteId: 'btn-remove-file-' + fileId,
+            dropZoneTitle: 'Kéo và thả tập tin vào đây',
+            dropZoneClickTitle: '<br>(hoặc nhấp để chọn)',
+            removeIcon: '<i class="glyphicon glyphicon-remove" id ="' + "btn-remove-" + key + '"></i>',
+            removeTitle: 'Cancel or reset changes',
+            elErrorContainer: '#kv-avatar-errors-2',
+            msgErrorClass: 'alert alert-block alert-danger',
+            initialPreview: _initialPreview,
+            initialPreviewDownloadUrl: _initialPreview,
+            initialPreviewConfig: _initialPreviewConfig,
+            //layoutTemplates: { main2: '{preview} ' + btnCust + ' {remove} {browse}' },
+            //layoutTemplates: { footer: '' },
+            overwriteInitial: false,
+            append: false
+
+        }).on("filebatchselected", function (event, files) {
+            if (countFilesByKey(parseInt(key)) >= 5)
+                return;
+            $(item).fileinput("upload");
+        }).on("filebeforedelete", function (event, key, fileId) {
+            removeFile(parseInt(key), fileId);
+        }).on('filebatchuploadsuccess', function (event, data) {
+            
+
+        });
+
+
+    }
+    function removeFile(key, fileId) {
+        if (isNullOrNoItem(filesUpload))
+            return;
+        let index = filesUpload.findIndex(p => p.key == key);
+        if (index >= 0) {
+            if (!isNullOrNoItem(filesUpload[index].files)) {
+                let indexOfFile = filesUpload[index].files.findIndex(p => p.Id == fileId);
+                if (indexOfFile >= 0)
+                    filesUpload[index].files.splice(indexOfFile, 1);
+            }
+        }
+    }
+    function isReach5Files(key) {
+       
+        return false;
+    }
+    function countFilesByKey(key) {
+        return 0;
+    }
+</script>

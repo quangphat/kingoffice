@@ -356,7 +356,7 @@
         if ((MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.TuChoi)
             || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)
             || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.Nhap))
-            && MaNV == user.id)
+            && MaNV == account.code)
         {
                 thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='SuaHS(this)' >";
                 thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
@@ -366,7 +366,7 @@
         }
         else if ((MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.NhapLieu)
                  || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo))
-                 && 'teamlead' == 'teamlead') {
+            && account.permissions.indexOf('teamlead')>=0) {
             thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='SuaHS(this)' >";
             thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
             thaoTac += "</i>";
@@ -374,7 +374,6 @@
             thaoTac += "</span>";
         }
         else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)'
-
             && 'sale' == 'sale') {
             thaoTac += "<a title='@Global.Button_Edit' >";
             thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
@@ -563,7 +562,7 @@
     });
 
     function XemHS(e) {
-        window.location = "/QuanLyHoSo/XemHSByID?id=" + $(e).attr("ID") + "&fromdate=" + $('#txtFromDate').val() + "&todate=" + $('#txtToDate').val() + "&mahs=" + $('#txtMaHS').val();
+        window.location = "/Hoso/chitiethoso/" + $(e).attr("ID");
     }
     function SuaHS(e) {
         window.location = "/QuanLyHoSo/SuaHSByID?id=" + $(e).attr("ID") + "&fromdate=" + $('#txtFromDate').val() + "&todate=" + $('#txtToDate').val();
