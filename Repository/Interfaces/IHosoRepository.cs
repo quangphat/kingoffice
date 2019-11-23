@@ -48,5 +48,28 @@ namespace Repository.Interfaces
             string status
             );
         Task<bool> CreateHosoDuyetXem(int hosoId);
+        Task<int> CountDanhsachHoso(int loginUserId,
+            int maNhom,
+            int userId,
+            DateTime fromDate,
+            DateTime toDate,
+            string maHs,
+            string cmnd,
+            string trangthai,
+            int loaiNgay,
+            string freeText = null);
+        Task<List<HoSoQuanLyModel>> GetDanhsachHoso(int loginUserId,
+                int maNhom,
+                int userId,
+                DateTime fromDate,
+                DateTime toDate,
+                string maHs,
+                string cmnd,
+                string trangthai,
+                int loaiNgay,
+                string freeText = null,
+                int offset = 0,
+                int limit = 10,
+                bool isDownload = false);
     }
 }

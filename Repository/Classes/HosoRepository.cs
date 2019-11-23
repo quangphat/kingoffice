@@ -43,7 +43,7 @@ namespace Repository.Classes
             string freeText = "")
         {
 
-            return  await _connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
+            return await _connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
                 new
                 {
                     @MaNVDangNhap = maNVDangNhap,
@@ -69,8 +69,8 @@ namespace Repository.Classes
             int loaiNgay,
             string trangThai,
             string freeText,
-            int offset, 
-            int limit, 
+            int offset,
+            int limit,
             bool isDowload = false)
         {
             var result = await _connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyet",
@@ -92,7 +92,7 @@ namespace Repository.Classes
                 commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
-        
+
         public async Task<int> Create(HosoModel model)
         {
             model.NgayTao = DateTime.Now;
@@ -148,10 +148,81 @@ namespace Repository.Classes
                 commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
+        public async Task<int> CountDanhsachHoso(int loginUserId,
+            int maNhom,
+            int userId,
+            DateTime fromDate,
+            DateTime toDate,
+            string maHs,
+            string cmnd,
+            string trangthai,
+            int loaiNgay,
+            string freeText = null)
+        {
+            //var p = new DynamicParameters();
+            //p.Add("MaNVDangNhap", loginUserId);
+            //p.Add("MaNhom", maNhom);
+            //p.Add("MaThanhVien", userId);
+            //p.Add("TuNgay", fromDate);
+            //p.Add("DenNgay", toDate);
+            //p.Add("MaHS", maHs);
+            //p.Add("CMND", cmnd);
+            //p.Add("LoaiNgay", loaiNgay);
+            //p.Add("TrangThai", trangthai);
+            //p.Add("freeText", fromDate);
+            return await _connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoQuanLy",
+               new
+               {
+                   MaNVDangNhap = loginUserId,
+                   MaNhom = maNhom,
+                   MaThanhVien = userId,
+                   TuNgay = fromDate,
+                   DenNgay = toDate,
+                   MaHS = new DbString() { IsAnsi= true, Value = maHs } ,
+                   CMND = new DbString() { IsAnsi = true, Value = cmnd },
+                   LoaiNgay = loaiNgay,
+                   TrangThai = trangthai,
+                   freeText = freeText
+               },
+               commandType: CommandType.StoredProcedure);
+        }
+        public async Task<List<HoSoQuanLyModel>> GetDanhsachHoso(int loginUserId,
+                int maNhom,
+                int userId,
+                DateTime fromDate,
+                DateTime toDate,
+                string maHs,
+                string cmnd,
+                string trangthai,
+                int loaiNgay,
+                string freeText = null,
+                int page = 0,
+                int limit = 10,
+                bool isDownload = false)
+        {
+            var result = await _connection.QueryAsync<HoSoQuanLyModel>("sp_HO_SO_TimHoSoQuanLy",
+               new
+               {
+                   MaNVDangNhap = loginUserId,
+                   MaNhom = maNhom,
+                   MaThanhVien = userId,
+                   TuNgay = fromDate,
+                   DenNgay = toDate,
+                   MaHS = new DbString() { IsAnsi = true, Value = maHs },
+                   CMND = new DbString() { IsAnsi = true, Value = cmnd },
+                   LoaiNgay = loaiNgay,
+                   TrangThai = trangthai,
+                   offset = (page-1)*limit,
+                   limit = limit,
+                   freeText = freeText
+               },
+               commandType: CommandType.StoredProcedure);
+            return result.ToList();
+        }
         private DynamicParameters generateHosoParameter(HosoModel model)
         {
             var p = new DynamicParameters();
-            if(model.ID >0 )
+            if (model.ID > 0)
             {
                 p.Add("ID", model.ID);
                 p.Add("UpdatedUserId", model.MaNguoiCapnhat);
@@ -162,7 +233,7 @@ namespace Repository.Classes
                 p.Add("MaHoSo", model.MaHoSo);
                 p.Add("ID", dbType: DbType.Int32, direction: ParameterDirection.Output);
             }
-            
+
             p.Add("CourierCode", model.CourierCode);
             p.Add("TenKhachHang", model.TenKhachHang);
             p.Add("CMND", model.CMND);

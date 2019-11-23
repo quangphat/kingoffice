@@ -24,5 +24,15 @@ namespace Business.Interfaces
         Task<bool> UploadHoso(int hosoId, List<FileUploadModelGroupByKey> fileGroups, string rootPath);
         //Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath);
         Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath, bool deleteExist = false);
+        Task<(List<HoSoQuanLyModel> datas, int totalRecord)> GetDanhsachHoso(string maHs,
+            string cmnd,
+            DateTime? fromDate,
+            DateTime? toDate,
+            int loaiNgay = 1,
+            int nhomId = 0,
+            int userId = 0,
+            string freetext = null,
+            string status = null,
+            int page = 1, int limit = 10);
     }
 }

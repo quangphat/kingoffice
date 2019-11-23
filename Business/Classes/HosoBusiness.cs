@@ -162,7 +162,7 @@ namespace Business.Classes
                 dtToDate = toDate.ConvertddMMyyyyToDateTime();
             maHS = string.IsNullOrWhiteSpace(maHS) ? "" : maHS;
             cmnd = string.IsNullOrWhiteSpace(cmnd) ? "" : cmnd;
-            string status = BusinessExtension.JoinTrangThai();
+            string status = BusinessExtension.JoinHosoStatus();
             totalRecord = await CountHosoDuyet(_process.User.Id, maNhom,
                 maThanhVien, dtFromDate, dtToDate, maHS, cmnd, loaiNgay, status, freetext);
             var datas = await GetHosoDuyet(_process.User.Id, maNhom, maThanhVien,
@@ -305,6 +305,33 @@ namespace Business.Classes
             };
             await _rpNotes.Add(ghichu);
         }
+        public async Task<(List<HoSoQuanLyModel> datas, int totalRecord)> GetDanhsachHoso(
+            string maHs,
+            string cmnd,
+            DateTime? fromDate,
+            DateTime? toDate,
+            int loaiNgay = 1,
+            int nhomId = 0,
+            int userId =0,
+            string freetext = null,
+            string status = null,
+            int page = 1, int limit = 10)
+        {
+            if (!string.IsNullOrWhiteSpace(freetext) && freetext.Length > 30)
+            {
+                AddError(errors.freetext_length_cannot_lagger_30);
+                return (null, 0);
+            }
+            var fDate = fromDate == null ? DateTime.Now : fromDate.Value;
+            var tDate = toDate == null ? DateTime.Now : toDate.Value;
+            BusinessExtension.ProcessPaging(page, ref limit);
+            freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
+            string trangthai = string.IsNullOrWhiteSpace(status) ? BusinessExtension.GetLimitStatusString() : status;
+            userId = userId <= 0 ? _process.User.Id : userId;
+            var totalRecord = await _rpHoso.CountDanhsachHoso(_process.User.Id, nhomId, userId, fDate, tDate, maHs, cmnd, trangthai, loaiNgay, freetext);
+            var datas = await _rpHoso.GetDanhsachHoso(_process.User.Id, nhomId, userId, fDate, tDate, maHs, cmnd, trangthai, loaiNgay, freetext, page, limit);
+            return (datas, totalRecord);
+        }
         private async Task<List<HosoDuyet>> GetHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,
@@ -381,5 +408,7 @@ namespace Business.Classes
 
             return (true, string.Empty);
         }
+
+       
     }
 }
