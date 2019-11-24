@@ -40,8 +40,12 @@ namespace Repository.Classes
 
         public async Task<List<LoaiTaiLieuModel>> GetLoaiTailieuList()
         {
-            var result = await _connection.QueryAsync<LoaiTaiLieuModel>("sp_LOAI_TAI_LIEU_LayDS",null,commandType: CommandType.StoredProcedure);
-            return result.ToList();
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<LoaiTaiLieuModel>("sp_LOAI_TAI_LIEU_LayDS", null, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+                
         }
         public async Task<List<FileUploadModel>> GetTailieuByHosoId(int hosoId)
         {
@@ -51,6 +55,32 @@ namespace Repository.Classes
             var result = await _connection.QueryAsync<FileUploadModel>("getTailieuByHosoId", p,
                 commandType: CommandType.StoredProcedure);
             return result.ToList();
+        }
+        public async Task<bool> RemoveTailieu(int hosoId, int tailieuId)
+        {
+            var p = new DynamicParameters();
+            p.Add("hosoId", hosoId);
+            p.Add("tailieuId", tailieuId);
+            using (var con = GetConnection())
+            {
+                var result = await con.ExecuteAsync("removeTailieu", p,
+                    commandType: CommandType.StoredProcedure);
+                return true;
+            }
+                
+        }
+        public async Task<bool> UpdateExistingFile(int fileId, string name, string url)
+        {
+            var p = new DynamicParameters();
+            p.Add("fileId", fileId);
+            p.Add("name", name);
+            p.Add("url", url);
+            using (var con = GetConnection())
+            {
+                var result = await con.ExecuteAsync("updateExistingFile", p,
+                    commandType: CommandType.StoredProcedure);
+                return true;
+            }
         }
     }
 }

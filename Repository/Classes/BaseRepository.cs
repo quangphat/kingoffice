@@ -24,8 +24,9 @@ namespace Repository.Classes
         }
         protected IDbConnection GetConnection()
         {
-            _connection.Open();
-            return _connection;
+            var con = new SqlConnection(_configuration.GetConnectionString("kingoffice"));
+            con.Open();
+            return con;
         }
         protected DynamicParameters AddOutputParam(string name, DbType type = DbType.Int32)
         {

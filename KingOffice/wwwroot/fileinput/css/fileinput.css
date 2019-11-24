@@ -205,8 +205,10 @@
 }
 
 .file-preview-image {
-    font: 40px Impact, Charcoal, sans-serif;
-    color: #008000;
+       /* font: 40px Impact, Charcoal, sans-serif; */
+       color: #008000;
+       display: flex;
+       word-break: break-word;
 }
 
 .krajee-default.file-preview-frame {

@@ -201,4 +201,7 @@
   <data name="missing_rootpath" xml:space="preserve">
     <value>Không tìm thấy rootpath</value>
   </data>
+  <data name="missing_name" xml:space="preserve">
+    <value>Vui lòng nhập họ tên</value>
+  </data>
 </root>

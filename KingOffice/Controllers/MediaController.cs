@@ -25,8 +25,8 @@ namespace KingOffice.Controllers
             _hosting = hostingEnvironment;
         }
         [Authorize]
-        [HttpPost("uploadtemp/{key}")]
-        public async Task<IActionResult> UploadFile(string key)
+        [HttpPost("uploadtemp/{key}/{fileId}")]
+        public async Task<IActionResult> UploadFile(string key, int fileId)
         {
             if (Request.Form != null && Request.Form.Files.Any())
             {
@@ -35,7 +35,7 @@ namespace KingOffice.Controllers
                 using (var stream = new MemoryStream())
                 {
                     await file.CopyToAsync(stream);
-                    result = await _bizMedia.UploadSingle(stream, key, file.FileName, _hosting.WebRootPath);
+                    result = await _bizMedia.UploadSingle(stream, key, fileId, file.FileName, _hosting.WebRootPath);
                 }
                 return Json(result);
             }

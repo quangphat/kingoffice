@@ -1,4 +1,5 @@
-﻿using Entity.ViewModels;
+﻿using Entity.PostModel;
+using Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,9 @@ namespace Business.Interfaces
 {
     public interface IHosoBusiness
     {
+        Task<bool> DuyetHoso(int hosoId, DuyetHosoPostModel model);
+        Task<bool> RemoveTailieu(int hosoId, int tailieuId);
+        Task<List<HosoTailieu>> GetTailieuByHosoId(int hosoId);
         Task<List<OptionSimple>> GetResultList();
         Task<List<OptionSimple>> GetStatusList();
         Task<List<GhichuViewModel>> GetComments(int hosoId);
@@ -24,7 +28,7 @@ namespace Business.Interfaces
         Task<List<HosoDuyet>> GetHosoNotApprove();
         Task<long> Save(HosoRequestModel model, bool isDraft);
         Task<bool> UploadHoso(int hosoId, List<FileUploadModel> files, string rootPath);
-        Task<bool> UploadHoso(int hosoId, List<FileUploadModelGroupByKey> fileGroups, string rootPath);
+        Task<bool> UploadHoso(int hosoId, List<FileUploadModelGroupByKey> fileGroups, string rootPath, bool isReset = false);
         //Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath);
         Task<bool> UploadHoso(int hosoId, int key, List<IFormFile> files, string rootPath, bool deleteExist = false);
         Task<(List<HoSoQuanLyModel> datas, int totalRecord)> GetDanhsachHoso(string maHs,

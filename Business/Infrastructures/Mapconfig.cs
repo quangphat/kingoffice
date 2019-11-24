@@ -35,10 +35,7 @@ namespace Business.Infrastructures
                .ForMember(a => a.UserName, b => b.MapFrom(c => c.Ten_Dang_Nhap))
                .ForMember(a => a.Email, b => b.MapFrom(c => c.Email))
                .ForMember(a => a.FullName, b => b.MapFrom(c => c.Ho_Ten));
-            CreateMap<HosoRequestModel, HosoModel>()
-                .ForMember(d => d.NgayNhanDon, map => map.MapFrom((s, d) => {
-                    return BusinessExtension.ConvertddMMyyyyToDateTime(s.ngaynhandon);
-                }));
+            CreateMap<HosoRequestModel, HosoModel>();
             CreateMap<OptionSimpleModelOld, OptionSimple>()
                .ForMember(a => a.Id, b => b.MapFrom(c => c.ID))
                .ForMember(a => a.Name, b => b.MapFrom(c => c.Ten));

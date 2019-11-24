@@ -27,6 +27,9 @@
     });
 }
 function getDistricts(provinceId, controlId, value = null) {
+    
+    if (isNullOrUndefined(provinceId))
+        return;
     $.ajax({
         type: "GET",
         url: '/locations/districts/' + provinceId,

@@ -16,8 +16,8 @@ namespace Entity.DatabaseModels
         public string SDT { get; set; }
         public string SDT2 { get; set; }
         public int GioTinh { get; set; }
-        public DateTime NgayTao { get; set; }
-        public DateTime NgayCapnhat { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public int MaNguoiTao { get; set; }
         public int MaNguoiCapnhat { get; set; }
         public int HoSoCuaAi { get; set; }
@@ -25,7 +25,7 @@ namespace Entity.DatabaseModels
         public DateTime? NgayNhanDon { get; set; }
         public int MaTrangThai { get; set; }
         public int Sanphamvay { get; set; }
-        public int CoBaoHiem { get; set; }
+        public bool CoBaoHiem { get; set; }
         public decimal SoTienVay { get; set; }
         public int HanVay { get; set; }
         public string TenCuaHang { get; }

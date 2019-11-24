@@ -7,6 +7,21 @@
     }
     return false;
 }
+function isNullOrNoItem(arr) {
+    if (arr === null || arr === undefined || arr.length === 0)
+        return true;
+    return false;
+}
+function isNullOrUndefined(value) {
+    if (value === null || value === undefined)
+        return true;
+    return false;
+}
+function isNullOrWhiteSpace(text) {
+    if (text === null || text === undefined || text === '' || text.toString().trim() === '')
+        return true;
+    return false;
+}
 function LayDanhsachGhichu(hosoId) {
     //$('#ddlTrangThai').empty();
     $.ajax({
@@ -56,7 +71,31 @@ function LayTrangThai(value, control) {
         }
     });
 }
+function getSalesCode(controlId) {
+    
+    $.ajax({
+        type: "GET",
+        url: '/employee/sale',
+        success: function (data) {
+            $(controlId).empty();
+            $(controlId).append("<option value='0'></option>");
+            var ten = '';
+            if (data !== null) {
+                $.each(data.data, function (index, item) {
+                    $(controlId).append("<option  fullname='" + item.Name + "' value='" + item.Id + "'>" + item.Code + "</option>");
+                });
+            }
+            //$(controlId).trigger("change");
+            //$(controlId).chosen().trigger("chosen:updated");
 
+        },
+        complete: function () {
+        },
+        error: function (jqXHR, exception) {
+            showError(jqXHR, exception);
+        }
+    });
+}
 function getPartners(controlId, value = null, productId = null, callbackControl = null) {
     $.ajax({
         type: "GET",
@@ -145,29 +184,38 @@ function renderOptionItem(id, name) {
         return;
     return "<option value='" + id + "'>" + name + "</option>"
 }
-function renderOneItemFile(key, id, name, isNotNull = false, className = '', generateInput = false, _initialPreview = [], _initialPreviewConfig = []) {
+function renderOneItemFile(key, fileId, titleName, isRequire = false, className = '', generateInput = false,
+    _initialPreview = [],
+    _initialPreviewConfig = [],
+    allowUpload = false,
+    isFileExist = false,
+    onUpload = null,
+    onDelete = null,
+    filesUploaded = []) {
 
     let content = "<div class='col-sm-3' style='width:20%'>";
-    if (!isNullOrUndefined(name)) {
-        if (isNotNull) {
-            content += '<h5  class="header green ' + className + '">' + name + '<span class="required">(*)</span></h5>';
+    
+    if (!isNullOrUndefined(titleName)) {
+        if (isRequire) {
+            content += '<h5  class="header green ' + className + '">' + titleName + '<span class="required">(*)</span></h5>';
         }
         else {
-            content += '<h5  class="header green ' + className + '">' + name + '<span > </span></h5>';
+            content += '<h5  class="header green ' + className + '">' + titleName + '<span > </span></h5>';
         }
     }
 
     content += "<div class=\"file-loading\">";
-    content += "<input class='attachFile' key=" + key + " id=\"attachFile-" + id + "\" type=\"file\">";
+    content += "<input class='attachFile' key=" + key + " id=\"attachFile-" + fileId + "\" type=\"file\">";
     content += "</div>";
     content += "</div>";
     $('#tailieu-' + key).append(content);
     if (generateInput === true) {
-        let item = $("#attachFile-" + id);
+        let item = $("#attachFile-" + fileId);
 
-        let fileId = getNewGuid();
+        fileId = (isFileExist === true) ? fileId : getNewGuid();
+        let uploadUrl = isFileExist === true ? '/media/uploadtemp/' + key + "/" + fileId : '/media/uploadtemp/' + key + "/0";
         $(item).fileinput({
-
+            uploadUrl: allowUpload === true ? uploadUrl : null,
             validateInitialCount: true,
             maxFileSize: 25 * 1024,
             msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>)'
@@ -186,6 +234,8 @@ function renderOneItemFile(key, id, name, isNotNull = false, className = '', gen
             showRemove: false, // hide remove button
             browseOnZoneClick: true,
             removeLabel: '',
+            fileId: fileId,
+            btnDeleteId: 'btn-remove-file-' + fileId,
             dropZoneTitle: 'Kéo và thả tập tin vào đây',
             dropZoneClickTitle: '<br>(hoặc nhấp để chọn)',
             removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
@@ -199,7 +249,7 @@ function renderOneItemFile(key, id, name, isNotNull = false, className = '', gen
             initialPreviewConfig: _initialPreviewConfig,
             fileActionSettings: {
                 showDownload: true,
-                showRemove: false,
+                showRemove: true,
                 showUpload: true,
                 showZoom: true,
                 showDrag: false
@@ -207,15 +257,46 @@ function renderOneItemFile(key, id, name, isNotNull = false, className = '', gen
             append: true
 
         }).on("filebatchselected", function (event, files) {
-
+            if (countFilesByKey(filesUploaded, parseInt(key)) >= 5)
+                return;
             $(item).fileinput("upload");
-        }).on("filebeforedelete", function (event, key, fileId) {
-
+        }).on("filebeforedelete", function (event, key2, fileId) {
+            
+            if (onDelete !== null) {
+                onDelete(key, fileId, isFileExist);
+            }
         }).on('filebatchuploadsuccess', function (event, data) {
+            if (onUpload !== null) {
+                onUpload(key, fileId, data.response, isFileExist);
+            }
         });
 
     }
 
+}
+function isReach5Files(filesUpload,key) {
+    if (isNullOrWhiteSpace(key))
+        return true;
+    if (isNullOrNoItem(filesUpload))
+        return false;
+    let sameKeyFile = filesUpload.find(p => p.key === key);
+    if (isNullOrUndefined(sameKeyFile))
+        return false;
+    if (isNullOrNoItem(sameKeyFile.files))
+        return 0;
+    if (sameKeyFile.files.length === 5)
+        return true;
+    return false;
+}
+function countFilesByKey(filesUpload,key) {
+    if (isNullOrWhiteSpace(key))
+        return 0;
+    let sameKeyFile = filesUpload.find(p => p.key === key);
+    if (isNullOrUndefined(sameKeyFile))
+        return 0;
+    if (isNullOrNoItem(sameKeyFile.files))
+        return 0;
+    return sameKeyFile.files.length;
 }
 function getNewGuid() {
     const s4 = () => {
@@ -223,12 +304,12 @@ function getNewGuid() {
     };
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
-function showMessage(title, message, success = false, showConfirmButton = true, callback = null) {
+function showMessage(title, message, type = 'success', showConfirmButton = true, callback = null) {
     if (callback === null) {
         swal({
             title: title,
             text: message,
-            type: success === true ? "success" : "error",
+            type: !isNullOrWhiteSpace(type) ? type : "success",
             timer: 4000,
             showConfirmButton: showConfirmButton
         });
@@ -237,7 +318,7 @@ function showMessage(title, message, success = false, showConfirmButton = true, 
     swal({
         title: title,
         text: message,
-        type: success === true ? "success" : "error",
+        type: !isNullOrWhiteSpace(type) ? type : "success",
         timer: 4000,
         showConfirmButton: showConfirmButton
     }, callback());
@@ -252,7 +333,13 @@ function setDateTimeInput(controlId, isSetDefaultDate = true, day = 0, format = 
     if (isSetDefaultDate === true) {
         if (isNullOrUndefined(day))
             day = 0;
-        $(controlId).datepicker({ dateFormat: format }).datepicker("setDate", new Date().getDay() + day);
+        if (day === 0) {
+            $(controlId).datepicker({ dateFormat: format }).datepicker("setDate", new Date());
+        }
+        else {
+            $(controlId).datepicker({ dateFormat: format }).datepicker("setDate", new Date().getDay + day);
+        }
+        
     }
 }
 function getTotalPage(totalRecord, limit = 10) {

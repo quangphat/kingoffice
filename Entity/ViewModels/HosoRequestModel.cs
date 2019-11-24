@@ -8,7 +8,8 @@ namespace Entity.ViewModels
     public class HosoRequestModel:HosoModel
     {
         public string Ghichu { get; set; }
-        public string ngaynhandon { get; set; }
+        public DateTime BirthDay { get; set; }
+        public DateTime CmndDay { get; set; }
         public int Doitac { get; set; }
         public  List<FileUploadModel> files { get; set; }
     }

@@ -29,9 +29,13 @@ namespace Repository.Classes
             p.Add("HosoId", model.HosoId);
             p.Add("Noidung", model.Noidung);
             p.Add("CommentTime", model.CommentTime);
-            await _connection.ExecuteAsync("insert into Ghichu (UserId,Noidung,HosoId, CommentTime) values(@UserId,@Noidung,@HosoId,@CommentTime)"
-                , p, commandType: CommandType.Text);
-            return true;
+            using (var con = GetConnection())
+            {
+                await _connection.ExecuteAsync("insert into Ghichu (UserId,Noidung,HosoId, CommentTime) values(@UserId,@Noidung,@HosoId,@CommentTime)"
+                   , p, commandType: CommandType.Text);
+                return true;
+            }
+               
         }
     }
 }

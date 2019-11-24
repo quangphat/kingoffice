@@ -41,23 +41,32 @@ namespace Repository.Classes
         }
         public async Task<bool> CheckIsInUse(int hosoId, int productId)
         {
+            
             var p = new DynamicParameters();
             p.Add("SanPhamVay", productId);
             p.Add("ID", hosoId);
             p.Add("Exist", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            await _connection.ExecuteScalarAsync<int>("sp_SAN_PHAM_VAY_CheckExist", p, commandType: CommandType.StoredProcedure);
-            var result = p.Get<int>("Exist");
-            if (result > 0)
-                return true;
-            return false;
+            using (var con = GetConnection())
+            {
+                await con.ExecuteScalarAsync<int>("sp_SAN_PHAM_VAY_CheckExist", p, commandType: CommandType.StoredProcedure);
+                var result = p.Get<int>("Exist");
+                if (result > 0)
+                    return true;
+                return false;
+            }
+                
         }
         public async Task<bool> UpdateUse(int hosoId,int productId)
         {
             var p = new DynamicParameters();
             p.Add("SanPhamVay", productId);
             p.Add("ID", hosoId);
-            await _connection.ExecuteAsync("sp_SAN_PHAM_VAY_CapNhatSuDung", p, commandType: CommandType.StoredProcedure);
-            return true;
+            using (var con = GetConnection())
+            {
+                await _connection.ExecuteAsync("sp_SAN_PHAM_VAY_CapNhatSuDung", p, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+                
         }
     }
 }

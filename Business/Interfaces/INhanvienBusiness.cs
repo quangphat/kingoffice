@@ -16,6 +16,7 @@ namespace Business.Interfaces
             int page = 1, int limit = 10);
         Task<int> Create(UserModel entity);
         Task<List<OptionSimpleModelOld>> GetCourierList();
+        Task<List<OptionSimple>> GetSaleList();
         Task<List<OptionSimpleModelV2>> GetListByUserId(int userId);
     }
 }

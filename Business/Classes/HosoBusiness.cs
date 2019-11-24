@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using Entity.PostModel;
 
 namespace Business.Classes
 {
@@ -43,6 +44,130 @@ namespace Business.Classes
             _rpNotes = notesRepository;
             _serviceProvider = serviceProvider;
         }
+        public async Task<bool> DuyetHoso(int hosoId, DuyetHosoPostModel model)
+        {
+            if (_process.User == null)
+            {
+                AddError(errors.error_login_expected);
+                return false;
+            }
+            if (model == null || model.Id <= 0)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(model.CustomerName))
+            {
+                AddError(errors.missing_name);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(model.Phone))
+            {
+                AddError(errors.missing_phone);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Cmnd))
+            {
+                AddError(errors.missing_cmnd);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(model.Address))
+            {
+                AddError(errors.missing_diachi);
+                return false;
+            }
+            if (model.DistrictId <= 0)
+            {
+                AddError(errors.missing_district);
+                return false;
+            }
+            if (model.ProductId <= 0)
+            {
+                AddError(errors.missing_product);
+                return false;
+            }
+            if (model.BorrowAmount <= 0)
+            {
+                AddError(errors.missing_money);
+                return false;
+            }
+            var lstLoaiTailieu = await _rpTailieu.GetLoaiTailieuList();
+            if (lstLoaiTailieu != null)
+            {
+                var missingNames = BusinessExtension.GetFilesMissingV2(lstLoaiTailieu, model.FileRequireIds);
+                if (!string.IsNullOrWhiteSpace(missingNames))
+                {
+                    AddError($"{errors.missing_must_have_files} {missingNames}");
+                    return false;
+                }
+            }
+            var old = _rpHoso.GetHosoById(model.Id);
+            if (old != null)
+            {
+                await _rpHoso.AddHosoDaxem(model.Id);
+            }
+            var checkProductInUse = await _rpProduct.CheckIsInUse(model.Id, model.ProductId);
+            if (checkProductInUse)
+            {
+                AddError(errors.product_code_inuse);
+                return false;
+            }
+            else
+            {
+                await _rpProduct.UpdateUse(model.Id, model.ProductId);
+            }
+
+            model.UpdateBy = _process.User.Id;
+
+            var result = await _rpHoso.DuyetHoso(model);
+            if (result == true)
+            {
+                await _rpHoso.UpdateStatus(model.Id, _process.User.Id, model.Status, model.Result, "");
+                await AddNote(model.Id, model.Comment);
+                return true;
+            }
+            return true;
+        }
+        public async Task<bool> RemoveTailieu(int hosoId, int tailieuId)
+        {
+            if (tailieuId <= 0)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            return await _rpTailieu.RemoveTailieu(hosoId, tailieuId);
+        }
+        public async Task<List<HosoTailieu>> GetTailieuByHosoId(int hosoId)
+        {
+            if (hosoId <= 0)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var lstLoaiTailieu = await _rpTailieu.GetLoaiTailieuList();
+            if (lstLoaiTailieu == null || !lstLoaiTailieu.Any())
+                return null;
+            var tailieuByHoso = await _rpTailieu.GetTailieuByHosoId(hosoId);
+            var result = new List<HosoTailieu>();
+
+            foreach (var loai in lstLoaiTailieu)
+            {
+                var tailieus = tailieuByHoso.Where(p => p.Key == loai.ID);
+
+                var item = new HosoTailieu
+                {
+                    ID = loai.ID,
+                    Ten = loai.Ten,
+                    BatBuoc = loai.BatBuoc,
+                    Tailieus = tailieus != null ? tailieus.ToList() : new List<FileUploadModel>()
+                };
+                result.Add(item);
+
+            }
+
+            return result;
+        }
         public async Task<List<GhichuViewModel>> GetComments(int hosoId)
         {
             if (hosoId <= 0)
@@ -54,7 +179,7 @@ namespace Business.Classes
         }
         public async Task<List<OptionSimple>> GetStatusList()
         {
-            if (_process.User ==null || _process.User.Permissions == null || !_process.User.Permissions.Any())
+            if (_process.User == null || _process.User.Permissions == null || !_process.User.Permissions.Any())
             {
                 AddError(errors.invalid_data);
                 return null;
@@ -77,13 +202,13 @@ namespace Business.Classes
         }
         public async Task<HoSoInfoModel> GetById(int hosoId)
         {
-            if(hosoId<=0)
+            if (hosoId <= 0)
             {
                 AddError(errors.invalid_data);
                 return null;
             }
             var result = await _rpHoso.GetHosoById(hosoId);
-            if(result!=null)
+            if (result != null)
             {
                 await _rpHoso.Daxem(hosoId);
             }
@@ -114,7 +239,10 @@ namespace Business.Classes
                     }
                 }
             }
-
+            model.HoSoCuaAi = _process.User.Id;
+            model.MaNguoiTao = _process.User.Id;
+            model.MaTrangThai = isDraft == true ? (int)TrangThaiHoSo.Nhap : (int)TrangThaiHoSo.NhapLieu;
+            model.KetQuaHS = (int)KetQuaHoSo.Trong;
             var hoso = _mapper.Map<HosoModel>(model);
             var validate = validateHoso(hoso, isDraft);
 
@@ -124,10 +252,7 @@ namespace Business.Classes
                 return 0;
             }
 
-            model.HoSoCuaAi = _process.User.Id;
-            model.MaNguoiTao = _process.User.Id;
-            model.MaTrangThai = isDraft == true ? (int)TrangThaiHoSo.Nhap : (int)TrangThaiHoSo.NhapLieu;
-            model.KetQuaHS = (int)KetQuaHoSo.Trong;
+            
             if (model.ID > 0)
             {
                 model.MaNguoiCapnhat = _process.User.Id;
@@ -260,7 +385,7 @@ namespace Business.Classes
                 AddError(errors.invalid_data);
                 return false;
             }
-            
+
             foreach (var item in files)
             {
                 var tailieu = new TaiLieu
@@ -274,22 +399,26 @@ namespace Business.Classes
             }
             return true;
         }
-        public async Task<bool> UploadHoso(int hosoId, List<FileUploadModelGroupByKey> fileGroups, string rootPath)
+        public async Task<bool> UploadHoso(int hosoId, List<FileUploadModelGroupByKey> fileGroups, string rootPath, bool deleteAllExist = false)
         {
             if (fileGroups == null || !fileGroups.Any())
                 return true;
-            if(string.IsNullOrWhiteSpace(rootPath))
+            if (string.IsNullOrWhiteSpace(rootPath))
             {
                 AddError(errors.missing_rootpath);
                 return false;
             }
-            var deleteAll = await _rpTailieu.RemoveAllTailieu(hosoId);
-            if (!deleteAll)
-                return false;
-            var result = false;
-            foreach(var item in fileGroups)
+            if(deleteAllExist)
             {
-                if(item.files.Any())
+                var deleteAll = await _rpTailieu.RemoveAllTailieu(hosoId);
+                if (!deleteAll)
+                    return false;
+            }
+            
+            var result = false;
+            foreach (var item in fileGroups)
+            {
+                if (item.files.Any())
                 {
                     result = await UploadHoso(hosoId, item.files, rootPath);
                 }
@@ -302,7 +431,7 @@ namespace Business.Classes
             {
                 return true;
             }
-            if(hosoId <=0 || key<=0)
+            if (hosoId <= 0 || key <= 0)
             {
                 AddError(errors.invalid_data);
                 return false;
@@ -312,15 +441,15 @@ namespace Business.Classes
             if (!deleted)
                 return false;
             IMediaBusiness bizMedia = _serviceProvider.GetService<IMediaBusiness>();
-            foreach(var file in files)
+            foreach (var file in files)
             {
-                if(!BusinessExtension.IsNotValidFileSize(file.Length))
+                if (!BusinessExtension.IsNotValidFileSize(file.Length))
                 {
                     using (var stream = new MemoryStream())
                     {
                         await file.CopyToAsync(stream);
                         var result = await bizMedia.Upload(stream, key.ToString(), file.FileName, rootPath);
-                        if(!string.IsNullOrWhiteSpace(result))
+                        if (!string.IsNullOrWhiteSpace(result))
                         {
                             var tailieu = new TaiLieu
                             {
@@ -338,7 +467,7 @@ namespace Business.Classes
         }
         public async Task AddNote(int hosoId, string ghiChu)
         {
-            
+
             if (string.IsNullOrWhiteSpace(ghiChu))
                 return;
             GhichuModel ghichu = new GhichuModel
@@ -357,7 +486,7 @@ namespace Business.Classes
             DateTime? toDate,
             int loaiNgay = 1,
             int nhomId = 0,
-            int userId =0,
+            int userId = 0,
             string freetext = null,
             string status = null,
             int page = 1, int limit = 10)
@@ -415,7 +544,7 @@ namespace Business.Classes
             {
                 return (false, errors.customername_must_not_be_empty);
             }
-            if(hoso.Sanphamvay <=0)
+            if (hoso.Sanphamvay <= 0)
             {
                 return (false, errors.missing_product);
             }
@@ -454,6 +583,6 @@ namespace Business.Classes
             return (true, string.Empty);
         }
 
-       
+
     }
 }

@@ -240,14 +240,15 @@
                     var i = 0;
                     var content = "";
                     let keys = [];
+                    
                     $.each(data.data, function (index, item) {
-                        
+                       
                         $("#lstTailieu").append("<div class='form-group'><div id='tailieu-" + item.Key + "'></div></div > ");
                         var _imgExts = ["jpg", "jpeg", "png", "pdf"];
                         var extn = item.FileUrl.split('.').pop();
                         var isImg = isExtension(extn, _imgExts);
-                        _initialPreview = [];
-                        _initialPreviewConfig = [];
+                        let _initialPreview = [];
+                        let _initialPreviewConfig = [];
                         if (isImg) {
                             _initialPreview.push(item.FileUrl);
                             _initialPreviewConfig.push({

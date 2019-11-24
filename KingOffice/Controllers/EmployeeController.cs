@@ -83,5 +83,12 @@ namespace KingOffice.Controllers
             var result = await _bizNhanvien.GetListByUserId(userId);
             return ToResponse(result);
         }
+        [Authorize]
+        [HttpGet("sale")]
+        public async Task<IActionResult> GetSaleList()
+        {
+            var result = await _bizNhanvien.GetSaleList();
+            return ToResponse(result);
+        }
     }
 }

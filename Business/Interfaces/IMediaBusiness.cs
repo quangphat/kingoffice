@@ -10,6 +10,6 @@ namespace Business.Interfaces
     public interface IMediaBusiness
     {
         Task<string> Upload(Stream stream, string key, string name, string webRootPath);
-        Task<MediaUploadConfig> UploadSingle(Stream stream, string key, string name, string webRootPath);
+        Task<MediaUploadConfig> UploadSingle(Stream stream, string key,int fileId, string name, string webRootPath);
     }
 }

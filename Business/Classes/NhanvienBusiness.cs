@@ -145,5 +145,17 @@ namespace Business.Classes
         {
             return await _rpNhanvien.GetListByUserId(userId);
         }
+        public async Task<List<OptionSimple>> GetSaleList()
+        {
+            if (_process.User == null)
+                return null;
+            var result = new List<OptionSimple>();
+            result.Add(new OptionSimple {
+                Id = _process.User.Id,
+                Name = _process.User.FullName,
+                Code = _process.User.UserName
+            });
+            return result;
+        }
     }
 }

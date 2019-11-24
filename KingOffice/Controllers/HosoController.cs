@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Interfaces;
 using Entity.Infrastructures;
+using Entity.PostModel;
 using Entity.ViewModels;
 using KingOffice.Infrastructures;
 using Microsoft.AspNetCore.Authorization;
@@ -89,10 +90,10 @@ namespace KingOffice.Controllers
             return ToResponse(result);
         }
         [Authorize]
-        [HttpPost("UploadHoso/{hosoId}")]
-        public async Task<IActionResult> UploadHoso(int hosoId, [FromBody] List<FileUploadModelGroupByKey> files)
+        [HttpPost("UploadHoso/{hosoId}/{isReset}")]
+        public async Task<IActionResult> UploadHoso(int hosoId,bool isReset, [FromBody] List<FileUploadModelGroupByKey> files)
         {
-            var result = await _bizHoso.UploadHoso(hosoId, files, _hosting.WebRootPath);
+            var result = await _bizHoso.UploadHoso(hosoId, files, _hosting.WebRootPath, isReset);
             return ToResponse(result);
         }
         [Authorize]
@@ -176,6 +177,28 @@ namespace KingOffice.Controllers
         {
             var result = await _bizHoso.GetResultList();
             return ToResponse(result);
+        }
+        [Authorize]
+        [HttpGet("duyethoso/tailieu/{hosoId}")]
+        public async Task<IActionResult> GetTailieuByHoso(int hosoId)
+        {
+            var result = await _bizHoso.GetTailieuByHosoId(hosoId);
+            return ToResponse(result);
+        }
+        [Authorize]
+        [HttpPost("tailieu/delete/{hosoId}/{fileId}")]
+        public async Task<IActionResult> RemoveTailieu(int hosoId, int fileId)
+        {
+            var result = await _bizHoso.RemoveTailieu(hosoId, fileId);
+            return ToResponse(result);
+        }
+        [Authorize]
+        [HttpPost("DuyetHoso/{hosoId}")]
+        public async Task<IActionResult> SaveDuyethoso(int hosoId, [FromBody] DuyetHosoPostModel model)
+        {
+            //return ToResponse(true);
+            var result = await _bizHoso.DuyetHoso(hosoId, model);
+            return ToResponse(true);
         }
     }
 }

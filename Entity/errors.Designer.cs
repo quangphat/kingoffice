@@ -187,6 +187,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lòng nhập họ tên.
+        /// </summary>
+        public static string missing_name {
+            get {
+                return ResourceManager.GetString("missing_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng nhập ngày nhận đơn.
         /// </summary>
         public static string missing_ngaynhandon {
