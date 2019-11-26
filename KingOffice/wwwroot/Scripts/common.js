@@ -22,6 +22,19 @@ function isNullOrWhiteSpace(text) {
         return true;
     return false;
 }
+function renderGhichu(noidung) {
+    if (isNullOrWhiteSpace(noidung))
+        return
+    $('#dsGhichu').prepend(
+        '<div class="timeline-event-content  active">' +
+        '<div class="timeline-item">' +
+        '<div class="timeline-body">' +
+        '<div class="timeline__message-container">'
+        + noidung +
+        '</div></div></div></div>'
+
+    )
+}
 function LayDanhsachGhichu(hosoId) {
     //$('#ddlTrangThai').empty();
     $.ajax({

@@ -200,5 +200,13 @@ namespace KingOffice.Controllers
             var result = await _bizHoso.DuyetHoso(hosoId, model);
             return ToResponse(true);
         }
+        [Authorize]
+        [HttpGet("edit/{hosoId}")]
+        public async Task<IActionResult> Edit(int hosoId)
+        {
+            var result = await _bizHoso.GetById(hosoId);
+            ViewBag.hoso = result;
+            return View();
+        }
     }
 }
