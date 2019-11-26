@@ -110,6 +110,62 @@ namespace Repository.Classes
             var result = await _connection.QueryAsync<OptionSimpleModelV2>("sp_NHOM_LayDSChonTheoNhanVien", new { @UserID =userId  }, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
+        public async Task<List<OptionSimple>> GetAllEmployeeSimpleList()
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimple>("sp_getAllEmployeeSimpleList", null, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<List<OptionSimple>> GetAllTeamSimpleList()
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimple>("sp_getAllNhomSimpleList", null, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<int> CreateTeam(Team team)
+        {
+            //sp_NHOM_Them
+            using (var con = GetConnection())
+            {
+                var p = base.AddOutputParam("Id");
+                p.Add("name", team.Name);
+                p.Add("shortName", team.ShortName);
+                p.Add("parentId", team.ParentTeamId);
+                p.Add("parentCode", team.ParentTeamCode);
+                p.Add("manageUserId", team.ManageUserId);
+                await _connection.ExecuteAsync("sp_CreateTeam", p,
+               commandType: CommandType.StoredProcedure);
+                var result = p.Get<int>("Id");
+                return result;
+            }
+        }
+        public async Task<bool> AddMembersToTeam(int teamId, List<int> memberIds)
+        {
+            //sp_NHAN_VIEN_NHOM_Them
+            using (var con = GetConnection())
+            {
+                await _connection.ExecuteAsync("sp_AddMemberToTeam", memberIds.Select(p=> new {
+                    teamId = teamId, userId = p
+                }),
+               commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
+        public async Task<string> GetParentCodeByTeamId (int teamId)
+        {
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("MaNhom", teamId);
+                var result = await _connection.ExecuteScalarAsync<string>("sp_NHOM_LayChuoiMaChaCuaMaNhom", p,
+               commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
     }
 }
 
