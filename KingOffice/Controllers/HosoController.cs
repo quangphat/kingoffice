@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Business.Interfaces;
+using Entity.DatabaseModels;
 using Entity.Infrastructures;
 using Entity.PostModel;
 using Entity.ViewModels;
@@ -77,7 +78,7 @@ namespace KingOffice.Controllers
         //}
         [Authorize]
         [HttpPost("draft")]
-        public async Task<IActionResult> SaveDaft([FromBody]HosoRequestModel model)
+        public async Task<IActionResult> SaveDaft([FromBody]HosoModel model)
         {
             var result = await _bizHoso.Save(model, true);
             return ToResponse(result);
@@ -194,7 +195,7 @@ namespace KingOffice.Controllers
         }
         [Authorize]
         [HttpPost("DuyetHoso/{hosoId}")]
-        public async Task<IActionResult> SaveDuyethoso(int hosoId, [FromBody] DuyetHosoPostModel model)
+        public async Task<IActionResult> SaveDuyethoso(int hosoId, [FromBody] HosoModel model)
         {
             //return ToResponse(true);
             var result = await _bizHoso.DuyetHoso(hosoId, model);

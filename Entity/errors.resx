@@ -204,4 +204,10 @@
   <data name="missing_name" xml:space="preserve">
     <value>Vui lòng nhập họ tên</value>
   </data>
+  <data name="missing_birthday" xml:space="preserve">
+    <value>Vui lòng chọn ngày sinh</value>
+  </data>
+  <data name="missing_cmnd_day" xml:space="preserve">
+    <value>Vui lòng chọn ngày cấp cmnd</value>
+  </data>
 </root>

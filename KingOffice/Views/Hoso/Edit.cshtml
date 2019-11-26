@@ -43,7 +43,7 @@
                         <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Ngày tháng năm sinh<span class="required">(*)</span> </label>
                         <div class="col-sm-4">
                             <div class="input-group">
-                                <input class="form-control date-picker" id="txtBirhDay" />
+                                <input class="form-control date-picker" id="txtBirthDay" />
                                 <span class="input-group-addon">
                                     <i class="fa fa-calendar bigger-110"></i>
                                 </span>
@@ -281,17 +281,19 @@
     var strLoading = '@Global.Message_Loading';
     var hoso = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.hoso));
     var account = document['account'];
+    var fileRequireIds = [];
     $(document).ready(function () {
         $('.chosen-select').chosen({ width: '100%', allow_single_deselect: true });
         setDateTimeInput('#txtToDate');
-        setDateTimeInput('#txtBirhDay');
+        setDateTimeInput('#txtBirthDay');
         setDateTimeInput('#txtCmndDay');
         if (hoso != null) {
             hoSoID = hoso.ID;
             $('#txtHoTen').val(hoso.TenKhachHang);
             $('#txtDienThoai').val(hoso.SDT);
+            $('#txtDienThoai2').val(hoso.SDT2);
             $("#txtToDate").val(FormatDateTimeDMY(hoso.NgayNhanDon));
-            $('#txtBirhDay').val(FormatDateTimeDMY(hoso.BirthDay));
+            $('#txtBirthDay').val(FormatDateTimeDMY(hoso.BirthDay));
             $('#txtCmndDay').val(FormatDateTimeDMY(hoso.CmndDay));
             $('#txtCMND').val(hoso.CMND);
             $('#txtDiaChi').val(hoso.DiaChi);
@@ -329,43 +331,44 @@
         }
     });
     function getModel() {
-        hoso.TenKhachHang = $('#txtHoTen').val();
-        hoso.SDT = $('#txtDienThoai').val();
-        hoso.SDT2 = $('#txtEmployeePhone').val();
-        hoso.NgayNhanDon = convertDMYToMDYFromStr($('#txtToDate').val());
-        hoso.CMND = $('#txtCMND').val();
-        hoso.GioTinh = parseInt($('#ddlGioiTinh').val());
-        hoso.MaKhuVuc = parseInt($('#ddlDistrict').val());
-        hoso.DiaChi = $('#txtDiaChi').val();
-        hoso.CourierCode = parseInt($('#ddlCourier').val());
-        hoso.Sanphamvay = parseInt($('#ddlSanPhamVay').val());
-        hoso.TenCuaHang = $('#txtTenCuaHang').val();
-        hoso.CoBaoHiem = $('#cbbaohiem').is(":checked") == false ? 0 : 1;
-        hoso.HanVay = parseInt($('#spnThoiHanVay').val());
-        hoso.Ghichu = $('#txtGhiChu').val();
-        hoso.Doitac = parseInt($('#ddlDoiTac').val());
+        
+        hoso.CustomerName = $('#txtHoTen').val();
+        hoso.Phone = $('#txtDienThoai').val();
+        hoso.Phone2 = $('#txtDienThoai2').val();
+        hoso.NgayNhandon = convertDMYToMDYFromStr($('#txtToDate').val());
+        hoso.Cmnd = $('#txtCMND').val();
+        hoso.Gender = parseInt($('#ddlGioiTinh').val());
+        hoso.DistrictId = parseInt($('#ddlDistrict').val());
+        hoso.Address = $('#txtDiaChi').val();
+        hoso.CourierId = parseInt($('#ddlCourier').val());
+        hoso.ProductId = parseInt($('#ddlSanPhamVay').val());
+        hoso.IsBaohiem = $('#cbbaohiem').is(":checked") == false ? 0 : 1;
+        hoso.Thoihanvay = parseInt($('#spnThoiHanVay').val());
+        hoso.Comment = $('#txtGhiChu').val();
+        hoso.PartnerId = parseInt($('#ddlDoiTac').val());
         hoso.files = null;
         hoso.BirthDay = convertDMYToMDYFromStr($("#txtBirthDay").val()),
             hoso.CmndDay = convertDMYToMDYFromStr($("#txtCmndDay").val()),
-            hoso.SoTienVay = isNullOrWhiteSpace($('#txtTienDeNghiVay').val().replace(/\./g, '')) ? 0 : parseFloat($('#txtTienDeNghiVay').val().replace(/\./g, ''));
+            hoso.Status = !isNullOrUndefined($('#ddlTrangThai').val()) ? parseInt($('#ddlTrangThai').val()) : $('#ddlTrangThai').val(),
+            hoso.Result = !isNullOrUndefined($('#ddlKetQua').val()) ? parseInt($('#ddlKetQua').val()) : $('#ddlKetQua').val(),
+            hoso.BorrowAmount = isNullOrWhiteSpace($('#txtTienDeNghiVay').val().replace(/\./g, '')) ? 0 : parseFloat($('#txtTienDeNghiVay').val().replace(/\./g, ''));
         return hoso;
     }
     $('#btn_Save').click(function (e) {
-        
+        let model = getModel();
         if (isNullOrUndefined(hoso))
             return;
-        let model = hoso;
-        if (isNullOrWhiteSpace(model.TenKhachHang)) {
+        if (isNullOrWhiteSpace(model.CustomerName)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng nhập tên",
+                text: "Vui lòng nhập họ tên",
                 type: "error",
                 timer: 4000,
                 showConfirmButton: true,
             });
             return;
         }
-        if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
+        if (model.PartnerId == 0 || isNullOrUndefined(model.PartnerId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn đối tác",
@@ -375,7 +378,7 @@
             });
             return;
         }
-        if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
+        if (model.ProductId == 0 || isNullOrUndefined(model.ProductId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -387,8 +390,8 @@
         }
 
 
-        if (isNullOrWhiteSpace(model.SDT)
-            || model.SDT.length != 10) {
+        if (isNullOrWhiteSpace(model.Phone)
+            || model.Phone.length != 10) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số điện thoại di động phải đúng 10 số!",
@@ -398,8 +401,8 @@
             });
             return;
         }
-        if (isNullOrWhiteSpace(model.SDT2)
-            || model.SDT2.length != 10) {
+        if (isNullOrWhiteSpace(model.Phone2)
+            || model.Phone2.length != 10) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số điện thoại nhân viên phải đúng 10 số!",
@@ -409,8 +412,8 @@
             });
             return;
         }
-        if (isNullOrWhiteSpace(model.CMND) ||
-            (model.CMND.length != 9 && model.CMND.length != 12)) {
+        if (isNullOrWhiteSpace(model.Cmnd) ||
+            (model.Cmnd.length != 9 && model.Cmnd.length != 12)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số CMND chỉ 9 hoặc 12 số!",
@@ -420,7 +423,8 @@
             });
             return;
         }
-        model.files = filesUpload
+        model.FileRequireIds = fileRequireIds
+        
         $.ajax({
             traditional: true,
             url: '/hoso/submit',
@@ -461,11 +465,10 @@
     });
    
     $('#btn_Temp').click(function (e) {
-        
+        let model = getModel();
         if (isNullOrUndefined(hoso))
             return;
-        let model = hoso;
-        if (isNullOrWhiteSpace(model.TenKhachHang)) {
+        if (isNullOrWhiteSpace(model.CustomerName)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng nhập tên",
@@ -475,7 +478,7 @@
             });
             return;
         }
-        if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
+        if (model.PartnerId <= 0 || isNullOrUndefined(model.PartnerId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn đối tác",
@@ -485,7 +488,7 @@
             });
             return;
         }
-        if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
+        if (model.ProductId <= 0 || isNullOrUndefined(model.ProductId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -495,7 +498,7 @@
             });
             return;
         }
-
+        model.FileRequireIds =[]
 
         $.ajax({
             traditional: true,
@@ -603,7 +606,7 @@
 
                         $("#lstTailieu").append("<div class='form-group'><div id='tailieu-" + item.ID + "'></div></div > ");
                         if (!isNullOrNoItem(item.Tailieus)) {
-
+                            fileRequireIds.push(item.ID);
                             let _initialPreview = [];
                             let _initialPreviewConfig = [];
                             $.each(item.Tailieus, function (i, tailieu) {

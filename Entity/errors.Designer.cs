@@ -133,11 +133,29 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn ngày sinh.
+        /// </summary>
+        public static string missing_birthday {
+            get {
+                return ResourceManager.GetString("missing_birthday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng nhập cmnd.
         /// </summary>
         public static string missing_cmnd {
             get {
                 return ResourceManager.GetString("missing_cmnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn ngày cấp cmnd.
+        /// </summary>
+        public static string missing_cmnd_day {
+            get {
+                return ResourceManager.GetString("missing_cmnd_day", resourceCulture);
             }
         }
         

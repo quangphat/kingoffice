@@ -23,7 +23,7 @@ namespace Repository.Classes
         {
 
         }
-        public async Task<bool> DuyetHoso(DuyetHosoPostModel model)
+        public async Task<bool> DuyetHoso(HosoModel model)
         {
             var p = new DynamicParameters();
 
@@ -341,39 +341,40 @@ namespace Repository.Classes
         private DynamicParameters generateHosoParameter(HosoModel model)
         {
             var p = new DynamicParameters();
-            if (model.ID > 0)
+            if (model.Id > 0)
             {
-                p.Add("ID", model.ID);
-                p.Add("UpdatedUserId", model.MaNguoiCapnhat);
-                p.Add("UpdatedDate", model.UpdatedDate);
+                p.Add("ID", model.Id);
+                p.Add("UpdatedUserId", model.UpdateBy);
+                p.Add("UpdatedDate", DateTime.Now);
             }
             else
             {
-                p.Add("MaHoSo", model.MaHoSo);
+                p.Add("MaHoSo", model.Code);
                 p.Add("ID", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("NgayTao", model.CreatedDate);
+                p.Add("MaNguoiTao", model.CreatedBy);
+                p.Add("HoSoCuaAi", model.HoSoCuaAi);
             }
 
-            p.Add("CourierCode", model.CourierCode);
-            p.Add("TenKhachHang", model.TenKhachHang);
-            p.Add("CMND", model.CMND);
-            p.Add("DiaChi", model.DiaChi);
-            p.Add("MaKhuVuc", model.MaKhuVuc);
-            p.Add("SDT", model.SDT);
-            p.Add("SDT2", model.SDT2);
-            p.Add("GioiTinh", model.GioTinh);
-            p.Add("NgayTao", model.CreatedDate);
-            p.Add("MaNguoiTao", model.MaNguoiTao);
-            p.Add("HoSoCuaAi", model.HoSoCuaAi);
-            p.Add("KetQuaHS", model.KetQuaHS);
-            p.Add("NgayNhanDon", model.NgayNhanDon);
-            p.Add("MaTrangThai", model.MaTrangThai);
-            p.Add("SanPhamVay", model.Sanphamvay);
-            p.Add("CoBaoHiem", model.CoBaoHiem);
-            p.Add("SoTienVay", model.SoTienVay);
-            p.Add("HanVay", model.HanVay);
-            p.Add("TenCuaHang", model.TenCuaHang);
-            p.Add("birthDay", DateTime.Now);
-            p.Add("cmndDay", DateTime.Now);
+            p.Add("CourierCode", model.CourierId);
+            p.Add("TenKhachHang", model.CustomerName);
+            p.Add("CMND", model.Cmnd);
+            p.Add("DiaChi", model.Address);
+            p.Add("MaKhuVuc", model.DistrictId);
+            p.Add("SDT", model.Phone);
+            p.Add("SDT2", model.Phone2);
+            p.Add("GioiTinh", model.Gender);
+            
+            p.Add("KetQuaHS", model.Result);
+            p.Add("NgayNhanDon", model.NgayNhandon);
+            p.Add("MaTrangThai", model.Status);
+            p.Add("SanPhamVay", model.ProductId);
+            p.Add("CoBaoHiem", model.IsBaohiem);
+            p.Add("SoTienVay", model.BorrowAmount);
+            p.Add("HanVay", model.ThoihanVay);
+            p.Add("TenCuaHang", "");
+            p.Add("birthDay", model.BirthDay);
+            p.Add("cmndDay", model.CmndDay);
             return p;
         }
     }
