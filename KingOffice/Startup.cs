@@ -45,17 +45,17 @@ namespace KingOffice
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddSession();
-            services.AddScoped<IHosoRepository, HosoRepository>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IUserRoleMenuRepository, UserRoleMenuRepository>();
-            services.AddScoped<ILocationRepository, LocationRepository>();
-            services.AddScoped<INhanvienRepository, NhanvienRepository>();
-            services.AddScoped<ITailieuRepository, TailieuRepository>();
-            services.AddScoped<IDoitacRepository, DoitacRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IAutoIdRepository, AutoIdRepository>();
-            services.AddScoped<INotesRepository, NotesRepository>();
-            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddSingleton<IHosoRepository, HosoRepository>();
+            services.AddSingleton<IAccountRepository, AccountRepository>();
+            services.AddSingleton<IUserRoleMenuRepository, UserRoleMenuRepository>();
+            services.AddSingleton<ILocationRepository, LocationRepository>();
+            services.AddSingleton<INhanvienRepository, NhanvienRepository>();
+            services.AddSingleton<ITailieuRepository, TailieuRepository>();
+            services.AddSingleton<IDoitacRepository, DoitacRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<IAutoIdRepository, AutoIdRepository>();
+            services.AddSingleton<INotesRepository, NotesRepository>();
+            services.AddSingleton<IRoleRepository, RoleRepository>();
             //AppendMongoDI
 
             services.AddScoped<IHosoBusiness, HosoBusiness>();

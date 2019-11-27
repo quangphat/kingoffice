@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Busine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "Entity\Entity.csproj", "{FBEF0C23-E566-400E-9D65-3DB6E8EA2379}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F88ServiceApi", "F88ServiceApi\F88ServiceApi.csproj", "{7A690354-3519-48C9-9740-E64C900B9E52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "F88ServiceApi", "F88ServiceApi\F88ServiceApi.csproj", "{7A690354-3519-48C9-9740-E64C900B9E52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpHelper", "HttpHelper\HttpHelper.csproj", "{4E403935-2F69-46C7-A6F1-CB2C3BFCB1C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{7A690354-3519-48C9-9740-E64C900B9E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A690354-3519-48C9-9740-E64C900B9E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A690354-3519-48C9-9740-E64C900B9E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E403935-2F69-46C7-A6F1-CB2C3BFCB1C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E403935-2F69-46C7-A6F1-CB2C3BFCB1C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E403935-2F69-46C7-A6F1-CB2C3BFCB1C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E403935-2F69-46C7-A6F1-CB2C3BFCB1C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
