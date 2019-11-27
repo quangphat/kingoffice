@@ -68,6 +68,7 @@ namespace KingOffice
             services.AddScoped<IMediaBusiness, MediaBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
             //<AppendBusinessDI>
+            services.AddScoped<F88ServiceApi.F88Service>();
             services.AddScoped<CurrentProcess>();
             var mappingConfig = new MapperConfiguration(mc =>
             {
