@@ -97,19 +97,6 @@ namespace KingOffice.Controllers
             var result = await _bizNhanvien.GetAllEmployeeSimpleList();
             return ToResponse(result);
         }
-        [Authorize]
-        [HttpGet("teams/simplelist")]
-        public async Task<IActionResult> GetAllTeamSimpleList()
-        {
-            var result = await _bizNhanvien.GetAllTeamSimpleList();
-            return ToResponse(result);
-        }
-        [Authorize]
-        [HttpPost("teams")]
-        public async Task<IActionResult> CreateTeam([FromBody] Team model)
-        {
-            var result = await _bizNhanvien.CreateTeam(model);
-            return ToResponse(result);
-        }
+        
     }
 }

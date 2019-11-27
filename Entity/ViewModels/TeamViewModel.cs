@@ -4,16 +4,12 @@ using System.Text;
 
 namespace Entity.ViewModels
 {
-    public class Team
+    public class TeamViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
-        public int ParentTeamId { get; set; }
+        public string ManageUser { get; set; }
         public string ParentTeamCode { get; set; }
-        public int ManageUserId { get; set; }
-        public List<int> MemberIds { get; set; }
-        public string LeaderName { get; set; }
-        public string ParentName { get; set; }
     }
 }

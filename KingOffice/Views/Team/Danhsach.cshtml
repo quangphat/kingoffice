@@ -1,0 +1,277 @@
+﻿@using KingOffice.Resources;
+@{
+    ViewBag.Title = Global.Home_Index_Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    SetActiveMenu('3_2', 2);
+</script>
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            @*<li>
+                    <a href="/HoSo/Index">Hồ sơ của tôi</a>
+                </li>*@
+            <li>
+                <a href="#" class="active">Quản lý tổ nhóm</a>
+            </li>
+        </ul>
+    </div>
+    <div class="page-content" id="panel_body">
+        <div class="row">
+            <div class="col-xs-12">
+                <form class="form-horizontal" role="form">
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label class="col-sm-1  col-xs-12 control-label no-padding-right" for="form-field-1">Nhóm cha</label>
+                        <div class="col-sm-5 col-xs-12 ">
+                            <select id="ddlNhomCha" class="chosen-select form-control" data-placeholder="Chọn nhóm cha">
+                                <option value="0"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                </form>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div class="table-header">
+                    Danh sách nhóm
+                </div>
+                <div class="dataTables_wrapper form-inline no-footer">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label>
+                                Hiển thị
+                                <select id="ddlLimit" class="form-control input-sm" onchange="onSelectLimit()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> dòng mỗi trang
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="report-table-custom--overflow">
+                        <table id="dtSource" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px" class="center">STT</th>
+                                    <th style="width: 200px">Tên ngắn</th>
+                                    <th>Tên</th>
+                                    <th style="width: 200px">Người quản lý</th>
+                                    <th style="width: 150px">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="clearfix" />
+                <div class="one-row no-gutters justify-content-between paginate mb-50">
+                    <div class="col-auto">
+                        <div class="dataTables_info" id="dtSource_info" role="status" aria-live="polite"></div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="one-row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <span id="totalPage"></span>
+                            </div>
+                            <div class="col">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dtSource_paginate">
+                                    <ul class="pagination" id="paging"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- /.col -->
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    var strLoading = '@Global.Message_Loading';
+    var queries = new URLSearchParams(window.location.search);
+    var page = 1;
+    var limit = 10;
+    var pageMargin = 2;
+    var totalPage = 1;
+    var totalRecord = 0;
+    $(document).ready(function e() {
+        $('#ddlNhomCha').chosen({ width: '100%', allow_single_deselect: true });
+        GetAllTeam('#ddlNhomCha');
+        window.addEventListener('popstate', function (e) {
+
+            queries = new URLSearchParams(window.location.search)
+            page = queries.get("page");
+            if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+                page = 1;
+            else
+                page = parseInt(page)
+            limit = queries.get("limit")
+            if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+                limit = 10;
+            else
+                limit = parseInt(limit)
+            getData(page, limit, memberId, true)
+        });
+        setTableLimit("#ddlLimit");
+        bindQueries()
+        getData(page, limit)
+    });
+    function onClickPage(page) {
+        page = page;
+        getData(page, limit);
+    }
+    function bindQueries() {
+        page = queries.get("page");
+        if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+            page = 1;
+        else
+            page = parseInt(page)
+        limit = queries.get("limit")
+        if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+            limit = 10;
+        else
+            limit = parseInt(limit)
+        $("#ddlLimit").val(limit)
+       
+
+    }
+
+    function onSelectLimit() {
+        limit = $("#ddlLimit").val()
+        getData(page, limit)
+    }
+    function renderRow(index, rowData) {
+        page = queries.get("page");
+        if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+            page = 1;
+        else
+            page = parseInt(page)
+        limit = queries.get("limit")
+        if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+            limit = 10;
+        else
+            limit = parseInt(limit)
+        var stt = (page - 1) * limit + index + 1;
+        return "<tr role='row' class = 'odd'>"
+            + renderTextCenter(stt, '', 'center w-45')
+            + renderTextLeft(rowData.ShortName, '', "m-50")
+            + renderTextLeft(rowData.Name, '', "m-w-150 tb-row-breakword")
+            + renderTextLeft(rowData.ManageUser, '', 'w-150')
+            + renderActionTeam(rowData.Id)
+            + "</tr>";
+    }
+    function renderActionTeam(id) {
+        let thaoTac = "<div class='action-buttons'>";
+                        thaoTac += "<a title='@Global.Button_View' class=\"blue\" style='cursor: pointer' id='" + id + "' onClick='XemToNhom(this)'>";
+                        thaoTac += "<i class=\"ace-icon fa fa-eye bigger-130\">";
+                        thaoTac += "</i>";
+                        thaoTac += "</a>";
+                        thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' id=" + id+ " onclick='SuaToNhom(this)' >";
+                        thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
+                        thaoTac += "</i>";
+                        thaoTac += "</a>";
+                        thaoTac += "</a>";
+        thaoTac += "</div>";
+        return "<td class='text-center'>" + thaoTac + "</td>";
+    }
+    function renderTableBody(datas) {
+        var tableBody = $("#dtSource").find("tbody");
+        tableBody.empty();
+        if (isNullOrNoItem(datas))
+            return;
+        $.each(datas, function (index, item) {
+            tableBody.append(renderRow(index, item));
+        });
+
+    }
+
+    function getData(page, limit, memberId = 0, isPopState = false) {
+        $.ajax({
+            url: '/teams/list',
+            type: "GET",
+            contentType: "application/json",
+
+            data: {
+                'page': page,
+                'limit': limit,
+               
+                'parentId': isNullOrUndefined($("#ddlNhomCha").val()) ? 0 : parseInt($("#ddlNhomCha").val()),
+            },
+            success: function (response) {
+                if (response.Message == null) {
+                    totalRecord = response.data.TotalRecord;
+                    var search = this.url.replace("/teams/list", "");
+                    queries = new URLSearchParams(search)
+                    page = queries.get("page");
+                    if (isNullOrUndefined(page) || isNullOrWhiteSpace(page))
+                        page = 1;
+                    else
+                        page = parseInt(page)
+                    limit = queries.get("limit")
+                    if (isNullOrUndefined(limit) || isNullOrWhiteSpace(limit))
+                        limit = 10;
+                    else
+                        limit = parseInt(limit)
+                    renderTableBody(response.data.Datas)
+                    renderPageList(page, limit, totalRecord)
+                    totalPage = getTotalPage(totalRecord, limit);
+                    $("#dtSource_info").text("Tổng: " + totalRecord + " items");
+                    $("#totalPage").text("Tổng: " + totalPage + " trang");
+                }
+                else {
+                    swal({
+                        title: "",
+                        text: response.Message.ErrorMessage,
+                        type: "error",
+                        timer: 4000,
+                        showConfirmButton: true,
+                    });
+                }
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            },
+            complete: function () {
+                $('#panel_body').unblock();
+                if (!isPopState) {
+                    var requestUrl = this.url.replace("/list", "/Danhsach")
+                    window.history.pushState(requestUrl, this.title, requestUrl)
+                }
+
+            }
+        })
+
+    }
+
+    $('#ddlNhomCha').change(function () {
+        getData(page,limit)
+    });
+    function onEdit(id) {
+        if (isNullOrUndefined(id))
+            return;
+        window.location = "/employee/edit/" + id;
+    }
+    function SuaToNhom(element) {
+        var id = $(element).attr("id");
+        window.location = "/teams/capnhat/" + id;
+    }
+
+    function XemToNhom(element) {
+        var id = $(element).attr("id");
+        window.location = "/teams/Chitiet?id=" + id;
+    }
+</script>

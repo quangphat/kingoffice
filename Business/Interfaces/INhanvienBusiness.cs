@@ -8,6 +8,12 @@ namespace Business.Interfaces
 {
     public interface INhanvienBusiness
     {
+        Task<(List<TeamMember> datas, int totalRecord)> GetTeamMembers(int teamId, int page = 1, int limit = 10);
+        Task<bool> UpdateTeam(Team model);
+        Task<Team> GetTeamById(int id, bool isGetForDetail = false);
+        Task<List<OptionSimple>> GetTeamMember(int id);
+        Task<List<OptionSimple>> GetUserNotInTeam(int id);
+        Task<(List<TeamViewModel> datas, int totalRecord)> GetTeamsByParentId(int parentId = 0, int page = 1, int limit = 10);
         Task<bool> CreateTeam(Team model);
         Task<List<OptionSimple>> GetAllTeamSimpleList();
         Task<List<OptionSimple>> GetAllEmployeeSimpleList();

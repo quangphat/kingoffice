@@ -15,7 +15,7 @@ using Entity.ViewModels;
 namespace KingOffice.Controllers
 {
 
-    [Route("home")]
+    
     public class HomeController : BaseController
     {
         protected readonly IHosoRepository _rpHoso;
@@ -39,9 +39,10 @@ namespace KingOffice.Controllers
             }
 
         }
-        [HttpPost("f88")]
+        [HttpPost("home/f88")]
         public async Task<IActionResult> TestF88()
         {
+            _f88.LadipageReturnID(new Entity.F88.LadipageModel());
             return ToResponse(true);
         }
         [Authorize]

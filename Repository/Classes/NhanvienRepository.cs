@@ -155,6 +155,29 @@ namespace Repository.Classes
                 return true;
             }
         }
+        public async Task<bool> RemoveAllMemberFromTeam(int teamId)
+        {
+            using (var con = GetConnection())
+            {
+               await con.ExecuteAsync("sp_NHAN_VIEN_NHOM_Xoa", new { MaNhom = teamId }, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
+        public async Task<bool> UpdateTeam(Team team)
+        {
+            var p = new DynamicParameters();
+            p.Add("ID", team.Id);
+            p.Add("MaNhomCha", team.ParentTeamId);
+            p.Add("MaNguoiQL", team.ManageUserId);
+            p.Add("TenVietTat", team.ShortName);
+            p.Add("Ten", team.Name);
+            p.Add("ChuoiMaCha", team.ParentTeamCode);
+            using (var con = GetConnection())
+            {
+                await con.ExecuteAsync("sp_NHOM_Sua", p, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
         public async Task<string> GetParentCodeByTeamId (int teamId)
         {
             using (var con = GetConnection())
@@ -162,6 +185,80 @@ namespace Repository.Classes
                 var p = new DynamicParameters();
                 p.Add("MaNhom", teamId);
                 var result = await _connection.ExecuteScalarAsync<string>("sp_NHOM_LayChuoiMaChaCuaMaNhom", p,
+               commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+        public async Task<List<TeamViewModel>> GetTeamsByParentId(int parentId, int page = 0, int limit = 10)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<TeamViewModel>("sp_GetChildTeamByParentId",new { parentId, page,limit }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<int> CountTeamsByParentId(int parentId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.ExecuteScalarAsync<int>("sp_CountChildTeamByParentId", new { parentId }, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+        public async Task<Team> GetTeamById(int teamId, bool isGetForDetail = false)
+        {
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("id", teamId);
+                p.Add("isGetForDetail", isGetForDetail);
+                var result = await _connection.QueryFirstOrDefaultAsync<Team>("sp_GetTeamById", p,
+               commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+        public async Task<List<OptionSimple>> GetTeamMember(int teamId)
+        {
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("id", teamId);
+                var result = await _connection.QueryAsync<OptionSimple>("sp_GetAllUserInTeam", p,
+               commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<List<OptionSimple>> GetUserNotInTeam(int teamId)
+        {
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("id", teamId);
+                var result = await _connection.QueryAsync<OptionSimple>("sp_AllUserNotInTeam", p,
+               commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<List<TeamMember>> GetTeamMemberDetail(int teamId, int page =1, int limit =10)
+        {
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("id", teamId);
+                p.Add("page", page);
+                p.Add("limit", limit);
+                var result = await _connection.QueryAsync<TeamMember>("sp_GetAllMemberByTeam", p,
+               commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<int>CountTeamMemberDetail(int teamId)
+        {
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("id", teamId);
+                var result = await _connection.ExecuteScalarAsync<int>("sp_CountAllMemberByTeam", p,
                commandType: CommandType.StoredProcedure);
                 return result;
             }

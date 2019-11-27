@@ -1,17 +1,17 @@
 ﻿@using KingOffice.Resources;
 @{
-    ViewBag.Title = "Tạo tổ nhóm";
+    ViewBag.Title = "Sửa tổ nhóm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script type="text/javascript">
-    SetActiveMenu('3_1', 2);
+    SetActiveMenu('3_2', 2);
 </script>
 <div class="main-content-inner">
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
             <li>
                 <i class="fa fa-caret-right"></i>
-                <a href="#">Tạo tổ nhóm</a>
+                <a href="#">Sửa tổ nhóm</a>
             </li>
         </ul>
     </div>
@@ -23,11 +23,11 @@
                     <div class="form-group">
                         <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên <span class="required">(*)</span> </label>
                         <div class="col-sm-4">
-                            <input type="text" id="txtTenNhom" placeholder="Nhập tên nhóm" class="form-control">
+                            <input type="text" id="txtTenNhom" placeholder="Nhập tên nhóm" class="form-control" value="" />
                         </div>
                         <label for="form-field-1" class="col-sm-2 control-label no-padding-right">Tên ngắn <span class="required">(*)</span> </label>
                         <div class="col-sm-4">
-                            <input type="text" id="txtTenNgan" placeholder="Nhập tên ngắn" class="form-control">
+                            <input type="text" id="txtTenNgan" placeholder="Nhập tên ngắn" class="form-control" value="" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -53,11 +53,12 @@
                 <div class="form-group">
                     <div class="col-sm-12">
                         <select multiple="multiple" size="10" name="duallistbox_demo1[]" id="duallistNhanVien"></select>
-
+                        <div class="hr hr-16 hr-dotted"></div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="clearfix"></div>
         <div class="row">
             <div class="col-xs-12">
                 <hr />
@@ -65,7 +66,7 @@
                     <a class="btn btn-sm btn-primary" id="btn_Save">
                         Lưu
                     </a>
-
+                    <a href="/ToNhom/QLToNhom" title="@Global.Button_Return" class="btn btn-sm btn-primary on-top-return"><i class="ace-icon glyphicon glyphicon-backward"></i></a>
                 </div>
             </div>
         </div>
@@ -73,11 +74,17 @@
 </div>
 <script src="~/ace-master/assets/js/jquery.bootstrap-duallistbox.min.js"></script>
 <script>
+    var team = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(@ViewBag.team));
     $(document).ready(function () {
+        if (!isNullOrUndefined(team)) {
+            $("#txtTenNhom").val(team.Name)
+            $("#txtTenNgan").val(team.ShortName)
+        }
+        GetMember();
         LayNhanVien();
-        //LayDSNhanVienQL();
         LayDSNhom();
     });
+
     jQuery(function ($) {
         var demo1 = $('select[name="duallistbox_demo1[]"]').bootstrapDualListbox({ infoTextFiltered: '<span class="label label-purple label-lg">Filtered</span>', filterPlaceHolder: '', filterTextClear: '', infoText: '', infoTextFiltered: '' });
 
@@ -117,7 +124,36 @@
 
     });
 
-    function LayNhanVien() {
+    function GetMember() {
+        $('#duallistNhanVien').empty();
+        $.ajax({
+            type: "GET",
+            url: '/teams/member/' + team.Id,
+            success: function (data) {
+                
+                if (data != null) {
+                    if (data.notMembers != null && data.notMembers) {
+                        $.each(data.notMembers, function (index, item) {
+                            $('#duallistNhanVien').append("<option value='" + item.id + "'>" + item.name + "</option>");
+                        });
+                    }
+                    if (data.members != null && data.members.length > 0) {
+                        $.each(data.members, function (index, item) {
+                            $('#duallistNhanVien').append("<option value='" + item.id + "' selected='selected'>" + item.name + "</option>");
+                        });
+                    }
+                }
+                $('#duallistNhanVien').bootstrapDualListbox('refresh', true);
+            },
+            complete: function () {
+            },
+            error: function (jqXHR, exception) {
+                showError(jqXHR, exception);
+            }
+        });
+    }
+
+        function LayNhanVien() {
         $('#duallistNhanVien').empty();
         $('#ddlNguoiQL').empty();
         $('#ddlNguoiQL').append("<option value='0'></option>");
@@ -132,9 +168,7 @@
                             $('#duallistNhanVien').append("<option value='" + item.Id + "'>" + item.Code + " - " + item.Name + "</option>");
                             $('#ddlNguoiQL').append("<option value='" + item.Id + "'>" + item.Code + " - " + item.Name + "</option>");
                         });
-                        if (data.data.length == 1) {
-                            $('#ddlNguoiQL').val(data.data[0].Id);
-                        }
+                        $('#ddlNguoiQL').val(team.ManageUserId);
                     }
                 }
                 $('#duallistNhanVien').bootstrapDualListbox('refresh', true);
@@ -178,7 +212,6 @@
             }
         });
     }
-
     $('#btn_Save').click(function (e) {
         if ($('#txtTenNhom').val() == '') {
             swal({
@@ -205,8 +238,7 @@
         for (var i = 0; i < lstRightSelect.length; i++) {
             lstSelectedId.push(lstRightSelect[i].attributes[0].value);
         }
-        if (lstSelectedId.length == 0)
-        {
+        if (lstSelectedId.length == 0) {
             swal({
                 title: "",
                 text: "Vui lòng chọn thành viên nhóm!",
@@ -216,7 +248,9 @@
             });
             return;
         }
+        
         var model = {
+            Id: team.Id,
             Name: $('#txtTenNhom').val(),
             ShortName: $('#txtTenNgan').val(),
             ManageUserId: $('#ddlNguoiQL').val(),
@@ -224,9 +258,9 @@
             MemberIds: lstSelectedId
         };
         $.ajax({
-             traditional: true,
-            url: '/teams',
-            type: "POST",
+            traditional: true,
+            url: '/teams/' + team.Id,
+            type: "PUT",
             contentType: "application/json;",
             dataType: 'json',
             data: JSON.stringify(model),
@@ -245,7 +279,7 @@
                 else {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
-                        text: data.code,
+                        text: data.error.code,
                         type: "error",
                         timer: 4000,
                         showConfirmButton: true,

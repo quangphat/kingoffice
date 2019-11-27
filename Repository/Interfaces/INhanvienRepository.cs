@@ -10,6 +10,15 @@ namespace Repository.Interfaces
 {
     public interface INhanvienRepository
     {
+        Task<int> CountTeamMemberDetail(int teamId);
+        Task<List<TeamMember>> GetTeamMemberDetail(int teamId, int page = 1, int limit = 10);
+        Task<bool> RemoveAllMemberFromTeam(int teamId);
+        Task<bool> UpdateTeam(Team team);
+        Task<List<OptionSimple>> GetUserNotInTeam(int teamId);
+        Task<List<OptionSimple>> GetTeamMember(int teamId);
+        Task<Team> GetTeamById(int teamId, bool isGetForDetail = false);
+        Task<List<TeamViewModel>> GetTeamsByParentId(int parentId, int page = 0, int limit = 10);
+        Task<int> CountTeamsByParentId(int parentId);
         Task<string> GetParentCodeByTeamId(int teamId);
         Task<int> CreateTeam(Team team);
         Task<bool> AddMembersToTeam(int teamId, List<int> memberIds);

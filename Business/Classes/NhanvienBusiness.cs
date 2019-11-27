@@ -21,6 +21,93 @@ namespace Business.Classes
         {
             _rpNhanvien = nhanvienRepository;
         }
+        public async Task<Team> GetTeamById(int id, bool isGetForDetail = false)
+        {
+            if (id <= 0)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var result = await _rpNhanvien.GetTeamById(id, isGetForDetail);
+            return result;
+        }
+        public async Task<List<OptionSimple>> GetTeamMember(int id)
+        {
+            if (id <= 0)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var result = await _rpNhanvien.GetTeamMember(id);
+            return result;
+        }
+        public async Task<List<OptionSimple>> GetUserNotInTeam(int id)
+        {
+            if (id <= 0)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            var result = await _rpNhanvien.GetUserNotInTeam(id);
+            return result;
+        }
+        public async Task<(List<TeamViewModel> datas, int totalRecord)> GetTeamsByParentId(int parentId = 0, int page =1, int limit = 10)
+        {
+            var totalRecord = await _rpNhanvien.CountTeamsByParentId(parentId);
+            if(totalRecord<=0)
+            {
+                return (null, 0);
+            }
+            BusinessExtension.ProcessPaging(page, ref limit);    
+            var result = await _rpNhanvien.GetTeamsByParentId(parentId,page, limit);
+            return (result,totalRecord);
+        }
+        public async Task<(List<TeamMember> datas, int totalRecord)> GetTeamMembers(int teamId, int page = 1, int limit = 10)
+        {
+            var totalRecord = await _rpNhanvien.CountTeamMemberDetail(teamId);
+            if (totalRecord <= 0)
+            {
+                return (null, 0);
+            }
+            BusinessExtension.ProcessPaging(page, ref limit);
+            var result = await _rpNhanvien.GetTeamMemberDetail(teamId, page, limit);
+            return (result, totalRecord);
+        }
+        public async Task<bool> UpdateTeam(Team model)
+        {
+            if (model == null|| model.Id <=0)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(model.Name) || string.IsNullOrWhiteSpace(model.ShortName))
+            {
+                AddError(errors.missing_team_name);
+                return false;
+            }
+            if (model.ManageUserId <= 0)
+            {
+                AddError(errors.missing_manage_team);
+                return false;
+            }
+            if (model.MemberIds == null || !model.MemberIds.Any())
+            {
+                AddError(errors.missing_team_member);
+                return false;
+            }
+            if (model.ParentTeamId != 0)
+                model.ParentTeamCode = await _rpNhanvien.GetParentCodeByTeamId(model.ParentTeamId) + "." + model.ParentTeamId;
+            else
+                model.ParentTeamCode = "0";
+            var isUpdateSuccess = await _rpNhanvien.UpdateTeam(model);
+            if (isUpdateSuccess == false)
+                return false;
+            var isRemoveSuccess = await _rpNhanvien.RemoveAllMemberFromTeam(model.Id);
+            if (isRemoveSuccess == false)
+                return false;
+            var result = await _rpNhanvien.AddMembersToTeam(model.Id, model.MemberIds);
+            return result;
+        }
         public async Task<bool> CreateTeam(Team model)
         {
             if(model==null)
