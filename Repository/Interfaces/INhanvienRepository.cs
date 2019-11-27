@@ -10,6 +10,11 @@ namespace Repository.Interfaces
 {
     public interface INhanvienRepository
     {
+        Task<string> GetParentCodeByTeamId(int teamId);
+        Task<int> CreateTeam(Team team);
+        Task<bool> AddMembersToTeam(int teamId, List<int> memberIds);
+        Task<List<OptionSimple>> GetAllTeamSimpleList();
+        Task<List<OptionSimple>> GetAllEmployeeSimpleList();
         Task<Nhanvien> GetById(int id);
         Task<bool> Update(Nhanvien entity);
         Task<int> Count(

@@ -204,4 +204,25 @@
   <data name="missing_name" xml:space="preserve">
     <value>Vui lòng nhập họ tên</value>
   </data>
+  <data name="missing_birthday" xml:space="preserve">
+    <value>Vui lòng chọn ngày sinh</value>
+  </data>
+  <data name="missing_cmnd_day" xml:space="preserve">
+    <value>Vui lòng chọn ngày cấp cmnd</value>
+  </data>
+  <data name="missing_manage_team" xml:space="preserve">
+    <value>Vui lòng chọn người quản lý</value>
+  </data>
+  <data name="missing_shortname" xml:space="preserve">
+    <value>Vui lòng nhập tên ngắn</value>
+  </data>
+  <data name="missing_team_member" xml:space="preserve">
+    <value>Vui lòng chọn ít nhất 1 thành viên</value>
+  </data>
+  <data name="missing_team_name" xml:space="preserve">
+    <value>Vui lòng nhập tên</value>
+  </data>
+  <data name="missing_team_parent" xml:space="preserve">
+    <value>Vui lòng chọn nhóm cha</value>
+  </data>
 </root>

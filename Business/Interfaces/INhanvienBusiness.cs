@@ -8,6 +8,9 @@ namespace Business.Interfaces
 {
     public interface INhanvienBusiness
     {
+        Task<bool> CreateTeam(Team model);
+        Task<List<OptionSimple>> GetAllTeamSimpleList();
+        Task<List<OptionSimple>> GetAllEmployeeSimpleList();
         Task<bool> Update(EmployeeEditModel model);
         Task<EmployeeEditModel> GetById(int id);
         Task<(int totalRecord, List<EmployeeViewModel> datas)> Gets(DateTime? fromDate, DateTime? toDate,

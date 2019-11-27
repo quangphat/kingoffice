@@ -11,8 +11,9 @@ namespace Repository.Interfaces
 {
     public interface IHosoRepository
     {
+        
         Task<bool> UpdateStatus(int hosoId, int userId, int status, int result, string comment);
-        Task<bool> DuyetHoso(DuyetHosoPostModel model);
+        Task<bool> DuyetHoso(HosoModel model);
         Task<List<OptionSimpleModelOld>> GetResultList();
         Task<List<OptionSimpleModelOld>> GetStatusList(bool isTeamlead);
         Task<List<GhichuViewModel>> GetComments(int hosoId);

@@ -358,7 +358,7 @@
             || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.Nhap))
             && MaNV == account.code)
         {
-                thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='SuaHS(this)' >";
+                thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='onClickEdit(this)' >";
                 thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
                 thaoTac += "</i>";
                 thaoTac += "</a>";
@@ -367,7 +367,7 @@
         else if ((MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.NhapLieu)
                  || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo))
             && account.permissions.indexOf('teamlead')>=0) {
-            thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='SuaHS(this)' >";
+            thaoTac += "<a title='@Global.Button_Edit' class=\"green\" style='cursor: pointer' ID=" + id + " onclick='onClickEdit(this)' >";
             thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
             thaoTac += "</i>";
             thaoTac += "</a>";
@@ -564,8 +564,8 @@
     function XemHS(e) {
         window.location = "/Hoso/chitiethoso/" + $(e).attr("ID");
     }
-    function SuaHS(e) {
-        window.location = "/QuanLyHoSo/SuaHSByID?id=" + $(e).attr("ID") + "&fromdate=" + $('#txtFromDate').val() + "&todate=" + $('#txtToDate').val();
+    function onClickEdit(e) {
+        window.location = "/Hoso/Edit/" + $(e).attr("ID");
     }
     function DownloadReport(e) {
         var maNhom = 0;

@@ -133,11 +133,29 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn ngày sinh.
+        /// </summary>
+        public static string missing_birthday {
+            get {
+                return ResourceManager.GetString("missing_birthday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng nhập cmnd.
         /// </summary>
         public static string missing_cmnd {
             get {
                 return ResourceManager.GetString("missing_cmnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn ngày cấp cmnd.
+        /// </summary>
+        public static string missing_cmnd_day {
+            get {
+                return ResourceManager.GetString("missing_cmnd_day", resourceCulture);
             }
         }
         
@@ -165,6 +183,15 @@ namespace Entity {
         public static string missing_location_code {
             get {
                 return ResourceManager.GetString("missing_location_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn người quản lý.
+        /// </summary>
+        public static string missing_manage_team {
+            get {
+                return ResourceManager.GetString("missing_manage_team", resourceCulture);
             }
         }
         
@@ -246,6 +273,42 @@ namespace Entity {
         public static string missing_rootpath {
             get {
                 return ResourceManager.GetString("missing_rootpath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng nhập tên ngắn.
+        /// </summary>
+        public static string missing_shortname {
+            get {
+                return ResourceManager.GetString("missing_shortname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn ít nhất 1 thành viên.
+        /// </summary>
+        public static string missing_team_member {
+            get {
+                return ResourceManager.GetString("missing_team_member", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng nhập tên.
+        /// </summary>
+        public static string missing_team_name {
+            get {
+                return ResourceManager.GetString("missing_team_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn nhóm cha.
+        /// </summary>
+        public static string missing_team_parent {
+            get {
+                return ResourceManager.GetString("missing_team_parent", resourceCulture);
             }
         }
         

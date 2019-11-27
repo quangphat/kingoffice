@@ -44,7 +44,7 @@ namespace Business.Classes
             _rpNotes = notesRepository;
             _serviceProvider = serviceProvider;
         }
-        public async Task<bool> DuyetHoso(int hosoId, DuyetHosoPostModel model)
+        public async Task<bool> DuyetHoso(int hosoId, HosoModel model)
         {
             if (_process.User == null)
             {
@@ -214,14 +214,19 @@ namespace Business.Classes
             }
             return result;
         }
-        public async Task<long> Save(HosoRequestModel model, bool isDraft)
+        public async Task<long> Save(HosoModel model, bool isDraft)
         {
-            if (!string.IsNullOrWhiteSpace(model.Ghichu) && model.Ghichu.Length > 200)
+            if(model == null)
+            {
+                AddError(errors.invalid_data);
+                return 0;
+            }
+            if (!string.IsNullOrWhiteSpace(model.Comment) && model.Comment.Length > 200)
             {
                 AddError(errors.note_length_cannot_more_than_200);
                 return 0;
             }
-            if (model.Doitac <= 0)
+            if (model.PartnerId <= 0)
             {
                 AddError(errors.missing_partner);
                 return 0;
@@ -231,18 +236,17 @@ namespace Business.Classes
                 var lstLoaiTailieu = await _rpTailieu.GetLoaiTailieuList();
                 if (lstLoaiTailieu != null)
                 {
-                    var missingNames = BusinessExtension.GetFilesMissing(lstLoaiTailieu, model.files);
-                    if (missingNames.Length > 0)
+                    var missingNames = BusinessExtension.GetFilesMissingV2(lstLoaiTailieu, model.FileRequireIds);
+                    if (!string.IsNullOrWhiteSpace(missingNames))
                     {
-                        AddError($"{errors.missing_must_have_files} {missingNames.ToString()}");
+                        AddError(missingNames);
                         return 0;
                     }
                 }
             }
-            model.HoSoCuaAi = _process.User.Id;
-            model.MaNguoiTao = _process.User.Id;
-            model.MaTrangThai = isDraft == true ? (int)TrangThaiHoSo.Nhap : (int)TrangThaiHoSo.NhapLieu;
-            model.KetQuaHS = (int)KetQuaHoSo.Trong;
+            
+            model.Status = isDraft == true ? (int)TrangThaiHoSo.Nhap : (int)TrangThaiHoSo.NhapLieu;
+            model.Result = (int)KetQuaHoSo.Trong;
             var hoso = _mapper.Map<HosoModel>(model);
             var validate = validateHoso(hoso, isDraft);
 
@@ -252,56 +256,58 @@ namespace Business.Classes
                 return 0;
             }
 
-            
-            if (model.ID > 0)
+            //update
+            if (model.Id > 0)
             {
-                model.MaNguoiCapnhat = _process.User.Id;
+                model.UpdateBy = _process.User.Id;
                 await Update(hoso);
+                await AddNote(hoso.Id, model.Comment);
+                return hoso.Id;
             }
-            var hosoId = model.ID > 0 ? model.ID : await Create(hoso);
+            //create
+            var hosoId =  await Create(hoso);
             if (hosoId > 0)
             {
-                await AddNote(hosoId, model.Ghichu);
-            }
-            if (!isDraft)
-            {
-
+                await AddNote(hosoId, model.Comment);
             }
             return hosoId;
         }
         public async Task<int> Update(HosoModel hoso)
         {
-            if (hoso.MaTrangThai == (int)TrangThaiHoSo.NhapLieu
-                || hoso.MaTrangThai == (int)TrangThaiHoSo.BoSungHoSo
-                || hoso.MaTrangThai == (int)TrangThaiHoSo.GiaiNgan
-                || hoso.MaTrangThai == (int)TrangThaiHoSo.ThamDinh
-                || hoso.MaTrangThai == (int)TrangThaiHoSo.TuChoi
-                || hoso.MaTrangThai == (int)TrangThaiHoSo.Nhap)
+            if (hoso.Status == (int)TrangThaiHoSo.NhapLieu
+                || hoso.Status == (int)TrangThaiHoSo.BoSungHoSo
+                || hoso.Status == (int)TrangThaiHoSo.GiaiNgan
+                || hoso.Status == (int)TrangThaiHoSo.ThamDinh
+                || hoso.Status == (int)TrangThaiHoSo.TuChoi
+                || hoso.Status == (int)TrangThaiHoSo.Nhap)
             {
-                var checkProductInUse = await _rpProduct.CheckIsInUse(hoso.ID, hoso.Sanphamvay);
+                var checkProductInUse = await _rpProduct.CheckIsInUse(hoso.Id, hoso.ProductId);
                 if (checkProductInUse)
                 {
                     AddError(errors.product_code_inuse);
-                    return hoso.ID;
+                    return hoso.Id;
                 }
                 else
                 {
-                    await _rpProduct.UpdateUse(hoso.ID, hoso.Sanphamvay);
+                    await _rpProduct.UpdateUse(hoso.Id, hoso.ProductId);
                 }
             }
+            hoso.UpdateBy = _process.User.Id;
             var result = await _rpHoso.Update(hoso);
             if (result)
             {
-
+                await _rpHoso.CreateHosoDuyetXem(hoso.Id);
             }
-            return hoso.ID;
+            return hoso.Id;
         }
         public async Task<int> Create(HosoModel hoso)
         {
             var autoId = await _rpAuto.GetAutoId((int)AutoID.HoSo);
             if (autoId == null)
                 return 0;
-            hoso.MaHoSo = BusinessExtension.GenerateAutoCode(ref autoId);
+            hoso.HoSoCuaAi = _process.User.Id;
+            hoso.CreatedBy = _process.User.Id;
+            hoso.Code = BusinessExtension.GenerateAutoCode(ref autoId);
             var hosoId = await _rpHoso.Create(hoso);
             if (hosoId > 0)
             {
@@ -540,43 +546,52 @@ namespace Business.Classes
             {
                 return (false, errors.invalid_data);
             }
-            if (string.IsNullOrWhiteSpace(hoso.TenKhachHang))
+            if (string.IsNullOrWhiteSpace(hoso.CustomerName))
             {
                 return (false, errors.customername_must_not_be_empty);
             }
-            if (hoso.Sanphamvay <= 0)
+            if (hoso.ProductId <= 0)
             {
                 return (false, errors.missing_product);
             }
             if (!isDraft)
             {
-                if (string.IsNullOrWhiteSpace(hoso.SDT))
+                if (string.IsNullOrWhiteSpace(hoso.Phone))
                 {
                     return (false, errors.missing_phone);
                 }
-                if (hoso.NgayNhanDon == null)
+                if (hoso.NgayNhandon == null)
                 {
                     return (false, errors.missing_ngaynhandon);
                 }
-                if (string.IsNullOrWhiteSpace(hoso.CMND))
+                if (string.IsNullOrWhiteSpace(hoso.Cmnd))
                 {
                     return (false, errors.missing_cmnd);
                 }
-                if (string.IsNullOrWhiteSpace(hoso.DiaChi))
+                if (hoso.DistrictId <= 0)
+                {
+                    return (false, errors.missing_district);
+                }
+                if (string.IsNullOrWhiteSpace(hoso.Address))
                 {
                     return (false, errors.missing_diachi);
                 }
-                if (hoso.MaKhuVuc <= 0)
-                {
-                    return (false, errors.missing_location_code);
-                }
-                if (hoso.Sanphamvay <= 0)
+               
+                if (hoso.ProductId <= 0)
                 {
                     return (false, errors.missing_product);
                 }
-                if (hoso.SoTienVay <= 0)
+                if (hoso.BorrowAmount <= 0)
                 {
                     return (false, errors.missing_money);
+                }
+                if (hoso.BirthDay == null)
+                {
+                    return (false, errors.missing_birthday);
+                }
+                if (hoso.CmndDay == null)
+                {
+                    return (false, errors.missing_cmnd_day);
                 }
             }
 

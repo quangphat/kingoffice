@@ -8,6 +8,7 @@ using Entity.ViewModels;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,59 @@ namespace Business.Classes
         public NhanvienBusiness(CurrentProcess process, INhanvienRepository nhanvienRepository, IMapper mapper) : base(mapper, process)
         {
             _rpNhanvien = nhanvienRepository;
+        }
+        public async Task<bool> CreateTeam(Team model)
+        {
+            if(model==null)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            if(string.IsNullOrWhiteSpace(model.Name) || string.IsNullOrWhiteSpace(model.ShortName))
+            {
+                AddError(errors.missing_team_name);
+                return false;
+            }
+            if(model.ManageUserId <= 0)
+            {
+                AddError(errors.missing_manage_team);
+                return false;
+            }
+            if(model.MemberIds == null || !model.MemberIds.Any())
+            {
+                AddError(errors.missing_team_member);
+                return false;
+            }
+            if (model.ParentTeamId != 0)
+                model.ParentTeamCode = await _rpNhanvien.GetParentCodeByTeamId(model.ParentTeamId) + "." + model.ParentTeamId;
+            else
+                model.ParentTeamCode = "0";
+            var id = await _rpNhanvien.CreateTeam(model);
+            if(id > 0)
+            {
+                await _rpNhanvien.AddMembersToTeam(id, model.MemberIds);
+                return true;
+            }
+            return false;
+        }
+        public async Task<List<OptionSimple>> GetAllEmployeeSimpleList()
+        {
+            if (_process.User == null)
+                return null;
+            var result = await _rpNhanvien.GetAllEmployeeSimpleList();
+            return result;
+        }
+        public async Task<List<OptionSimple>> GetAllTeamSimpleList()
+        {
+            if (_process.User == null)
+                return null;
+            var teams = await _rpNhanvien.GetAllTeamSimpleList();
+            if(teams==null || !teams.Any())
+            {
+                return teams;
+            }
+            var result = CreateTeamTree(teams, "0");
+            return result;
         }
         public async Task<bool> Update(EmployeeEditModel model)
         {
@@ -156,6 +210,52 @@ namespace Business.Classes
                 Code = _process.User.UserName
             });
             return result;
+        }
+        private List<OptionSimple> CreateTeamTree(List<OptionSimple> lstData, string origin)
+        {
+            try
+            {
+                if (lstData == null)
+                    return null;
+                List<OptionSimple> lstResult = new List<OptionSimple>();
+                Stack<OptionSimple> stack = new Stack<OptionSimple>();
+                List<OptionSimple> lstFind = new List<OptionSimple>();
+                do
+                {
+                    if (stack.Count > 0)
+                    {
+                        OptionSimple team = stack.Pop();
+                        if (team != null)
+                        {
+                            string[] tempArray = team.Code.Split('.');
+                            if (tempArray.Length > 1)
+                            {
+                                for (int i = 0; i < tempArray.Length - 1; i++)
+                                {
+                                    team.Name = "-" + team.Name;
+                                }
+                            }
+                            lstResult.Add(team);
+                            origin = team.Code + "." + team.Id;
+                        }
+                    }
+                    lstFind = lstData.FindAll(x => x.Code.Equals(origin));
+                    if (lstFind != null)
+                    {
+
+                        for (int i = lstFind.Count - 1; i >= 0; i--)
+                        {
+                            stack.Push(lstFind[i]);
+                            lstData.Remove(lstFind[i]);
+                        }
+                    }
+                } while (stack.Count > 0);
+                return lstResult;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -226,28 +226,7 @@
 
     <script>
         var hoso = {
-            ID: 0,
-            MaHoSo: null,
-            CourierCode: 0,
-            TenKhachHang: null,
-            CMND: null,
-            DiaChi: null,
-            MaKhuVuc: 0,
-            SDT: null,
-            SDT2: null,
-            GioTinh: 0,
-            MaNguoiTao: 0,
-            HoSoCuaAi: 0,
-            KetQuaHS: null,
-            NgayNhanDon: null,
-            MaTrangThai: 0,
-            Sanphamvay: 0,
-            Doitac: 0,
-            CoBaoHiem: 0,
-            SoTienVay: 0,
-            HanVay: 0,
-            TenCuaHang: null,
-            Ghichu: null
+            
         };
         let filesUpload = [];
         var lstFile = null;
@@ -274,7 +253,7 @@
             getPartners('#ddlDoiTac');
             $('#ddlDoiTac').on('change', function () {
                 setTimeout(function () {
-                    
+
                     getProductByPartnetId($('#ddlDoiTac').val(), '#ddlSanPhamVay', hoso.SanPhamVay);
                 }, 500);
 
@@ -284,13 +263,13 @@
                 getDistricts(this.value, "#ddlDistrict", 0);
             });
             LayDSCourier();
-            
+
             getSalesCode("#ddlSaleCode");
             $('#ddlSaleCode').on('change', function () {
                 $('#txtTenNV').val($('option:selected', this).attr('fullname'));
             });
         });
-        
+
 
     $('#spnThoiHanVay').ace_spinner({ value: 0, min: 0, max: 36, step: 3, btn_up_class: 'btn-info', btn_down_class: 'btn-info' })
 				.closest('.ace-spinner')
@@ -373,7 +352,7 @@
             removeFile(key, fileId);
         }
         function onUploadFile(key, fileId, data, isExist) {
-            
+
             if (isReach5Files(filesUpload, key))
                 return;
             let response = data;
@@ -425,16 +404,15 @@
                     $.each(data.data, function (index, item) {
                         $("#lstTailieu").append("<div class='form-group'><div id='tailieu-" + item.ID + "'></div></div > ");
                         let name = '',
-                            isrequire = false,
                             className = ''
                         if (keys.indexOf(item.ID) < 0) {
                             name = item.Ten;
-                            isrequire = true
                         }
                         else {
                             className = 'mt-46'
                         }
-                        renderOneItemFile(item.ID, item.ID, name, isrequire, className, true, [], [], true, false, onUploadFile, onDeleteFile, filesUpload);
+                        
+                        renderOneItemFile(item.ID, item.ID, name, item.BatBuoc, className, true, [], [], true, false, onUploadFile, onDeleteFile, filesUpload);
                         keys.push(item.ID);
                     });
 
@@ -448,47 +426,36 @@
             }
         });
         }
-    
-    function renderGhichu(noidung) {
-        if (isNullOrWhiteSpace(noidung))
-            return
-        $('#dsGhichu').prepend(
-            '<div class="timeline-event-content  active">' +
-                '<div class="timeline-item">' +
-                    '<div class="timeline-body">' +
-                        '<div class="timeline__message-container">'
-                            + noidung +
-            '</div></div></div></div>'
 
-        )
-    }
-    function getModel() {
-        hoso.TenKhachHang = $('#txtHoTen').val();
-        hoso.SDT = $('#txtDienThoai').val();
-        hoso.SDT2 = $('#txtDienThoai2').val();
-        hoso.NgayNhanDon = convertDMYToMDYFromStr($('#txtToDate').val());
-        hoso.CMND = $('#txtCMND').val();
-        hoso.GioTinh = parseInt($('#ddlGioiTinh').val());
-        hoso.MaKhuVuc = parseInt($('#ddlDistrict').val());
-        hoso.DiaChi = $('#txtDiaChi').val();
-        hoso.CourierCode = parseInt($('#ddlCourier').val());
-        hoso.Sanphamvay = parseInt($('#ddlSanPhamVay').val());
-        hoso.TenCuaHang = $('#txtTenCuaHang').val();
-        hoso.CoBaoHiem = $('#cbbaohiem').is(":checked") == false ? 0 : 1;
-        hoso.HanVay = parseInt($('#spnThoiHanVay').val());
-        hoso.Ghichu = $('#txtGhiChu').val();
-        hoso.Doitac = parseInt($('#ddlDoiTac').val());
-        hoso.files = null;
-        hoso.BirthDay = convertDMYToMDYFromStr($("#txtBirthDay").val()),
-        hoso.CmndDay = convertDMYToMDYFromStr($("#txtCmndDay").val()),
-        hoso.SoTienVay = isNullOrWhiteSpace($('#txtTienDeNghiVay').val().replace(/\./g, '')) ? 0 : parseFloat($('#txtTienDeNghiVay').val().replace(/\./g, ''));
-        return hoso;
-    }
+
+        function getModel() {
+            hoso.CustomerName = $('#txtHoTen').val();
+            hoso.Phone = $('#txtDienThoai').val();
+            hoso.Phone2 = $('#txtDienThoai2').val();
+            hoso.NgayNhandon = convertDMYToMDYFromStr($('#txtToDate').val());
+            hoso.Cmnd = $('#txtCMND').val();
+            hoso.Gender = parseInt($('#ddlGioiTinh').val());
+            hoso.DistrictId = parseInt($('#ddlDistrict').val());
+            hoso.Address = $('#txtDiaChi').val();
+            hoso.CourierId = parseInt($('#ddlCourier').val());
+            hoso.ProductId = parseInt($('#ddlSanPhamVay').val());
+            hoso.IsBaohiem = $('#cbbaohiem').is(":checked") == false ? 0 : 1;
+            hoso.Thoihanvay = parseInt($('#spnThoiHanVay').val());
+            hoso.Comment = $('#txtGhiChu').val();
+            hoso.PartnerId = parseInt($('#ddlDoiTac').val());
+            hoso.files = null;
+            hoso.BirthDay = convertDMYToMDYFromStr($("#txtBirthDay").val()),
+                hoso.CmndDay = convertDMYToMDYFromStr($("#txtCmndDay").val()),
+                hoso.Status = !isNullOrUndefined($('#ddlTrangThai').val()) ? parseInt($('#ddlTrangThai').val()): $('#ddlTrangThai').val(),
+                hoso.Result = !isNullOrUndefined($('#ddlKetQua').val()) ? parseInt($('#ddlKetQua').val()): $('#ddlKetQua').val(),
+            hoso.BorrowAmount = isNullOrWhiteSpace($('#txtTienDeNghiVay').val().replace(/\./g, '')) ? 0 : parseFloat($('#txtTienDeNghiVay').val().replace(/\./g, ''));
+            return hoso;
+        }
     $('#btn_Temp').click(function (e) {
         let model = getModel();
         if (isNullOrUndefined(hoso))
             return;
-        if (isNullOrWhiteSpace(model.TenKhachHang)) {
+        if (isNullOrWhiteSpace(model.CustomerName)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng nhập tên",
@@ -498,7 +465,7 @@
             });
             return;
         }
-        if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
+        if (model.PartnerId <= 0 || isNullOrUndefined(model.PartnerId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn đối tác",
@@ -508,7 +475,7 @@
             });
             return;
         }
-        if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
+        if (model.ProductId <= 0 || isNullOrUndefined(model.ProductId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -518,7 +485,7 @@
             });
             return;
         }
-
+        model.FileRequireIds =[]
 
         $.ajax({
             traditional: true,
@@ -528,7 +495,7 @@
             dataType: 'json',
             data: JSON.stringify(model),
             success: function (data) {
-                if (data.success == true && data.data>0) {
+                if (data.success == true && data.data > 0) {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
                         text: 'Thành công',
@@ -536,11 +503,11 @@
                         timer: 4000,
                         showConfirmButton: true,
                     }, function () {
-                            hoso.ID = data.data;
+                            hoso.Id = data.data;
                             renderGhichu(hoso.Ghichu)
                             hoso.Ghichu =''
                             $("#txtGhiChu").val('')
-                            uploadHoso2(hoso.ID)
+                            uploadHoso2(hoso.Id)
                     });
 
                 }
@@ -569,17 +536,17 @@
         let model = getModel();
         if (isNullOrUndefined(hoso))
             return;
-        if (isNullOrWhiteSpace(model.TenKhachHang)) {
+        if (isNullOrWhiteSpace(model.CustomerName)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
-                text: "Vui lòng nhập tên",
+                text: "Vui lòng nhập họ tên",
                 type: "error",
                 timer: 4000,
                 showConfirmButton: true,
             });
             return;
         }
-        if (model.Doitac == 0 || isNullOrUndefined(model.Doitac)) {
+        if (model.PartnerId == 0 || isNullOrUndefined(model.PartnerId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn đối tác",
@@ -589,7 +556,7 @@
             });
             return;
         }
-        if (model.Sanphamvay == 0 || isNullOrUndefined(model.Sanphamvay)) {
+        if (model.ProductId == 0 || isNullOrUndefined(model.ProductId)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Vui lòng chọn sản phẩm vay",
@@ -601,8 +568,8 @@
         }
 
 
-        if (isNullOrWhiteSpace(model.SDT)
-            || model.SDT.length != 10) {
+        if (isNullOrWhiteSpace(model.Phone)
+            || model.Phone.length != 10) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số điện thoại di động phải đúng 10 số!",
@@ -612,8 +579,8 @@
             });
             return;
         }
-        if (isNullOrWhiteSpace(model.SDT2)
-            || model.SDT2.length != 10) {
+        if (isNullOrWhiteSpace(model.Phone2)
+            || model.Phone2.length != 10) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số điện thoại nhân viên phải đúng 10 số!",
@@ -623,8 +590,8 @@
             });
             return;
         }
-        if (isNullOrWhiteSpace(model.CMND) ||
-            (model.CMND.length != 9 && model.CMND.length != 12)) {
+        if (isNullOrWhiteSpace(model.Cmnd) ||
+            (model.Cmnd.length != 9 && model.Cmnd.length != 12)) {
             swal({
                 title: "@Html.Raw(Global.Message_Title)",
                 text: "Số CMND chỉ 9 hoặc 12 số!",
@@ -634,7 +601,9 @@
             });
             return;
         }
-        model.files = filesUpload
+        model.FileRequireIds = [];
+        model.FileRequireIds = filesUpload.map(p => model.FileRequireIds.push(p.key));
+        
         $.ajax({
             traditional: true,
             url: '/hoso/submit',
@@ -651,8 +620,8 @@
                         timer: 4000,
                         showConfirmButton: true,
                     }, function () {
-                            hoso.ID = data.data
-                            uploadHoso2(hoso.ID, true);
+                            hoso.Id = data.data
+                            uploadHoso2(hoso.Id, true);
                     });
                 }
                 else {
@@ -673,7 +642,7 @@
             },
         });
     });
-                function uploadHoso2(hosoId, reloadOnSuccess = false) {
+     function uploadHoso2(hosoId, reloadOnSuccess = false) {
             if (isNullOrNoItem(filesUpload))
                 return;
             $.ajax({
@@ -692,7 +661,7 @@
                 else {
                     swal({
                         title: "@Html.Raw(Global.Message_Title)",
-                        text: data.Message.ErrorMessage,
+                        text: data.code,
                         type: "error",
                         timer: 4000,
                         showConfirmButton: true,
