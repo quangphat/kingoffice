@@ -263,6 +263,27 @@ namespace Repository.Classes
                 return result;
             }
         }
+        public async Task<bool> RemoveNhanvienCF(int userId)
+        {
+            using (var con = GetConnection())
+            {
+                await con.ExecuteAsync("sp_NHAN_VIEN_CF_Xoa", new { MaNhanVien = userId }, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
+        public async Task<bool> AddUserToNhanvienCF(int userId, List<int> teamIds)
+        {
+
+            using (var con = GetConnection())
+            {
+                await _connection.ExecuteAsync("sp_NHAN_VIEN_CF_Them", teamIds.Select(p => new {
+                    MaNhom = p,
+                    MaNhanVien = userId
+                }),
+               commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
     }
 }
 

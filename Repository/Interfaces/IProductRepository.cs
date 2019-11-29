@@ -1,3 +1,4 @@
+using Entity.DatabaseModels;
 using Entity.ViewModels;
 
 using System;
@@ -9,6 +10,8 @@ namespace Repository.Interfaces
 {
     public interface IProductRepository
     {
+        Task<int> Insert(Product product);
+        Task<List<OptionSimple>> GetAllList(int doitacId = 0);
         Task<List<OptionSimpleModelOld>> GetListByDoitacId(int doitacId);
         Task<List<ProductViewModel>> GetListByHosoId(int doitaId, int hosoId);
         Task<bool> CheckIsInUse(int hosoId, int productId);

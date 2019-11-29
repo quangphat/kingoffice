@@ -1,4 +1,5 @@
 using Dapper;
+using Entity.DatabaseModels;
 using Entity.Infrastructures;
 using Entity.ViewModels;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,17 @@ namespace Repository.Classes
                 var result = await con.QueryAsync<OptionSimpleModelOld>("sp_SAN_PHAM_VAY_LayDSByID", new
                 {
                     @MaDoiTac = doitacId
+                }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<List<OptionSimple>> GetAllList(int doitacId =0)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimple>("sp_GetAllProduct", new
+                {
+                    partnerId = doitacId
                 }, commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
@@ -67,6 +79,23 @@ namespace Repository.Classes
                 return true;
             }
                 
+        }
+        public async Task<int> Insert(Product product)
+        {
+            var p = base.AddOutputParam("ID");
+            p.Add("MaDoiTac", product.PartnerId);
+            p.Add("Ma", product.Code);
+            p.Add("Ten", product.Name);
+            p.Add("NgayTao", product.CreatedDate);
+            p.Add("MaNguoiTao", product.CreatedBy);
+            p.Add("Loai", product.Type);
+            using (var con = GetConnection())
+            {
+                await _connection.ExecuteAsync("sp_SAN_PHAM_VAY_Them", p, commandType: CommandType.StoredProcedure);
+                var result = p.Get<int>("ID");
+                return result;
+            }
+
         }
     }
 }

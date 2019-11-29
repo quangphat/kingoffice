@@ -8,6 +8,7 @@ namespace Business.Interfaces
 {
     public interface INhanvienBusiness
     {
+        Task<bool> ApproveConfig(int userId, List<int> teamIds);
         Task<(List<TeamMember> datas, int totalRecord)> GetTeamMembers(int teamId, int page = 1, int limit = 10);
         Task<bool> UpdateTeam(Team model);
         Task<Team> GetTeamById(int id, bool isGetForDetail = false);

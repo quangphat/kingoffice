@@ -225,4 +225,10 @@
   <data name="missing_team_parent" xml:space="preserve">
     <value>Vui lòng chọn nhóm cha</value>
   </data>
+  <data name="missing_team" xml:space="preserve">
+    <value>Vui lỏng chọn nhóm</value>
+  </data>
+  <data name="missing_user_id" xml:space="preserve">
+    <value>Vui lòng chọn nhân viên</value>
+  </data>
 </root>

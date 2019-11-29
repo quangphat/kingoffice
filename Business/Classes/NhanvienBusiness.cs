@@ -21,6 +21,21 @@ namespace Business.Classes
         {
             _rpNhanvien = nhanvienRepository;
         }
+        public async Task<bool> ApproveConfig(int userId, List<int> teamIds)
+        {
+            if(userId<=0)
+            {
+                AddError(errors.missing_user_id);
+                return false;
+            }
+            if (teamIds==null || !teamIds.Any())
+            {
+                AddError(errors.missing_team);
+                return false;
+            }
+            await _rpNhanvien.AddUserToNhanvienCF(userId, teamIds);
+            return true;
+        }
         public async Task<Team> GetTeamById(int id, bool isGetForDetail = false)
         {
             if (id <= 0)

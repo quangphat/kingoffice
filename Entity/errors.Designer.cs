@@ -286,6 +286,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lỏng chọn nhóm.
+        /// </summary>
+        public static string missing_team {
+            get {
+                return ResourceManager.GetString("missing_team", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng chọn ít nhất 1 thành viên.
         /// </summary>
         public static string missing_team_member {
@@ -309,6 +318,15 @@ namespace Entity {
         public static string missing_team_parent {
             get {
                 return ResourceManager.GetString("missing_team_parent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn nhân viên.
+        /// </summary>
+        public static string missing_user_id {
+            get {
+                return ResourceManager.GetString("missing_user_id", resourceCulture);
             }
         }
         

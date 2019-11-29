@@ -10,6 +10,8 @@ namespace Repository.Interfaces
 {
     public interface INhanvienRepository
     {
+        Task<bool> AddUserToNhanvienCF(int userId, List<int> teamIds);
+        Task<bool> RemoveNhanvienCF(int userId);
         Task<int> CountTeamMemberDetail(int teamId);
         Task<List<TeamMember>> GetTeamMemberDetail(int teamId, int page = 1, int limit = 10);
         Task<bool> RemoveAllMemberFromTeam(int teamId);

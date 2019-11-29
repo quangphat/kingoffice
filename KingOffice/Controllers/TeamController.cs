@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Interfaces;
 using Entity.Infrastructures;
+using Entity.PostModel;
 using Entity.ViewModels;
 using KingOffice.Infrastructures;
 using Microsoft.AspNetCore.Authorization;
@@ -94,6 +95,21 @@ namespace KingOffice.Controllers
         {
             var result = await _bizNhanvien.GetTeamMembers(teamId, page, limit);
             return ToResponse(DataPaging.Create(result.datas, result.totalRecord));
+        }
+        [Authorize]
+        [HttpGet("CauhinhDuyet")]
+        public async Task<IActionResult> CauhinhDuyet(int id)
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost("approveconfig/{userId}")]
+        public async Task<IActionResult> ApproveConfig(int userId,[FromBody] TeamApproveModel model)
+        {
+            if (model == null)
+                return ToResponse(false);
+            var result = await _bizNhanvien.ApproveConfig(userId, model.TeamIds);
+            return ToResponse(result);
         }
     }
 }
