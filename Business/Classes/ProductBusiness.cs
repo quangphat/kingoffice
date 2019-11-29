@@ -18,10 +18,51 @@ namespace Business.Classes
     {
         IProductRepository _rpProduct;
 
+
         public ProductBusiness(CurrentProcess process,
             IProductRepository productRepository, IMapper mapper) : base(mapper, process)
         {
             _rpProduct = productRepository;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            if(id<=0)
+            {
+                AddError(errors.invalid_id);
+                return false;
+            }
+            return await _rpProduct.Delete(id);
+        }
+        public async Task<bool> Create(ProductCreateModel model)
+        {
+            if (model == null || string.IsNullOrWhiteSpace(model.Name))
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            if (model.CreateDate == null)
+                model.CreateDate = DateTime.Now;
+            Product sp = new Product
+            {
+                Code = model.Name,
+                Name = model.Name,
+                CreatedBy = _process.User.Id,
+                CreatedDate = model.CreateDate.Value,
+                PartnerId = 3,
+                Type = 1
+            };
+            var id = await _rpProduct.Insert(sp);
+            if (id > 0)
+                return true;
+            return false;
+        }
+        public async Task<List<ProductDetailViewModel>> GetListByDate(DateTime? createdDate, int partnerId = 0)
+        {
+            if (createdDate == null)
+                createdDate = DateTime.Now;
+            var result = await _rpProduct.GetListByDate(partnerId, createdDate.Value);
+            return result;
         }
         public async Task<List<OptionSimple>> GetListByDoitacId(int doitacId)
         {

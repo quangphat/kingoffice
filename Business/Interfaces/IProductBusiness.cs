@@ -9,6 +9,9 @@ namespace Business.Interfaces
 {
     public interface IProductBusiness
     {
+        Task<bool> Create(ProductCreateModel model);
+        Task<bool> Delete(int id);
+        Task<List<ProductDetailViewModel>> GetListByDate(DateTime? createdDate, int partnerId = 0);
         Task<List<ProductViewModel>> SaveImport(ImportSaveModel model);
         Task<ProductImportResponse> Import(ProductImport model);
         Task<List<OptionSimple>> GetListByDoitacId(int doitacId);

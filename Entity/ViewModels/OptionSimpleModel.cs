@@ -15,6 +15,10 @@ namespace Entity.ViewModels
         public string Name { get; set; }
         public string Code { get; set; }
     }
+    public class OptionSimpleExtendForProduct:OptionSimple
+    {
+        public string CreatedName { get; set; }
+    }
     public class OptionSimpleModelV2 : OptionSimpleModelOld
     {
         public int MaNguoiQL { get; set; }

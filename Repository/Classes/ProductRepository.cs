@@ -15,6 +15,7 @@ namespace Repository.Classes
 {
     public class ProductRepository : BaseRepository, IProductRepository
     {
+
         public ProductRepository(IConfiguration configuration) : base(configuration)
         {
 
@@ -30,13 +31,36 @@ namespace Repository.Classes
                 return result.ToList();
             }
         }
-        public async Task<List<OptionSimple>> GetAllList(int doitacId =0)
+        public async Task<List<OptionSimpleExtendForProduct>> GetAllList(int typeId =0)
         {
             using (var con = GetConnection())
             {
-                var result = await con.QueryAsync<OptionSimple>("sp_GetAllProduct", new
+                var result = await con.QueryAsync<OptionSimpleExtendForProduct>("sp_GetAllProduct", new
                 {
-                    partnerId = doitacId
+                    type = typeId
+                }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<bool> Delete(int id)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.ExecuteAsync("sp_SAN_PHAM_VAY_Xoa", new
+                {
+                    ID = id
+                }, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
+        public async Task<List<ProductDetailViewModel>> GetListByDate(int partnerId, DateTime createdDate)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<ProductDetailViewModel>("sp_SAN_PHAM_VAY_LayDSThongTinByID", new
+                {
+                    MaDoiTac = partnerId,
+                    NgayTao = createdDate
                 }, commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }

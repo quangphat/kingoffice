@@ -60,4 +60,9 @@ namespace Entity.PostModel
         public DateTime? ImportDate { get; set; }
         public List<ProductViewModel> lstSanPham { get; set; }
     }
+    public class ProductCreateModel
+    {
+        public DateTime? CreateDate { get; set; }
+        public string Name { get; set; }
+    }
 }

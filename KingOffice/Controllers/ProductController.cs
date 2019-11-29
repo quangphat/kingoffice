@@ -45,5 +45,33 @@ namespace KingOffice.Controllers
             var result = await _bizProduct.SaveImport(model);
             return ToResponse(result);
         }
+        [Authorize]
+        [HttpGet("SanPhamVay/QuanLySanPham")]
+        public async Task<IActionResult> QuanLySanPham(DateTime? createdDate)
+        {
+            
+            return View();
+        }
+        [Authorize]
+        [HttpGet("SanPhamVay/LayDS")]
+        public async Task<IActionResult> LayDS(DateTime? createdDate)
+        {
+            var result = await _bizProduct.GetListByDate(createdDate, 3);
+            return Json(result);
+        }
+        [Authorize]
+        [HttpDelete("product/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _bizProduct.Delete(id);
+            return Json(result);
+        }
+        [Authorize]
+        [HttpPost("product/create")]
+        public async Task<IActionResult> Create([FromBody]ProductCreateModel model)
+        {
+            var result = await _bizProduct.Create(model);
+            return Json(result);
+        }
     }
 }
