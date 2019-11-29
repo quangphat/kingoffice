@@ -9,6 +9,7 @@ namespace Repository.Interfaces
     public interface IDoitacRepository
     {
         Task<List<OptionSimpleModelOld>> GetListSimple();
+        Task<List<OptionSimpleWithIsSelect>> GetListForCheckCustomerDuplicate();
     }
 }
 

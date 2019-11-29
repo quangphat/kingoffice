@@ -504,7 +504,7 @@ namespace Business.Classes
             }
             var fDate = fromDate == null ? DateTime.Now : fromDate.Value;
             var tDate = toDate == null ? DateTime.Now : toDate.Value;
-            BusinessExtension.ProcessPaging(page, ref limit);
+            BusinessExtension.ProcessPaging(ref page, ref limit);
             freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
             string trangthai = string.IsNullOrWhiteSpace(status) ? BusinessExtension.GetLimitStatusString() : status;
             userId = userId <= 0 ? _process.User.Id : userId;

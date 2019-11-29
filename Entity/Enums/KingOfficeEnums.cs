@@ -4,6 +4,12 @@ using System.Text;
 
 namespace Entity.Enums
 {
+    public enum CICStatus
+    {
+        NotDebt = 0,// không nợ xấu
+        Warning = 1, //nợ chú ý
+        Debt = 2 //nợ xấu
+    }
     public enum TrangThaiHoSo
     {
         Nhap = 0,

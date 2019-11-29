@@ -73,7 +73,7 @@ namespace Business.Classes
             {
                 return (null, 0);
             }
-            BusinessExtension.ProcessPaging(page, ref limit);    
+            BusinessExtension.ProcessPaging(ref page, ref limit);    
             var result = await _rpNhanvien.GetTeamsByParentId(parentId,page, limit);
             return (result,totalRecord);
         }
@@ -84,7 +84,7 @@ namespace Business.Classes
             {
                 return (null, 0);
             }
-            BusinessExtension.ProcessPaging(page, ref limit);
+            BusinessExtension.ProcessPaging(ref page, ref limit);
             var result = await _rpNhanvien.GetTeamMemberDetail(teamId, page, limit);
             return (result, totalRecord);
         }
@@ -215,7 +215,7 @@ namespace Business.Classes
             }
             var fDate = fromDate == null ? DateTime.Now : fromDate.Value;
             var tDate = toDate == null ? DateTime.Now : toDate.Value;
-            BusinessExtension.ProcessPaging(page, ref limit);
+            BusinessExtension.ProcessPaging(ref page, ref limit);
             freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
             var totalRecord = await _rpNhanvien.Count(fDate, tDate, roleId, freetext);
             if (totalRecord == 0)

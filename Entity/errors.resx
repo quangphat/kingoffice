@@ -231,4 +231,7 @@
   <data name="missing_user_id" xml:space="preserve">
     <value>Vui lòng chọn nhân viên</value>
   </data>
+  <data name="mising_checkdate" xml:space="preserve">
+    <value>Vui lòng chọn ngày</value>
+  </data>
 </root>

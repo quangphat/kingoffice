@@ -15,6 +15,12 @@ namespace Entity.ViewModels
         public string Name { get; set; }
         public string Code { get; set; }
     }
+    public class OptionSimpleWithIsSelect
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public bool IsSelect { get; set; }
+    }
     public class OptionSimpleExtendForProduct:OptionSimple
     {
         public string CreatedName { get; set; }

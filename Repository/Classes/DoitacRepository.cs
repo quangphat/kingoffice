@@ -26,6 +26,15 @@ namespace Repository.Classes
                 return result.ToList();
             }
         }
+        public async Task<List<OptionSimpleWithIsSelect>> GetListForCheckCustomerDuplicate()
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimpleWithIsSelect>("sp_getListPartnerForCustomerCheck", commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+               
+        }
     }
 }
 

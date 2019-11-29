@@ -56,6 +56,7 @@ namespace KingOffice
             services.AddSingleton<IAutoIdRepository, AutoIdRepository>();
             services.AddSingleton<INotesRepository, NotesRepository>();
             services.AddSingleton<IRoleRepository, RoleRepository>();
+            services.AddSingleton<ICustomerRepository, CustomerRepository>();
             //AppendMongoDI
 
             services.AddScoped<IHosoBusiness, HosoBusiness>();
@@ -67,6 +68,7 @@ namespace KingOffice
             services.AddScoped<INhanvienBusiness, NhanvienBusiness>();
             services.AddScoped<IMediaBusiness, MediaBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
+            services.AddScoped<ICustomerBusiness, CustomerBusiness>();
             //<AppendBusinessDI>
             services.AddSingleton<F88ServiceApi.F88Service>();
             services.AddScoped<CurrentProcess>();

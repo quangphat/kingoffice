@@ -133,6 +133,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn ngày.
+        /// </summary>
+        public static string mising_checkdate {
+            get {
+                return ResourceManager.GetString("mising_checkdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng chọn ngày sinh.
         /// </summary>
         public static string missing_birthday {
