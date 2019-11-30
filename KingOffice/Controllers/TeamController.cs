@@ -111,5 +111,17 @@ namespace KingOffice.Controllers
             var result = await _bizNhanvien.ApproveConfig(userId, model.TeamIds);
             return ToResponse(result);
         }
+        [HttpGet("userchildteam/{userId}")]
+        public async Task<IActionResult> GetUserChildTeam(int userId)
+        {
+            var result = await _bizNhanvien.GetChildTeam(userId);
+            return ToResponse(result);
+        }
+        [HttpGet("memberincludechildteam/{teamId}")]
+        public async Task<IActionResult> GetMemberIncludeChildTeam(int teamId)
+        {
+            var result = await _bizNhanvien.GetMemberByTeamIncludeChild(teamId);
+            return ToResponse(result);
+        }
     }
 }

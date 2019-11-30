@@ -84,7 +84,7 @@ function LayTrangThai(value, control) {
         }
     });
 }
-function getSalesCode(controlId) {
+function getSalesCode(controlId, defaultValue = 0) {
     
     $.ajax({
         type: "GET",
@@ -98,8 +98,12 @@ function getSalesCode(controlId) {
                     $(controlId).append("<option  fullname='" + item.Name + "' value='" + item.Id + "'>" + item.Code + "</option>");
                 });
             }
-            //$(controlId).trigger("change");
-            //$(controlId).chosen().trigger("chosen:updated");
+            if (defaultValue > 0) {
+                $(controlId).val(defaultValue);
+                $(controlId).trigger("change");
+            $(controlId).chosen().trigger("chosen:updated");
+            }
+            
 
         },
         complete: function () {

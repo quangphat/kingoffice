@@ -10,6 +10,9 @@ namespace Repository.Interfaces
 {
     public interface INhanvienRepository
     {
+        Task<List<OptionSimpleModelOld>> GetMemberByTeamIncludeChild(int teamId);
+        Task<List<OptionSimpleExtendForTeam>> GetChildTeamSimpleList(int teamId);
+        Task<List<OptionSimple>> GetAllTeamManageByUserId(int userId);
         Task<bool> AddUserToNhanvienCF(int userId, List<int> teamIds);
         Task<bool> RemoveNhanvienCF(int userId);
         Task<int> CountTeamMemberDetail(int teamId);

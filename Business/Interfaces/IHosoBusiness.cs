@@ -17,12 +17,13 @@ namespace Business.Interfaces
         Task<List<OptionSimple>> GetResultList();
         Task<List<OptionSimple>> GetStatusList();
         Task<List<GhichuViewModel>> GetComments(int hosoId);
-        Task<(List<HosoDuyet> datas, int TotalRecord)> GetHosoDuyet(string fromDate,
-            string toDate,
+        Task<(List<HosoDuyet> datas, int TotalRecord)> GetHosoDuyet(DateTime? fromDate,
+            DateTime? toDate,
             string maHS = "",
             string cmnd = "",
             int loaiNgay = 1,
             int maNhom = 0,
+            string status = null,
             string freetext = "",
             int page = 1, int limit = 10,
             int maThanhVien = 0);

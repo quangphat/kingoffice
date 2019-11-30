@@ -8,6 +8,7 @@ namespace Entity.ViewModels
     {
         public int ID { get; set; }
         public string Ten { get; set; }
+        public string Code { get; set; }
     }
     public class OptionSimple
     {
@@ -24,6 +25,13 @@ namespace Entity.ViewModels
     public class OptionSimpleExtendForProduct:OptionSimple
     {
         public string CreatedName { get; set; }
+    }
+    public class OptionSimpleExtendForTeam : OptionSimple
+    {
+        public string ParentCode { get; set; }
+        public int ManageUserId { get; set; }
+        public string ManageUserName { get; set; }
+
     }
     public class OptionSimpleModelV2 : OptionSimpleModelOld
     {

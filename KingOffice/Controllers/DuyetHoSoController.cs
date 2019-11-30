@@ -30,22 +30,24 @@ namespace KingOffice.Controllers
         public IActionResult Index()
         {
             ViewBag.formindex = LstRole[RouteData.Values["action"].ToString()]._formindex;
+            ViewBag.account = _process.User;
             return View();
         }
         [Authorize]
         public async Task<IActionResult> TimHS(
-            string fromDate,
-            string toDate,
+            DateTime? fromDate,
+            DateTime? toDate,
             string maHS,
             string cmnd,
             int loaiNgay,
             int maNhom = 0,
             string freetext = null,
+            string status = null,
             int page = 1, int limit = 10,
             int maThanhVien = 0)
         {
             var data = await _bizHoso.GetHosoDuyet(fromDate, toDate, maHS,
-                cmnd, loaiNgay, maNhom, freetext, page, limit, maThanhVien);
+                cmnd, loaiNgay, maNhom, status, freetext, page, limit, maThanhVien);
             var result = DataPaging.Create(data.datas, data.TotalRecord);
             return ToResponse(result);
         }

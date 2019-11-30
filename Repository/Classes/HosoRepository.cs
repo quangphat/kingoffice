@@ -95,7 +95,7 @@ namespace Repository.Classes
         {
             using (var con = GetConnection())
             {
-                await _connection.ExecuteAsync("sp_HO_SO_XEM_DaXem",
+                await con.ExecuteAsync("sp_HO_SO_XEM_DaXem",
                   new
                   {
                       ID = hosoId
@@ -121,7 +121,7 @@ namespace Repository.Classes
         {
             using (var con = GetConnection())
             {
-                await _connection.ExecuteAsync("sp_HO_SO_CapNhatTrangThaiHS",
+                await con.ExecuteAsync("sp_HO_SO_CapNhatTrangThaiHS",
                   new
                   {
                       ID = hosoId,
@@ -162,21 +162,25 @@ namespace Repository.Classes
             string freeText = "")
         {
 
-            return await _connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
-                new
-                {
-                    @MaNVDangNhap = maNVDangNhap,
-                    @MaNhom = maNhom,
-                    @MaThanhVien = maThanhVien,
-                    @TuNgay = tuNgay,
-                    @DenNgay = denNgay,
-                    @MaHS = maHS,
-                    @CMND = cmnd,
-                    @LoaiNgay = loaiNgay,
-                    @TrangThai = trangThai,
-                    @freeText = freeText
-                },
-                commandType: CommandType.StoredProcedure);
+            using (var con = GetConnection())
+            {
+                return await con.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoDuyet",
+                    new
+                    {
+                        @MaNVDangNhap = maNVDangNhap,
+                        @MaNhom = maNhom,
+                        @MaThanhVien = maThanhVien,
+                        @TuNgay = tuNgay,
+                        @DenNgay = denNgay,
+                        @MaHS = maHS,
+                        @CMND = cmnd,
+                        @LoaiNgay = loaiNgay,
+                        @TrangThai = trangThai,
+                        @freeText = freeText
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
+                
         }
         public async Task<List<HosoDuyet>> GetHosoDuyet(int maNVDangNhap,
             int maNhom,
@@ -192,34 +196,42 @@ namespace Repository.Classes
             int limit,
             bool isDowload = false)
         {
-            var result = await _connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyet",
-                new
-                {
-                    @MaNVDangNhap = maNVDangNhap,
-                    @MaNhom = maNhom,
-                    @MaThanhVien = maThanhVien,
-                    @TuNgay = tuNgay,
-                    @DenNgay = denNgay,
-                    @MaHS = maHS,
-                    @CMND = cmnd,
-                    @LoaiNgay = loaiNgay,
-                    @TrangThai = trangThai,
-                    @offset = offset,
-                    @limit = limit,
-                    @freeText = freeText
-                },
-                commandType: CommandType.StoredProcedure);
-            return result.ToList();
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyet",
+                    new
+                    {
+                        @MaNVDangNhap = maNVDangNhap,
+                        @MaNhom = maNhom,
+                        @MaThanhVien = maThanhVien,
+                        @TuNgay = tuNgay,
+                        @DenNgay = denNgay,
+                        @MaHS = maHS,
+                        @CMND = cmnd,
+                        @LoaiNgay = loaiNgay,
+                        @TrangThai = trangThai,
+                        @offset = offset,
+                        @limit = limit,
+                        @freeText = freeText
+                    },
+                    commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+                
         }
 
         public async Task<int> Create(HosoModel model)
         {
             model.CreatedDate = DateTime.Now;
             var p = generateHosoParameter(model);
-            await _connection.ExecuteAsync("sp_HO_SO_Them", p,
-                commandType: CommandType.StoredProcedure);
-            var result = p.Get<int>("ID");
-            return result;
+            using (var con = GetConnection())
+            {
+                await con.ExecuteAsync("sp_HO_SO_Them", p,
+                    commandType: CommandType.StoredProcedure);
+                var result = p.Get<int>("ID");
+                return result;
+            }
+                
         }
         public async Task<bool> Update(HosoModel model)
         {
@@ -231,13 +243,17 @@ namespace Repository.Classes
         }
         public async Task<bool> CreateHosoDuyetXem(int hosoId)
         {
-            await _connection.ExecuteAsync("sp_HO_SO_DUYET_XEM_Them",
-                new
-                {
-                    ID = hosoId
-                },
-                commandType: CommandType.StoredProcedure);
-            return true;
+            using (var con = GetConnection())
+            {
+                await con.ExecuteAsync("sp_HO_SO_DUYET_XEM_Them",
+                    new
+                    {
+                        ID = hosoId
+                    },
+                    commandType: CommandType.StoredProcedure);
+                return true;
+            }
+                
         }
 
         public async Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
@@ -251,21 +267,25 @@ namespace Repository.Classes
             string status
             )
         {
-            var result = await _connection.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyetChuaXem",
-                new
-                {
-                    @MaNVDangNhap = userId,
-                    @MaNhom = maNhom,
-                    @MaThanhVien = maThanhvien,
-                    @TuNgay = fromDate,
-                    @DenNgay = toDate,
-                    @MaHS = maHs,
-                    @CMND = cmnd,
-                    @LoaiNgay = dateType,
-                    @TrangThai = status
-                },
-                commandType: CommandType.StoredProcedure);
-            return result.ToList();
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyetChuaXem",
+                    new
+                    {
+                        @MaNVDangNhap = userId,
+                        @MaNhom = maNhom,
+                        @MaThanhVien = maThanhvien,
+                        @TuNgay = fromDate,
+                        @DenNgay = toDate,
+                        @MaHS = maHs,
+                        @CMND = cmnd,
+                        @LoaiNgay = dateType,
+                        @TrangThai = status
+                    },
+                    commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+                
         }
         public async Task<int> CountDanhsachHoso(int loginUserId,
             int maNhom,
@@ -289,21 +309,25 @@ namespace Repository.Classes
             //p.Add("LoaiNgay", loaiNgay);
             //p.Add("TrangThai", trangthai);
             //p.Add("freeText", fromDate);
-            return await _connection.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoQuanLy",
-               new
-               {
-                   MaNVDangNhap = loginUserId,
-                   MaNhom = maNhom,
-                   MaThanhVien = userId,
-                   TuNgay = fromDate,
-                   DenNgay = toDate,
-                   MaHS = new DbString() { IsAnsi = true, Value = maHs },
-                   CMND = new DbString() { IsAnsi = true, Value = cmnd },
-                   LoaiNgay = loaiNgay,
-                   TrangThai = trangthai,
-                   freeText = freeText
-               },
-               commandType: CommandType.StoredProcedure);
+            using (var con = GetConnection())
+            {
+                return await con.ExecuteScalarAsync<int>("sp_HO_SO_Count_TimHoSoQuanLy",
+                   new
+                   {
+                       MaNVDangNhap = loginUserId,
+                       MaNhom = maNhom,
+                       MaThanhVien = userId,
+                       TuNgay = fromDate,
+                       DenNgay = toDate,
+                       MaHS = new DbString() { IsAnsi = true, Value = maHs },
+                       CMND = new DbString() { IsAnsi = true, Value = cmnd },
+                       LoaiNgay = loaiNgay,
+                       TrangThai = trangthai,
+                       freeText = freeText
+                   },
+                   commandType: CommandType.StoredProcedure);
+            }
+                
         }
         public async Task<List<HoSoQuanLyModel>> GetDanhsachHoso(int loginUserId,
                 int maNhom,
@@ -319,24 +343,28 @@ namespace Repository.Classes
                 int limit = 10,
                 bool isDownload = false)
         {
-            var result = await _connection.QueryAsync<HoSoQuanLyModel>("sp_HO_SO_TimHoSoQuanLy",
-               new
-               {
-                   MaNVDangNhap = loginUserId,
-                   MaNhom = maNhom,
-                   MaThanhVien = userId,
-                   TuNgay = fromDate,
-                   DenNgay = toDate,
-                   MaHS = new DbString() { IsAnsi = true, Value = maHs },
-                   CMND = new DbString() { IsAnsi = true, Value = cmnd },
-                   LoaiNgay = loaiNgay,
-                   TrangThai = trangthai,
-                   offset = (page - 1) * limit,
-                   limit = limit,
-                   freeText = freeText
-               },
-               commandType: CommandType.StoredProcedure);
-            return result.ToList();
+            using (var con = GetConnection())
+            {
+                var result = await _connection.QueryAsync<HoSoQuanLyModel>("sp_HO_SO_TimHoSoQuanLy",
+                   new
+                   {
+                       MaNVDangNhap = loginUserId,
+                       MaNhom = maNhom,
+                       MaThanhVien = userId,
+                       TuNgay = fromDate,
+                       DenNgay = toDate,
+                       MaHS = new DbString() { IsAnsi = true, Value = maHs },
+                       CMND = new DbString() { IsAnsi = true, Value = cmnd },
+                       LoaiNgay = loaiNgay,
+                       TrangThai = trangthai,
+                       offset = (page - 1) * limit,
+                       limit = limit,
+                       freeText = freeText
+                   },
+                   commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+                
         }
         private DynamicParameters generateHosoParameter(HosoModel model)
         {

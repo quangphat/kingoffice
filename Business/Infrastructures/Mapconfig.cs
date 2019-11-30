@@ -38,6 +38,7 @@ namespace Business.Infrastructures
             CreateMap<HosoRequestModel, HosoModel>();
             CreateMap<OptionSimpleModelOld, OptionSimple>()
                .ForMember(a => a.Id, b => b.MapFrom(c => c.ID))
+               .ForMember(a => a.Code, b => b.MapFrom(c => c.Code))
                .ForMember(a => a.Name, b => b.MapFrom(c => c.Ten));
         }
     }

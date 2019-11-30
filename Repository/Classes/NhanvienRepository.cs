@@ -126,6 +126,30 @@ namespace Repository.Classes
                 return result.ToList();
             }
         }
+        public async Task<List<OptionSimple>> GetAllTeamManageByUserId(int userId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimple>("getAllTeamManageByUserId", new { userId = userId }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<List<OptionSimpleExtendForTeam>> GetChildTeamSimpleList(int teamId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimpleExtendForTeam>("sp_GetChildTeamByTeamId", new { teamId }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+        public async Task<List<OptionSimpleModelOld>> GetMemberByTeamIncludeChild(int teamId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimpleModelOld>("sp_NHAN_VIEN_NHOM_LayDSChonThanhVienNhomCaCon", new { MaNhom = teamId }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
         public async Task<int> CreateTeam(Team team)
         {
             //sp_NHOM_Them

@@ -315,12 +315,13 @@ namespace Business.Classes
             }
             return hosoId;
         }
-        public async Task<(List<HosoDuyet> datas, int TotalRecord)> GetHosoDuyet(string fromDate,
-            string toDate,
+        public async Task<(List<HosoDuyet> datas, int TotalRecord)> GetHosoDuyet(DateTime? fromDate,
+            DateTime? toDate,
             string maHS = "",
             string cmnd = "",
             int loaiNgay = 1,
             int maNhom = 0,
+            string status = null,
             string freetext = "",
             int page = 1, int limit = 10,
             int maThanhVien = 0)
@@ -331,18 +332,16 @@ namespace Business.Classes
                 return (null, 0);
             }
             int totalRecord = 0;
-            DateTime dtFromDate = DateTime.MinValue, dtToDate = DateTime.MinValue;
-            if (fromDate != "")
-                dtFromDate = fromDate.ConvertddMMyyyyToDateTime();
-            if (toDate != "")
-                dtToDate = toDate.ConvertddMMyyyyToDateTime();
+            fromDate = fromDate== null ? DateTime.Today : fromDate;
+            toDate = toDate==null ? DateTime.Today : toDate;
+            
             maHS = string.IsNullOrWhiteSpace(maHS) ? "" : maHS;
             cmnd = string.IsNullOrWhiteSpace(cmnd) ? "" : cmnd;
-            string status = BusinessExtension.JoinHosoStatus();
+            status = string.IsNullOrWhiteSpace(status) ? BusinessExtension.JoinHosoStatus() : status;
             totalRecord = await CountHosoDuyet(_process.User.Id, maNhom,
-                maThanhVien, dtFromDate, dtToDate, maHS, cmnd, loaiNgay, status, freetext);
+                maThanhVien, fromDate.Value, toDate.Value, maHS, cmnd, loaiNgay, status, freetext);
             var datas = await GetHosoDuyet(_process.User.Id, maNhom, maThanhVien,
-                dtFromDate, dtToDate, maHS, cmnd, loaiNgay, status, page, limit, freetext);
+                fromDate.Value, toDate.Value, maHS, cmnd, loaiNgay, status, page, limit, freetext);
             return (datas, totalRecord);
         }
         public async Task<List<HosoDuyet>> GetHosoNotApprove()

@@ -21,6 +21,33 @@ namespace Business.Classes
         {
             _rpNhanvien = nhanvienRepository;
         }
+        public async Task<List<OptionSimple>> GetMemberByTeamIncludeChild(int teamId)
+        {
+            if(teamId<=0)
+            {
+                return new List<OptionSimple>();
+            }
+            var members = await _rpNhanvien.GetMemberByTeamIncludeChild(teamId);
+            var result = _mapper.Map<List<OptionSimple>>(members);
+            return result;
+        }
+        public async Task<List<OptionSimpleExtendForTeam>> GetChildTeam(int userId)
+        {
+            var userTeams = await _rpNhanvien.GetAllTeamManageByUserId(userId);
+            var result = new  List<OptionSimpleExtendForTeam>();
+            if (userTeams == null || !userTeams.Any())
+                return result;
+            
+            foreach (var item in userTeams)
+            {
+                var childTeams = await _rpNhanvien.GetChildTeamSimpleList(item.Id);
+                if(childTeams!=null && childTeams.Any())
+                {
+                    result.AddRange(CreateTeamTree(childTeams, $"{item.Code}.{item.Id}"));
+                }
+            }
+            return result.ToList();
+        }
         public async Task<bool> ApproveConfig(int userId, List<int> teamIds)
         {
             if(userId<=0)
@@ -170,6 +197,18 @@ namespace Business.Classes
                 return null;
             var teams = await _rpNhanvien.GetAllTeamSimpleList();
             if(teams==null || !teams.Any())
+            {
+                return teams;
+            }
+            var result = CreateTeamTree(teams, "0");
+            return result;
+        }
+        public async Task<List<OptionSimple>> GetAllTeamManageByUserId(int userId)
+        {
+            if (_process.User == null)
+                return null;
+            var teams = await _rpNhanvien.GetAllTeamSimpleList();
+            if (teams == null || !teams.Any())
             {
                 return teams;
             }
@@ -342,6 +381,52 @@ namespace Business.Classes
                         }
                     }
                     lstFind = lstData.FindAll(x => x.Code.Equals(origin));
+                    if (lstFind != null)
+                    {
+
+                        for (int i = lstFind.Count - 1; i >= 0; i--)
+                        {
+                            stack.Push(lstFind[i]);
+                            lstData.Remove(lstFind[i]);
+                        }
+                    }
+                } while (stack.Count > 0);
+                return lstResult;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private List<OptionSimpleExtendForTeam> CreateTeamTree(List<OptionSimpleExtendForTeam> lstData, string origin)
+        {
+            try
+            {
+                if (lstData == null)
+                    return null;
+                List<OptionSimpleExtendForTeam> lstResult = new List<OptionSimpleExtendForTeam>();
+                Stack<OptionSimpleExtendForTeam> stack = new Stack<OptionSimpleExtendForTeam>();
+                List<OptionSimpleExtendForTeam> lstFind = new List<OptionSimpleExtendForTeam>();
+                do
+                {
+                    if (stack.Count > 0)
+                    {
+                        OptionSimpleExtendForTeam team = stack.Pop();
+                        if (team != null)
+                        {
+                            string[] tempArray = team.ParentCode.Split('.');
+                            if (tempArray.Length > 1)
+                            {
+                                for (int i = 0; i < tempArray.Length - 1; i++)
+                                {
+                                    team.Name = "-" + team.Name;
+                                }
+                            }
+                            lstResult.Add(team);
+                            origin = team.ParentCode + "." + team.Id;
+                        }
+                    }
+                    lstFind = lstData.FindAll(x => x.ParentCode.Equals(origin));
                     if (lstFind != null)
                     {
 

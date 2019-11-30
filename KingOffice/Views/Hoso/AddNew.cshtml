@@ -264,7 +264,7 @@
             });
             LayDSCourier();
 
-            getSalesCode("#ddlSaleCode");
+            getSalesCode("#ddlSaleCode",'@ViewBag.userId');
             $('#ddlSaleCode').on('change', function () {
                 $('#txtTenNV').val($('option:selected', this).attr('fullname'));
             });

@@ -58,7 +58,7 @@ namespace KingOffice.Controllers
         public ActionResult AddNew()
         {
             ViewBag.formindex = LstRole[RouteData.Values["action"].ToString()]._formindex;
-            ViewBag.MaNV = _process.User.Id;
+            ViewBag.userId = _process.User.Id;
             var hoso = new HosoRequestModel();
             ViewBag.hoso = Utils.ConvertToJson(hoso);
             return View();
@@ -208,6 +208,20 @@ namespace KingOffice.Controllers
             var result = await _bizHoso.GetById(hosoId);
             ViewBag.hoso = result;
             return View();
+        }
+        [Authorize]
+        [HttpGet("download")]
+        public async Task<IActionResult> Download(string maHs,
+            string cmnd,
+            DateTime? fromDate,
+            DateTime? toDate,
+            int loaiNgay = 1,
+            int nhomId = 0,
+            int userId = 0,
+            string freetext = null,
+            string status = null)
+        {
+            return ToResponse(true);
         }
     }
 }
