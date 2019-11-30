@@ -206,6 +206,7 @@
             SetActiveMenu('@ViewBag.formindex', 2)
         }, 500);
         renderStatusList();
+        LayNhom();
         setDateTimeInput("#txtFromDate", true, -7);
         setDateTimeInput("#txtToDate", true,0);
         window.addEventListener('popstate', function (e) {
@@ -514,42 +515,40 @@
 
     function LayNhom() {
         $('#ddlNhom').empty();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("LayDSNhom", "QuanLyHoSo")',
-            data: {},
-            success: function (data) {
-                $('#ddlNhom').append("<option value='0'></option>");
-                if (data.DSNhom != null) {
-                    $.each(data.DSNhom, function (index, item) {
-                        $('#ddlNhom').append("<option value='" + item.ID + "'>" + item.Ten + "(" + item.TenQL + ")</option>");
-                    });
-                    $('#ddlNhom').chosen().trigger("chosen:updated").change();
-                }
-                queries = new URLSearchParams(window.location.search)
-                var memberId = queries.get("maThanhVien");
-                getData(page, limit, memberId);
-            },
-            complete: function () {
-            },
-            error: function (jqXHR, exception) {
-                showError(jqXHR, exception);
-            }
-        });
+        var datas = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.DSNhom));
+        if (isNullOrUndefined(datas) || isNullOrNoItem(datas))
+            return;
+        $('#ddlNhom').append("<option value='0'></option>");
+        
+        $.each(datas, function (index, item) {
+            
+                $('#ddlNhom').append("<option value='" + item.Id + "'>" + item.Name + "(" + item.ManageUserName + ")</option>");
+            });
+            $('#ddlNhom').chosen().trigger("chosen:updated").change();
+        
+        queries = new URLSearchParams(window.location.search)
+        var memberId = queries.get("maThanhVien");
+        getData(page, limit, memberId);
     }
 
     $('#ddlNhom').change(function () {
         $('#ddlThanhVienNhom').empty();
         $('#ddlThanhVienNhom').append("<option value='0'></option>");
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("LayDSThanhVienNhom", "QuanLyHoSo")',
-            data: { "maNhom": $('#ddlNhom').val() },
-            success: function (data) {
-                if (data.DSThanhVienNhom != null) {
-                    $.each(data.DSThanhVienNhom, function (index, item) {
-                        $('#ddlThanhVienNhom').append("<option value='" + item.ID + "'>" + item.Ten + "</option>");
+        var maNhom = $('#ddlNhom').val()
+        if (isNullOrUndefined(maNhom) || parseInt(maNhom) <= 0) {
+            return;
+        }
+        if (!isNullOrUndefined(maNhom)) {
+             $.ajax({
+                 type: "GET",
+                 url: '/teams/memberincludechildteam/' + maNhom,
+                 success: function (data) {
+                     if (data.data != null) {
+                    $.each(data.data, function (index, item) {
+                        $('#ddlThanhVienNhom').append("<option value='" + item.Id + "'>" + item.Name + "</option>");
                     });
+                    var memberId = queries.get("maThanhVien");
+                    $('#ddlThanhVienNhom').val(memberId)
                 }
             },
             complete: function () {
@@ -559,6 +558,8 @@
                 showError(jqXHR, exception);
             }
         });
+        }
+
     });
 
     function XemHS(e) {

@@ -48,6 +48,23 @@ namespace Business.Classes
             }
             return result.ToList();
         }
+        public async Task<List<OptionSimpleExtendForTeam>> GetTeamForDSHoso(int userId)
+        {
+            var userTeams = await _rpNhanvien.GetTeamSimpleListForDsHoso(userId);
+            var result = new List<OptionSimpleExtendForTeam>();
+            if (userTeams == null || !userTeams.Any())
+                return result;
+
+            foreach (var item in userTeams)
+            {
+                var childTeams = await _rpNhanvien.GetChildTeamSimpleList(item.Id);
+                if (childTeams != null && childTeams.Any())
+                {
+                    result.AddRange(CreateTeamTree(childTeams, $"{item.Code}.{item.Id}",userId));
+                }
+            }
+            return result.ToList();
+        }
         public async Task<bool> ApproveConfig(int userId, List<int> teamIds)
         {
             if(userId<=0)
@@ -398,7 +415,7 @@ namespace Business.Classes
                 throw ex;
             }
         }
-        private List<OptionSimpleExtendForTeam> CreateTeamTree(List<OptionSimpleExtendForTeam> lstData, string origin)
+        private List<OptionSimpleExtendForTeam> CreateTeamTree(List<OptionSimpleExtendForTeam> lstData, string origin, int leaderId =0)
         {
             try
             {
@@ -432,6 +449,8 @@ namespace Business.Classes
 
                         for (int i = lstFind.Count - 1; i >= 0; i--)
                         {
+                            if (leaderId > 0 && lstFind[i].ParentCode == origin && lstFind[i].ManageUserId != leaderId)
+                                continue;
                             stack.Push(lstFind[i]);
                             lstData.Remove(lstFind[i]);
                         }

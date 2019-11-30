@@ -8,6 +8,7 @@ namespace Business.Interfaces
 {
     public interface INhanvienBusiness
     {
+        Task<List<OptionSimpleExtendForTeam>> GetTeamForDSHoso(int userId);
         Task<List<OptionSimple>> GetMemberByTeamIncludeChild(int teamId);
         Task<List<OptionSimpleExtendForTeam>> GetChildTeam(int userId);
         Task<bool> ApproveConfig(int userId, List<int> teamIds);

@@ -22,16 +22,19 @@ namespace KingOffice.Controllers
     {
         protected readonly IHosoBusiness _bizHoso;
         protected readonly ITailieuBusiness _bizTailieu;
+        protected readonly INhanvienBusiness _bizNhanvien;
         protected readonly IHostingEnvironment _hosting;
         
         public HosoController(CurrentProcess process,
             ITailieuBusiness loaiTailieuBusiness,
+            INhanvienBusiness nhanvienBusiness,
             IHostingEnvironment hosting,
             
         IHosoBusiness hosoBusiness) : base(process)
         {
             _bizHoso = hosoBusiness;
             _bizTailieu = loaiTailieuBusiness;
+            _bizNhanvien = nhanvienBusiness;
             _hosting = hosting;
             
         }
@@ -116,6 +119,7 @@ namespace KingOffice.Controllers
         public async Task<IActionResult> DanhsachHoso()
         {
             ViewBag.formindex = "2_2";
+            ViewBag.DSNhom = await _bizNhanvien.GetTeamForDSHoso(_process.User.Id);
             return View();
         }
         [Authorize]

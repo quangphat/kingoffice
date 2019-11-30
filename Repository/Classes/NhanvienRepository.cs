@@ -142,6 +142,14 @@ namespace Repository.Classes
                 return result.ToList();
             }
         }
+        public async Task<List<OptionSimple>> GetTeamSimpleListForDsHoso(int userId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<OptionSimple>("getAllTeamManageByUserIdForDsHoso", new { userId = userId }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
         public async Task<List<OptionSimpleModelOld>> GetMemberByTeamIncludeChild(int teamId)
         {
             using (var con = GetConnection())

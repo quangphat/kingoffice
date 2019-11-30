@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -121,6 +121,13 @@ namespace KingOffice.Controllers
         public async Task<IActionResult> GetMemberIncludeChildTeam(int teamId)
         {
             var result = await _bizNhanvien.GetMemberByTeamIncludeChild(teamId);
+            return ToResponse(result);
+        }
+        //hết tên để đặt rồi
+        [HttpGet("teamfordshs/{userId}")]
+        public async Task<IActionResult> GetTeamForDanhsachHoso(int userId)
+        {
+            var result = await _bizNhanvien.GetTeamForDSHoso(userId);
             return ToResponse(result);
         }
     }
