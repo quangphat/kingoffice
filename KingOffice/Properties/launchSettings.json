@@ -22,6 +22,22 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "KingOffice.Staging": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://kingoffice.vn:5002",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      }
+    },
+    "KingOffice.Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://kingoffice.vn:5003",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
     }
   }
 }
