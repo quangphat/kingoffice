@@ -119,6 +119,7 @@ namespace KingOffice.Controllers
         public async Task<IActionResult> DanhsachHoso()
         {
             ViewBag.formindex = "2_2";
+            ViewBag.account = _process.User;
             ViewBag.DSNhom = await _bizNhanvien.GetTeamForDSHoso(_process.User.Id);
             return View();
         }

@@ -200,7 +200,7 @@
         { value: "7", display: "Hủy" },
         { value: "8", display: "PCB" },
     ]
-    var user = document['account']
+    var account = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.account))
     $(document).ready(function e() {
         setTimeout(function () {
             SetActiveMenu('@ViewBag.formindex', 2)
@@ -354,6 +354,7 @@
             + "<a title='@Global.Button_View' class=\"blue\" style='cursor: pointer' id='" + id+ "' onClick='XemHS(this)'>"
             + "<i class=\"ace-icon fa fa-eye bigger-130\">"
             + "</i></a>"
+        debugger
         if ((MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.TuChoi)
             || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)
             || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.Nhap))
@@ -375,7 +376,7 @@
             thaoTac += "</span>";
         }
         else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)'
-            && 'sale' == 'sale') {
+            && account.roleId == 2) {
             thaoTac += "<a title='@Global.Button_Edit' >";
             thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
             thaoTac += "</i>";
