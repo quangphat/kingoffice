@@ -10,6 +10,10 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="MimeTypes" Version="1.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="MsgPack.Cli" Version="1.0.1" />
   </ItemGroup>
 
@@ -19,6 +23,12 @@
     <ProjectReference Include="..\Entity\Entity.csproj" />
     <ProjectReference Include="..\F88ServiceApi\F88ServiceApi.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Download\" />
+    <Folder Include="wwwroot\TemplateReport\" />
   </ItemGroup>
 
 </Project>

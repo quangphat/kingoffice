@@ -250,8 +250,8 @@
             }
         });
         function bindQueries() {
-            
-            
+
+
             var dateType = queries.get("loaiNgay");
             setCheckedValueOfRadioButtonGroup("radio-ngay", dateType)
             var maHS = queries.get("maHS");
@@ -275,10 +275,10 @@
             if (!isNullOrWhiteSpace(fromDate)) {
                 $("#txtFromDate").val(convertMDYToDMYFromStr(fromDate));
             }
-            
+
             let toDate = queries.get("toDate");
             if (!isNullOrWhiteSpace(toDate)) {
-                
+
                 $("#txtToDate").val(convertMDYToDMYFromStr(toDate));
             }
             getData(page, limit);
@@ -286,7 +286,7 @@
         $('#ddlThanhVienNhom').chosen({ width: '100%', allow_single_deselect: true });
         $('#ddlNhom').chosen({ width: '100%', allow_single_deselect: true });
         $('#ddllimit').chosen({ width: '100%', allow_single_deselect: true });
-        
+
         var status = decodeURI(queries.get("status"))
         if (!isNullOrWhiteSpace(status)) {
             let arrStatus = status.split(',')
@@ -519,13 +519,13 @@
         if (isNullOrUndefined(datas) || isNullOrNoItem(datas))
             return;
         $('#ddlNhom').append("<option value='0'></option>");
-        
+
         $.each(datas, function (index, item) {
-            
+
                 $('#ddlNhom').append("<option value='" + item.Id + "'>" + item.Name + "(" + item.ManageUserName + ")</option>");
             });
             $('#ddlNhom').chosen().trigger("chosen:updated").change();
-        
+
         queries = new URLSearchParams(window.location.search)
         var memberId = queries.get("maThanhVien");
         getData(page, limit, memberId);
@@ -577,23 +577,35 @@
         if ($('#ddlThanhVienNhom').val() != undefined) {
             maThanhVien = $('#ddlThanhVienNhom').val();
         }
-        var objectSend = JSON.stringify({ 'maNhom': maNhom, 'maThanhVien': maThanhVien, 'fromDate': $('#txtFromDate').val(), 'toDate': $('#txtToDate').val(), 'maHS': $('#txtMaHS').val(), 'cmnd': $('#txtCMND').val(), 'loaiNgay': $('input[name="radio-ngay"]:checked').val() });
+        
         $.ajax({
             traditional: true,
-            url: '/QuanLyHoSo/DownloadReport',
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: objectSend,
+            url: '/Hoso/Download',
+            type: "GET",
+            contentType: "application/json",
+            data: {
+            'maNhom': 0,
+            'userId': maThanhVien,
+            'fromDate': convertDMYToMDYFromStr($("#txtFromDate").val()),
+            'toDate': convertDMYToMDYFromStr($("#txtToDate").val()),
+            'maHs': $('#txtMaHS').val(),
+            'cmnd': $('#txtCMND').val(),
+            'freetext': $("#txtFreeText").val(),
+            'loaiNgay': $('input[name="radio-ngay"]:checked').val(),
+                'status': !isNullOrNoItem($("#ddlStatus").val()) ? $("#ddlStatus").val().toString() : "",
+            'exportType':1
+        },
             success: function (data) {
-                if (data.Message.Result == true) {
+                if (data.success == true) {
                     var link = document.createElement("a");
-                    link.href = data.newurl;
+                    debugger
+                    link.href = data.data;
                     link.click();
                 }
                 else {
                     swal({
                         title: "",
-                        text: data.Message.ErrorMessage,
+                        text: data.error.code,
                         type: "error",
                         timer: 4000,
                         showConfirmButton: true,

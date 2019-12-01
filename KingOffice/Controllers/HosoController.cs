@@ -24,19 +24,19 @@ namespace KingOffice.Controllers
         protected readonly ITailieuBusiness _bizTailieu;
         protected readonly INhanvienBusiness _bizNhanvien;
         protected readonly IHostingEnvironment _hosting;
-        
+
         public HosoController(CurrentProcess process,
             ITailieuBusiness loaiTailieuBusiness,
             INhanvienBusiness nhanvienBusiness,
             IHostingEnvironment hosting,
-            
+
         IHosoBusiness hosoBusiness) : base(process)
         {
             _bizHoso = hosoBusiness;
             _bizTailieu = loaiTailieuBusiness;
             _bizNhanvien = nhanvienBusiness;
             _hosting = hosting;
-            
+
         }
         public static Dictionary<string, ActionInfo> LstRole
         {
@@ -95,14 +95,14 @@ namespace KingOffice.Controllers
         }
         [Authorize]
         [HttpPost("UploadHoso/{hosoId}/{isReset}")]
-        public async Task<IActionResult> UploadHoso(int hosoId,bool isReset, [FromBody] List<FileUploadModelGroupByKey> files)
+        public async Task<IActionResult> UploadHoso(int hosoId, bool isReset, [FromBody] List<FileUploadModelGroupByKey> files)
         {
             var result = await _bizHoso.UploadHoso(hosoId, files, _hosting.WebRootPath, isReset);
             return ToResponse(result);
         }
         [Authorize]
         [HttpPost("uploadhoso/{hosoId}/{key}/{isDraft}")]
-        public async Task<IActionResult> UploadFile(int hosoId,int key,bool isDraft, List<IFormFile> files)
+        public async Task<IActionResult> UploadFile(int hosoId, int key, bool isDraft, List<IFormFile> files)
         {
             var result = await _bizHoso.UploadHoso(hosoId, key, files, _hosting.WebRootPath, !isDraft);
             return ToResponse(result);
@@ -223,9 +223,10 @@ namespace KingOffice.Controllers
             int nhomId = 0,
             int userId = 0,
             string freetext = null,
-            string status = null)
+            string status = null, int exportType = 0)
         {
-            return ToResponse(true);
+            var result = await _bizHoso.Download(nhomId, userId, fromDate, toDate, maHs, cmnd, loaiNgay, status, freetext, _hosting.WebRootPath, exportType);
+            return ToResponse(result);
         }
     }
 }

@@ -47,5 +47,18 @@ namespace KingOffice.Controllers
         {
             return Json(new { Result = string.Empty });
         }
+        [Authorize]
+        [HttpGet("download")]
+        public async Task<IActionResult> Download(string path)
+        {
+            string mimeType = MimeTypes.GetMimeType(path);
+            string ext = System.IO.Path.GetExtension(path);
+            FileStream fs = new FileStream(System.IO.Path.Combine(_hosting.WebRootPath,path), FileMode.Open, FileAccess.Read);
+            if (ext == ".pdf")
+                Response.Headers.Add("content-disposition", "inline; filename=" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ext);
+            else
+                Response.Headers.Add("content-disposition", "attachment; filename=" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ext);
+            return File(fs, mimeType);
+        }
     }
 }

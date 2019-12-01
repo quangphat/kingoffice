@@ -182,7 +182,7 @@ namespace Repository.Classes
             }
                 
         }
-        public async Task<List<HosoDuyet>> GetHosoDuyet(int maNVDangNhap,
+        public async Task<List<HoSoQuanLyModel>> GetHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,
             DateTime tuNgay,
@@ -198,7 +198,7 @@ namespace Repository.Classes
         {
             using (var con = GetConnection())
             {
-                var result = await con.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyet",
+                var result = await con.QueryAsync<HoSoQuanLyModel>("sp_HO_SO_TimHoSoDuyet",
                     new
                     {
                         @MaNVDangNhap = maNVDangNhap,
@@ -256,7 +256,7 @@ namespace Repository.Classes
                 
         }
 
-        public async Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
+        public async Task<List<HoSoQuanLyModel>> GetHosoNotApprove(int userId,
             int maNhom,
             int maThanhvien,
             DateTime fromDate,
@@ -269,7 +269,7 @@ namespace Repository.Classes
         {
             using (var con = GetConnection())
             {
-                var result = await con.QueryAsync<HosoDuyet>("sp_HO_SO_TimHoSoDuyetChuaXem",
+                var result = await con.QueryAsync<HoSoQuanLyModel>("sp_HO_SO_TimHoSoDuyetChuaXem",
                     new
                     {
                         @MaNVDangNhap = userId,

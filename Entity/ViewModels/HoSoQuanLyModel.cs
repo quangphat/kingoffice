@@ -12,7 +12,6 @@ namespace Entity.ViewModels
         public string DoiTac { get; set; }
         public string CMND { get; set; }
         public string TenKH { get; set; }
-
         public int MaTrangThai { get; set; }
         public string TrangThaiHS { get; set; }
         public string KetQuaHS { get; set; }
@@ -21,9 +20,7 @@ namespace Entity.ViewModels
         public string DoiNguBanHang { get; set; }
         public string MaNV { get; set; }
         public string MaNVSua { get; set; }
-
         public string MaNVLayHS { get; set; }
-
         public bool CoBaoHiem { get; set; }
         public string DiaChiKH { get; set; }
         public string KhuVucText { get; set; }

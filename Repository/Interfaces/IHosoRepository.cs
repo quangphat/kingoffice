@@ -30,7 +30,7 @@ namespace Repository.Interfaces
             int loaiNgay,
             string trangThai,
             string freeText = null);
-        Task<List<HosoDuyet>> GetHosoDuyet(int maNVDangNhap,
+        Task<List<HoSoQuanLyModel>> GetHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,
             DateTime tuNgay,
@@ -43,7 +43,7 @@ namespace Repository.Interfaces
             int offset,
             int limit,
             bool isDowload = false);
-        Task<List<HosoDuyet>> GetHosoNotApprove(int userId,
+        Task<List<HoSoQuanLyModel>> GetHosoNotApprove(int userId,
             int maNhom,
             int maThanhvien,
             DateTime fromDate,

@@ -9,6 +9,7 @@ namespace Business.Interfaces
 {
     public interface IMediaBusiness
     {
+        Task<string> Download(List<HoSoQuanLyModel> datas, Entity.Enums.ExportType exportType, string webRootPath);
         Task<string> Upload(Stream stream, string key, string name, string webRootPath);
         Task<MediaUploadConfig> UploadSingle(Stream stream, string key,int fileId, string name, string webRootPath);
     }

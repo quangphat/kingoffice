@@ -44,6 +44,77 @@ namespace Business.Classes
             _rpNotes = notesRepository;
             _serviceProvider = serviceProvider;
         }
+        public async Task<string> Download(int maNhom,
+           int maThanhVien,
+           DateTime? tuNgay,
+           DateTime? denNgay,
+           string maHS,
+           string cmnd,
+           int loaiNgay,
+           string trangThai,
+           string freeText,
+           string webRoothPath, int exportType = 0)
+        {
+            var fromDate = tuNgay == null ? DateTime.Now : tuNgay.Value;
+            var toDate = denNgay == null ? DateTime.Now : denNgay.Value;
+            freeText = string.IsNullOrWhiteSpace(freeText) ? string.Empty : freeText.Trim();
+            
+            maThanhVien = maThanhVien <= 0 ? _process.User.Id : maThanhVien;
+            var result = string.Empty;
+            maHS = string.IsNullOrWhiteSpace(maHS) ? "" : maHS;
+            cmnd = string.IsNullOrWhiteSpace(cmnd) ? "" : cmnd;
+            if (exportType == (int)Entity.Enums.ExportType.DuyetHoso)
+            {
+                string trangthai = string.IsNullOrWhiteSpace(trangThai) ? BusinessExtension.JoinHosoStatus() : trangThai;
+                result = await DownloadDuyetHoso(maNhom, maThanhVien, fromDate, toDate, maHS, cmnd, loaiNgay, trangthai, freeText, webRoothPath);
+            }
+            else if(exportType == (int)Entity.Enums.ExportType.DanhsachHoso)
+            {
+                string trangthai = string.IsNullOrWhiteSpace(trangThai) ? BusinessExtension.GetLimitStatusString() : trangThai;
+                result = await DownloadDSHS(maNhom, maThanhVien, fromDate, toDate, maHS, cmnd, loaiNgay, trangthai, freeText, webRoothPath);
+            }
+            return result;
+        }
+        public async Task<string> DownloadDuyetHoso(int maNhom,
+            int maThanhVien,
+            DateTime fromDate,
+            DateTime toDate,
+            string maHS,
+            string cmnd,
+            int loaiNgay,
+            string trangThai,
+            string freeText,
+            string webRoothPath)
+        {
+            var totalRecord = await CountHosoDuyet(_process.User.Id, maNhom, maThanhVien, fromDate, toDate, maHS, cmnd, loaiNgay, trangThai, freeText);
+            if (totalRecord <= 0)
+                return string.Empty;
+            var data = await GetHosoDuyet(_process.User.Id, maNhom, maThanhVien, fromDate, toDate, maHS, cmnd, loaiNgay, trangThai, 1, totalRecord, freeText);
+            var bizMedia = _serviceProvider.GetService<IMediaBusiness>();
+            var result = await bizMedia.Download(data, ExportType.DanhsachHoso, webRoothPath);
+            return result;
+        }
+        public async Task<string> DownloadDSHS(int maNhom,
+            int maThanhVien,
+            DateTime fromDate,
+            DateTime toDate,
+            string maHS,
+            string cmnd,
+            int loaiNgay,
+            string trangThai,
+            string freeText,
+            string webRoothPath)
+        {
+           
+            var totalRecord = await _rpHoso.CountDanhsachHoso(_process.User.Id, maNhom, maThanhVien, fromDate, toDate, maHS, cmnd, trangThai, loaiNgay, freeText);
+            if (totalRecord <= 0)
+                return string.Empty;
+            var data = await _rpHoso.GetDanhsachHoso(_process.User.Id, maNhom, maThanhVien, fromDate, toDate, maHS, cmnd, trangThai, loaiNgay, freeText,1, totalRecord);
+            var bizMedia = _serviceProvider.GetService<IMediaBusiness>();
+            var result = await bizMedia.Download(data, ExportType.DanhsachHoso, webRoothPath);
+            return result;
+        }
+
         public async Task<bool> DuyetHoso(int hosoId, HosoModel model)
         {
             if (_process.User == null)
@@ -315,7 +386,7 @@ namespace Business.Classes
             }
             return hosoId;
         }
-        public async Task<(List<HosoDuyet> datas, int TotalRecord)> GetHosoDuyet(DateTime? fromDate,
+        public async Task<(List<HoSoQuanLyModel> datas, int TotalRecord)> GetHosoDuyet(DateTime? fromDate,
             DateTime? toDate,
             string maHS = "",
             string cmnd = "",
@@ -344,7 +415,7 @@ namespace Business.Classes
                 fromDate.Value, toDate.Value, maHS, cmnd, loaiNgay, status, page, limit, freetext);
             return (datas, totalRecord);
         }
-        public async Task<List<HosoDuyet>> GetHosoNotApprove()
+        public async Task<List<HoSoQuanLyModel>> GetHosoNotApprove()
         {
             DateTime tuNgay = DateTime.Now.AddDays(-50);
             DateTime denNgay = DateTime.Now.AddDays(10);
@@ -511,7 +582,7 @@ namespace Business.Classes
             var datas = await _rpHoso.GetDanhsachHoso(_process.User.Id, nhomId, userId, fDate, tDate, maHs, cmnd, trangthai, loaiNgay, freetext, page, limit);
             return (datas, totalRecord);
         }
-        private async Task<List<HosoDuyet>> GetHosoDuyet(int maNVDangNhap,
+        private async Task<List<HoSoQuanLyModel>> GetHosoDuyet(int maNVDangNhap,
             int maNhom,
             int maThanhVien,
             DateTime tuNgay,

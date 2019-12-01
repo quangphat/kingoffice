@@ -500,7 +500,7 @@
                 'maThanhVien': (isNaN(memberId) || memberId == 0) ? $('#ddlThanhVienNhom').val() : memberId,
                 'fromDate':convertDMYToMDYFromStr($('#txtFromDate').val()),
                 'toDate': convertDMYToMDYFromStr($('#txtToDate').val()),
-                  'maHS':$('#txtMaHS').val(),
+                'maHS':$('#txtMaHS').val(),
                 'cmnd': $('#txtCMND').val(),
                 'freetext': $("#txtFreeText").val(),
                 'loaiNgay': $('input[name="radio-ngay"]:checked').val(),
@@ -635,23 +635,34 @@
         if ($('#ddlThanhVienNhom').val() != undefined) {
             maThanhVien = $('#ddlThanhVienNhom').val();
         }
-        var objectSend = JSON.stringify({ 'maNhom': maNhom, 'maThanhVien': maThanhVien, 'fromDate': $('#txtFromDate').val(), 'toDate': $('#txtToDate').val(), 'maHS': $('#txtMaHS').val(), 'cmnd': $('#txtCMND').val(), 'loaiNgay': $('input[name="radio-ngay"]:checked').val() });
+
         $.ajax({
             traditional: true,
-            url: '/DuyetHoSo/DownloadReport',
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: objectSend,
+            url: '/Hoso/Download',
+            type: "GET",
+            contentType: "application/json",
+            data: {
+                'maNhom': 0,
+                'userId': parseInt($('#ddlThanhVienNhom').val()),
+                'fromDate': convertDMYToMDYFromStr($("#txtFromDate").val()),
+                'toDate': convertDMYToMDYFromStr($("#txtToDate").val()),
+                'maHs': $('#txtMaHS').val(),
+                'cmnd': $('#txtCMND').val(),
+                'freetext': $("#txtFreeText").val(),
+                'loaiNgay': $('input[name="radio-ngay"]:checked').val(),
+                'status': !isNullOrNoItem($("#ddlStatus").val()) ? $("#ddlStatus").val().toString() : "",
+                'exportType': 2
+            },
             success: function (data) {
-                if (data.Message.Result == true) {
+                if (data.success == true) {
                     var link = document.createElement("a");
-                    link.href = data.newurl;
+                    link.href = data.data;
                     link.click();
                 }
                 else {
                     swal({
                         title: "",
-                        text: data.Message.ErrorMessage,
+                        text: data.error.code,
                         type: "error",
                         timer: 4000,
                         showConfirmButton: true,
@@ -666,5 +677,4 @@
             },
         });
     }
-
 </script>

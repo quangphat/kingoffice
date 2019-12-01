@@ -4,6 +4,11 @@ using System.Text;
 
 namespace Entity.Enums
 {
+    public enum ExportType
+    {
+        DanhsachHoso = 1,
+        DuyetHoso = 2
+    }
     public enum CICStatus
     {
         NotDebt = 0,// không nợ xấu
