@@ -36,11 +36,8 @@
                     </a>
 
                     <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                        <li>
-                            <a href="@Url.Action("UserProfile", "NhanVien")">
-                                <i class="ace-icon fa fa-user"></i>
-                                @Global.NavBar_TTCN@*Thông tin cá nhân*@
-                            </a>
+                        <li id="user-info-popup">
+                            
                         </li>
 
                         <li class="divider"></li>
@@ -62,21 +59,43 @@
          $.ajax({
             type: "GET",
             datatype: "JSON",
+            url: '@Url.Action("GetAccount", "Account", new { area="" })',
+             success: function (data) {
+                 if (data.success == true && !isNullOrNoItem(data.data)) {
+                     account = JSON.parse(data.data.ToJson)
+                     renderUserInfo(account)
+                 }
+                },
+                error: function (jqXHR, exception) { if (jqXHR.status != 0) document.account = null; }
+        });
+         $.ajax({
+            type: "GET",
+            datatype: "JSON",
              url: '/hoso/notification',
              success: function (data) {
                  if (data.success == true && !isNullOrNoItem(data.data)) {
                      renderNotificationHosoNotApprove(data.data)
-                     
                  }
-                 $("#fullname").text(document["account"].fullName)
+                 
             },
             error: function (jqXHR, exception) { if (jqXHR.status != 0) alert('Error'); }
          });
+        function renderUserInfo(account) {
+            if (isNullOrUndefined(account))
+                return;
+            
+            let content = "<a href='/employee/edit/" + account.id +"'>"
+                               + "<i class='ace-icon fa fa-user'></i>"
+                               +  "Thông tin cá nhân"
+                + "</a>"
+            $("#fullname").text(account.fullName)
+            $("#user-info-popup").append(content);
+        }
         function renderNotificationHosoNotApprove(datas) {
             let text = "Thông báo chưa xem";
             let icon = "fa fa-bell";
             let animate = "icon-animated-vertical";
-            let href = "/QuanLyHoSo/DanhSachHoSo";
+            let href = "/Hoso/DanhsachHoso";
             let mainContent = "<li class='green'>"
                 + "<a title='" + text + "' data-toggle='dropdown' class='dropdown-toggle' href='#'>"
                 + "<i class='ace-icon " + icon + " " + animate + "'></i>"
@@ -90,7 +109,7 @@
                 + "<li class='dropdown-content'>"
                 + "<ul class='dropdown-menu dropdown-navbar'>"
             let itemContent = '';
-            let itemHref = "/QuanLyHoSo/XemHSByID/";
+            let itemHref = "/Hoso/DuyetHoso/";
 
             $.each(datas, function (index, item) {
                 itemContent += "<li>"
@@ -115,8 +134,6 @@
                 + "</ul>"
                 + "</li>"
             $("#notification").prepend(mainContent)
-            
-           
         }
 
     </script>

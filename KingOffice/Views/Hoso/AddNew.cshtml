@@ -300,54 +300,7 @@
         });
     }
 
-        //function generateAttachFile(item) {
-        //    let key = parseInt($(item).attr("key"));
-        //    let fileId = getNewGuid();
-        //    $(item).fileinput({
 
-        //        uploadUrl: '/media/uploadtemp/' + key,
-        //        validateInitialCount: true,
-        //        maxFileSize: 25 * 1024,
-        //        msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>)'
-        //            + 'exceeds maximum allowed upload size of <b>{25} MB</b>. '
-        //            + 'Please retry your upload!',
-        //        allowedFileExtensions: ['png', 'jpg', 'pdf'],
-        //        initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
-        //        initialPreviewFileType: 'image',
-
-        //        showUpload: false,
-        //        showUploadedThumbs: false,
-        //        uploadAsync: false,
-        //        showClose: false,
-        //        showCaption: false,
-        //        showBrowse: false,
-        //        showUpload: false, // hide upload button
-        //        showRemove: false, // hide remove button
-        //        browseOnZoneClick: true,
-        //        removeLabel: '',
-        //        fileId: fileId,
-        //        btnDeleteId: 'btn-remove-file-' + fileId,
-        //        dropZoneTitle: 'Kéo và thả tập tin vào đây',
-        //        dropZoneClickTitle: '<br>(hoặc nhấp để chọn)',
-        //        removeIcon: '<i class="glyphicon glyphicon-remove" id ="' + "btn-remove-" + key + '"></i>',
-        //        removeTitle: 'Cancel or reset changes',
-        //        elErrorContainer: '#kv-avatar-errors-2',
-        //        msgErrorClass: 'alert alert-block alert-danger',
-        //        //layoutTemplates: { main2: '{preview} ' + btnCust + ' {remove} {browse}' },
-        //        //layoutTemplates: { footer: '' },
-        //        overwriteInitial: false,
-        //        append: false
-
-        //    }).on("filebatchselected", function (event, files) {
-
-        //    }).on("filebeforedelete", function (event, key, fileId) {
-
-        //    }).on('filebatchuploadsuccess', function (event, data) {
-
-        //    });
-
-
-        //}
         function onDeleteFile(key, fileId, isExist) {
             removeFile(key, fileId);
         }

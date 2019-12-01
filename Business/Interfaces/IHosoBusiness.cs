@@ -1,4 +1,5 @@
 ﻿using Entity.DatabaseModels;
+using Entity.F88;
 using Entity.PostModel;
 using Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,8 @@ namespace Business.Interfaces
 {
     public interface IHosoBusiness
     {
+        Task<F88ResponseModel> SendToF88(F88PostModel model);
+
         Task<string> Download(int maNhom,
            int maThanhVien,
            DateTime? tuNgay,

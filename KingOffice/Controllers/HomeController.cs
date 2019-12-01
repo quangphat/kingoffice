@@ -19,13 +19,10 @@ namespace KingOffice.Controllers
     public class HomeController : BaseController
     {
         protected readonly IHosoRepository _rpHoso;
-        protected readonly F88ServiceApi.F88Service _f88;
         public HomeController(IHosoRepository hosoRepository, 
-            F88ServiceApi.F88Service f88,
             CurrentProcess process) : base(process)
         {
             _rpHoso = hosoRepository;
-            _f88 = f88;
         }
         public static Dictionary<string, ActionInfo> LstRole
         {
@@ -39,12 +36,12 @@ namespace KingOffice.Controllers
             }
 
         }
-        [HttpPost("home/f88")]
-        public async Task<IActionResult> TestF88()
-        {
-            _f88.LadipageReturnID(new Entity.F88.LadipageModel());
-            return ToResponse(true);
-        }
+        //[HttpPost("home/f88")]
+        //public async Task<IActionResult> TestF88()
+        //{
+        //    _f88.LadipageReturnID(new Entity.F88.LadipageModel());
+        //    return ToResponse(true);
+        //}
         [Authorize]
         public async Task<IActionResult> Index()
         {

@@ -7,26 +7,17 @@ using Newtonsoft.Json;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using Entity.Infrastructures;
+using F88ServiceApi.Interface;
 
 namespace F88ServiceApi
 {
-    public class F88Service :F88ServiceBase
+    public class F88Service : F88ServiceBase, IF88Service
     {
-        public F88Service(IOptions<F88Api> option):base(option)
+        public F88Service(IOptions<F88Api> option) : base(option)
         {
 
         }
-        private async Task<ResponseModel> PostLadipageReturnID(LadipageModel model)
-        {
-            model.Select1 = "";
-            model.ReferenceType = 10;
-            HttpClient _httpClient = new HttpClient();
-            var response = await _httpClient.Post(_basePath, "/LadipageReturnID", null, model);
-            if (response == null || response.Content == null)
-                return null;
-            var json = response.Content.ReadAsStringAsync().Result;
-            return JsonConvert.DeserializeObject<ResponseModel>(json);
-        }
+
 
         public async Task<F88ResponseModel> LadipageReturnID(LadipageModel model)
         {
@@ -44,41 +35,17 @@ namespace F88ServiceApi
                 return ToF88Response(false, e.Message);
             }
         }
-        public F88ResponseModel ToF88Response(ResponseModel model)
+        private async Task<ResponseModel> PostLadipageReturnID(LadipageModel model)
         {
-            var result = new F88ResponseModel();
-            result.Success = false;
-            result.Message = "";
-            if (model.Code == 200 && model.Data != null)
-            {
-                if (model.Data.Count() == 2)
-                {
-                    result.Success = false;
-                    result.Message = "Số điện thoại đã tồn tại";
-                    return result;
-                }
-                if (model.Data.Count() == 4)
-                {
-                    result.Success = true;
-                    result.Message = "Thành công";
-                    return result;
-                }
-                return result;
-            }
-            else
-            {
-                result.Success = false;
-                result.Message = $"Code:{model.Code} . Message: {model.Message}";
-                return result;
-            }
+            model.Select1 = "";
+            model.ReferenceType = 10;
+            HttpClient _httpClient = new HttpClient();
+            var response = await _httpClient.Post(_basePath, "/LadipageReturnID", null, model);
+            if (response == null || response.Content == null)
+                return null;
+            var json = response.Content.ReadAsStringAsync().Result;
+            return JsonConvert.DeserializeObject<ResponseModel>(json);
         }
-        public F88ResponseModel ToF88Response(bool success, string message = null)
-        {
-            return new F88ResponseModel
-            {
-                Success = success,
-                Message = message
-            };
-        }
+
     }
 }

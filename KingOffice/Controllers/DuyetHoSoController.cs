@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Business.Interfaces;
+using Entity.F88;
 using Entity.Infrastructures;
 using KingOffice.Infrastructures;
 using Microsoft.AspNetCore.Authorization;
@@ -34,6 +35,7 @@ namespace KingOffice.Controllers
             return View();
         }
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> TimHS(
             DateTime? fromDate,
             DateTime? toDate,
@@ -50,6 +52,13 @@ namespace KingOffice.Controllers
                 cmnd, loaiNgay, maNhom, status, freetext, page, limit, maThanhVien);
             var result = DataPaging.Create(data.datas, data.TotalRecord);
             return ToResponse(result);
+        }
+        [Authorize]
+        [HttpPost("duyethoso/f88")]
+        public async Task<IActionResult> SentToF88([FromBody] F88PostModel model)
+        {
+            var result = await _bizHoso.SendToF88(model);
+            return ToResponse(true);
         }
     }
 }

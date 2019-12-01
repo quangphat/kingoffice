@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExcelUtility\ExcelUtility.csproj" />
+    <ProjectReference Include="..\F88ServiceApi\F88ServiceApi.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 

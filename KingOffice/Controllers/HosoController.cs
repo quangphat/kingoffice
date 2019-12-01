@@ -54,6 +54,7 @@ namespace KingOffice.Controllers
         public async Task<IActionResult> GetNotificationHosoNotApprove()
         {
             var result = await _bizHoso.GetHosoNotApprove();
+
             return ToResponse(result);
         }
         [MyAuthorize(Roles = RoleConsts.hoso_write)]

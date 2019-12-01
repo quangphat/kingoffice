@@ -239,6 +239,11 @@ namespace Business.Classes
                 AddError(errors.invalid_data);
                 return false;
             }
+            if(model.WorkDate ==null)
+            {
+                AddError(errors.missing_date_or_invalid);
+                return false;
+            }
             var user = _mapper.Map<Nhanvien>(model);
             user.UpdatedBy = _process.User.Id;
             return await _rpNhanvien.Update(user);
@@ -338,6 +343,11 @@ namespace Business.Classes
             if (existUserName != null)
             {
                 AddError(errors.username_has_exist);
+                return 0;
+            }
+            if(entity.WorkDate == null)
+            {
+                AddError(errors.missing_date_or_invalid);
                 return 0;
             }
             entity.UserName = entity.UserName.Trim();

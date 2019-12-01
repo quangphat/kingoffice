@@ -70,7 +70,7 @@ namespace KingOffice
             services.AddScoped<IRoleBusiness, RoleBusiness>();
             services.AddScoped<ICustomerBusiness, CustomerBusiness>();
             //<AppendBusinessDI>
-            services.AddSingleton<F88ServiceApi.F88Service>();
+            services.AddSingleton<F88ServiceApi.Interface.IF88Service,F88ServiceApi.F88Service>();
             services.AddScoped<CurrentProcess>();
             var mappingConfig = new MapperConfiguration(mc =>
             {

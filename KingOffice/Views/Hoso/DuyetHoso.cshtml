@@ -447,31 +447,25 @@
             var id = element.attr("data-content");
                 showBlock($('#panel_body'), strLoading);
                 let doitacF88Value = 0;
-                if (!isNullOrNoItem(lstDoitac)) {
-                    let doitacId = !isNullOrUndefined($('#ddlDoiTac').val()) ? parseInt($('#ddlDoiTac').val()) : 0;
-                    let doitac = lstDoitac.find(p => p.ID == doitacId);
-                    if (!isNullOrUndefined(doitac)) {
-                        doitacF88Value = doitac.F88Value;
-                    }
-                }
-            var objectSend = JSON.stringify({
-                'hosoId': id,
-                'customerName': $('#txtHoTen').val(),
-                'phone': $('#txtDienThoai').val(),
-                'link': window.location.href,
-                'provinceName': $("#ddlProvince option:selected").text(),
-                'district': $("#ddlDistrict option:selected").text()
+               
+                var objectSend = JSON.stringify({
+                    hosoId: hoso.ID,
+                customerName: $('#txtHoTen').val(),
+                phone: $('#txtDienThoai').val(),
+                link: window.location.href,
+                provinceName: $("#ddlProvince option:selected").text(),
+                district: $("#ddlDistrict option:selected").text()
             });
 
             $.ajax({
-                url: '/DuyetHoSo/SendToF88',
+                url: '/DuyetHoSo/F88',
                 type: "POST",
-                contentType: "application/json; charset=utf-8",
+                contentType: "application/json",
                 processData: false,
                 data: objectSend,
                 success: function (data) {
-                    debugger
-                    if (data.datas.Success == true) {
+
+                    if (data.success == true) {
                         swal({
                             title: "Thành công",
                             text: "Thành công",
@@ -485,7 +479,7 @@
                     else {
                         swal({
                             title: "",
-                            text: data.datas.Message,
+                            text: data.error.code,
                             type: "error",
                             timer: 4000,
                             showConfirmButton: true,

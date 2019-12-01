@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using Entity.PostModel;
+using Entity.F88;
+using F88ServiceApi.Interface;
 
 namespace Business.Classes
 {
@@ -27,6 +29,7 @@ namespace Business.Classes
         protected readonly INotesRepository _rpNotes;
         protected readonly ITailieuRepository _rpTailieu;
         protected IServiceProvider _serviceProvider;
+        protected readonly IF88Service _f88Service;
         public HosoBusiness(CurrentProcess process,
             IHosoRepository hosoRepository,
             IProductRepository productRepository,
@@ -34,6 +37,7 @@ namespace Business.Classes
             INotesRepository notesRepository,
             IServiceProvider serviceProvider,
             ITailieuRepository tailieuRepository,
+            IF88Service f88Api,
             IMapper mapper) : base(mapper, process)
         {
             _mapper = mapper;
@@ -43,6 +47,68 @@ namespace Business.Classes
             _rpTailieu = tailieuRepository;
             _rpNotes = notesRepository;
             _serviceProvider = serviceProvider;
+            _f88Service = f88Api;
+        }
+        public async Task<F88ResponseModel> SendToF88(F88PostModel model)
+        {
+            if(model==null)
+            {
+                AddError(errors.invalid_data);
+                return null;
+            }
+            if (model.hosoId <= 0)
+            {
+                AddError(errors.invalid_id);
+                return null;
+            }
+            if (string.IsNullOrWhiteSpace(model.customerName))
+            {
+                AddError(errors.missing_name);
+                return null;
+               
+            }
+            if (string.IsNullOrWhiteSpace(model.phone))
+            {
+                AddError(errors.missing_phone);
+            }
+            if (!string.IsNullOrWhiteSpace(model.district))
+            {
+                if (model.district.Contains("Huyện"))
+                {
+                    model.district = model.district.Replace("Huyện", "").Trim();
+                }
+                if (model.district.Contains("Quận"))
+                {
+                    model.district = model.district.Replace("Quận", "").Trim();
+                }
+                if (model.district.Contains("Thành phố"))
+                {
+                    model.district = model.district.Replace("Thành phố", "").Trim();
+                }
+                if (model.district.Contains("Thị xã"))
+                {
+                    model.district = model.district.Replace("Thị xã", "").Trim();
+                }
+            }
+            var f88Model = new LadipageModel
+            {
+                Name = model.customerName,
+                Phone = model.phone,
+                Link = model.link,
+                Select1 = null,
+                District = model.district,
+                Select2 = model.district + " - " + model.provinceName,
+                TransactionId = model.hosoId,
+                ReferenceType = 0,
+                Province = model.provinceName
+            };
+            var result = await _f88Service.LadipageReturnID(f88Model);
+            if(result.Success==false)
+            {
+                AddError(result.Message);
+                return null;
+            }
+            return result;
         }
         public async Task<string> Download(int maNhom,
            int maThanhVien,

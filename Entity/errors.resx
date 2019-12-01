@@ -234,4 +234,7 @@
   <data name="mising_checkdate" xml:space="preserve">
     <value>Vui lòng chọn ngày</value>
   </data>
+  <data name="missing_date_or_invalid" xml:space="preserve">
+    <value>Bạn chưa chọn ngày tháng hoặc ngày tháng không đúng định dạng(ngày/tháng/năm, vd: 30/12/2019)</value>
+  </data>
 </root>

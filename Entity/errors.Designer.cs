@@ -169,6 +169,15 @@ namespace Entity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bạn chưa chọn ngày tháng hoặc ngày tháng không đúng định dạng(ngày/tháng/năm, vd: 30/12/2019).
+        /// </summary>
+        public static string missing_date_or_invalid {
+            get {
+                return ResourceManager.GetString("missing_date_or_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng nhập địa chỉ.
         /// </summary>
         public static string missing_diachi {

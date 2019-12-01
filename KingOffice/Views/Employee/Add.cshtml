@@ -252,7 +252,7 @@
         nhanvien.FullName = $("#txtFullName").val();
         nhanvien.Email = $("#txtEmail").val();
         nhanvien.Phone = $("#txtPhone").val();
-        nhanvien.WorkDate = $("#txtWorkDate").val();
+        nhanvien.WorkDate = convertDMYToMDYFromStr($("#txtWorkDate").val());
         nhanvien.UserName = $("#txtUserName").val();
         nhanvien.RoleId = $("#ddlRole").val();
         nhanvien.Password = $("#txtPass").val();
