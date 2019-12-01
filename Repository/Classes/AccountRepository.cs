@@ -1,4 +1,5 @@
 using Dapper;
+using Entity.DatabaseModels;
 using Entity.DatanbaseModels;
 using Entity.Infrastructures;
 using Microsoft.Extensions.Configuration;
@@ -17,11 +18,39 @@ namespace Repository.Classes
 
         }
 
-        public async Task<List<string>> GetPermissionByUserId(int userId)
+        public async Task<bool> InserUserRoleMenu(UserRoleMenu model)
         {
             using (var con = GetConnection())
             {
-                var result = await con.QueryAsync<string>("sp_getPermissionByUserId", new { @userId = userId }, commandType: CommandType.StoredProcedure);
+                var result = await con.ExecuteAsync("insertRoleMenu",
+                    new
+                    {
+                        roleId = model.RoleId,
+                        menuId = model.MenuId,
+                        roleCode = model.RoleCode,
+                        menuName = model.MenuName
+                    }, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
+        public async Task<bool> UpdateRoleForUser(int userId, int roleId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.ExecuteAsync("setRoleForUser",
+                    new
+                    {
+                        userId,
+                        roleId
+                    }, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+        }
+        public async Task<List<string>> GetPermissionByUserId(int roleId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<string>("sp_getPermissionByUserId", new { @roleId = roleId }, commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
                 
@@ -65,6 +94,20 @@ namespace Repository.Classes
                 return result;
             }
                 
+        }
+        public async Task<bool> CheckIsAdmin(int userId)
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.ExecuteScalarAsync<bool>("sp_CheckIsAdmin",
+                    new
+                    {
+                        userId
+
+                    }, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+
         }
     }
 }

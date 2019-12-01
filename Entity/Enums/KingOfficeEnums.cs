@@ -4,6 +4,12 @@ using System.Text;
 
 namespace Entity.Enums
 {
+    public enum RoleType
+    {
+        Admin = 1,
+        Leader = 5,
+        Sale = 2
+    }
     public enum ExportType
     {
         DanhsachHoso = 1,

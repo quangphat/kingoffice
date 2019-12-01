@@ -49,7 +49,7 @@ namespace KingOffice.Controllers
             }
 
         }
-        [MyAuthorize(Roles = RoleConsts.hoso_read)]
+        [Authorize]
         [HttpGet("notification")]
         public async Task<IActionResult> GetNotificationHosoNotApprove()
         {
@@ -57,7 +57,7 @@ namespace KingOffice.Controllers
 
             return ToResponse(result);
         }
-        [MyAuthorize(Roles = RoleConsts.hoso_write)]
+        [Authorize]
         [HttpGet("AddNew")]
         public ActionResult AddNew()
         {

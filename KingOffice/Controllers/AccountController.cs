@@ -5,7 +5,9 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Business.Interfaces;
+using Entity.DatabaseModels;
 using Entity.Infrastructures;
+using Entity.PostModel;
 using Entity.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -103,6 +105,34 @@ namespace KingOffice.Controllers
                 || string.IsNullOrWhiteSpace(account.UserName))
                 return false;
             return true;
+        }
+        [HttpPost("menu")]
+        public async Task<IActionResult> InsertMenu([FromBody] UserRoleMenu model)
+        {
+            var result = await _bizAccount.InserUserRoleMenu(model);
+            return ToResponse(result);
+        }
+        [HttpPost("menu/multiple")]
+        public async Task<IActionResult> InsertMenus([FromBody] UserRoleMenuForMultipleMenu model)
+        {
+            var result = await _bizAccount.InserUserRoleMenuForMultipleMenu(model);
+            return ToResponse(result);
+        }
+        [HttpPut("role/quangphat")]
+        public async Task<IActionResult> InsertMenu([FromBody] UpdateUserRole model)
+        {
+            if (model == null)
+                return ToResponse(false);
+            var result = await _bizAccount.UpdateRoleForUserByQuangPhat(model.UserId,model.RoleId, model.secret);
+            return ToResponse(result);
+        }
+        [HttpPut("role/quangphats")]
+        public async Task<IActionResult> UpdateRoleForMultiple([FromBody] UpdateUserRoleForMultipleUser model)
+        {
+            if (model == null)
+                return ToResponse(false);
+            var result = await _bizAccount.UpdateRoleForMultipleUserByQuangPhat(model.UserIds, model.RoleId, model.secret);
+            return ToResponse(result);
         }
     }
 }

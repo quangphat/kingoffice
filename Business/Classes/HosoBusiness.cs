@@ -643,7 +643,8 @@ namespace Business.Classes
             BusinessExtension.ProcessPaging(ref page, ref limit);
             freetext = string.IsNullOrWhiteSpace(freetext) ? string.Empty : freetext.Trim();
             string trangthai = string.IsNullOrWhiteSpace(status) ? BusinessExtension.GetLimitStatusString() : status;
-            userId = userId <= 0 ? _process.User.Id : userId;
+            maHs = string.IsNullOrWhiteSpace(maHs) ? "" : maHs;
+            cmnd = string.IsNullOrWhiteSpace(cmnd) ? "" : cmnd;
             var totalRecord = await _rpHoso.CountDanhsachHoso(_process.User.Id, nhomId, userId, fDate, tDate, maHs, cmnd, trangthai, loaiNgay, freetext);
             var datas = await _rpHoso.GetDanhsachHoso(_process.User.Id, nhomId, userId, fDate, tDate, maHs, cmnd, trangthai, loaiNgay, freetext, page, limit);
             return (datas, totalRecord);

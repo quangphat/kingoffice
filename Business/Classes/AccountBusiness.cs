@@ -14,6 +14,8 @@ using System.Security.Claims;
 using Business.Infrastructures;
 using System.Linq;
 using Entity;
+using Entity.DatabaseModels;
+using Entity.Enums;
 
 namespace Business.Classes
 {
@@ -34,6 +36,65 @@ namespace Business.Classes
             _appSettings = appSettings.Value;
             _rpNhanvien = nhanvienRepository;
         }
+        public async Task<bool> InserUserRoleMenu(UserRoleMenu model)
+        {
+            if(model==null )
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            return await _rpAccount.InserUserRoleMenu(model);
+        }
+        public async Task<bool> InserUserRoleMenuForMultipleMenu(UserRoleMenuForMultipleMenu model)
+        {
+            if (model == null)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            if(model.MenuIds==null)
+            {
+                AddError(errors.invalid_data);
+                return false;
+            }
+            foreach(int menuId in model.MenuIds)
+            {
+                var menu = new UserRoleMenu
+                {
+                    MenuId = menuId,
+                    RoleId = model.RoleId,
+                    RoleCode = model.RoleCode,
+                    MenuName = string.Empty,
+                };
+                await _rpAccount.InserUserRoleMenu(menu);
+            }
+            return true;
+        }
+        public async Task<bool> UpdateRoleForUserByQuangPhat(int userId, int roleId, string updateBy = "")
+        {
+            if(string.IsNullOrWhiteSpace(updateBy) || updateBy !="quangphatno8")
+            {
+                return false;
+            }
+            var result = await _rpAccount.UpdateRoleForUser(userId, roleId);
+            return result;
+        }
+        public async Task<bool> UpdateRoleForMultipleUserByQuangPhat(List<int> userIds, int roleId, string updateBy = "")
+        {
+            if (string.IsNullOrWhiteSpace(updateBy) || updateBy != "quangphatno8")
+            {
+                return false;
+            }
+            if(userIds==null)
+            {
+                return false;
+            }
+            foreach(int id in userIds)
+            {
+                await _rpAccount.UpdateRoleForUser(id, roleId);
+            }
+            return true;
+        }
         public async Task<Account> Login(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
@@ -52,15 +113,39 @@ namespace Business.Classes
 
             if (nhanvien.Mat_Khau != Utils.getMD5(password))
                 return null;
-            var scope = await _rpAccount.GetPermissionByUserId(nhanvien.ID);
+            //just for match with old database;
+            int roleId = (int)RoleType.Sale;
             var isTeamlead = await _rpAccount.CheckIsTeamLead(nhanvien.ID);
+            var isAdmin = await _rpAccount.CheckIsAdmin(nhanvien.ID);
+            if(isTeamlead)
+            {
+                roleId = (int)RoleType.Leader;
+            }
+            else if(isAdmin)
+            {
+                roleId = (int)RoleType.Admin;
+            }
+
+            var scope = await _rpAccount.GetPermissionByUserId(roleId);
+
+            var account = _mapper.Map<Account>(nhanvien);
+            
             if (isTeamlead)
             {
                 scope.Add("teamlead");
+                account.RoleId = (int)Entity.Enums.RoleType.Leader;
             }
-            var account = _mapper.Map<Account>(nhanvien);
-            account.Permissions = scope.ToArray();
             
+            if(isAdmin)
+            {
+                scope.Add("admin");
+                account.RoleId = (int)Entity.Enums.RoleType.Admin;
+            }
+            account.Permissions = scope.ToArray();
+            if (!isTeamlead && !isAdmin)
+            {
+                account.RoleId = (int)Entity.Enums.RoleType.Sale;
+            }
             var menus = await _rpUserRoleMenu.GetMenuByRoleId(account.RoleId);
             if (menus != null)
             {

@@ -354,7 +354,7 @@
             + "<a title='@Global.Button_View' class=\"blue\" style='cursor: pointer' id='" + id+ "' onClick='XemHS(this)'>"
             + "<i class=\"ace-icon fa fa-eye bigger-130\">"
             + "</i></a>"
-        debugger
+        
         if ((MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.TuChoi)
             || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)
             || MaTrangThai == @((int)Entity.Enums.TrangThaiHoSo.Nhap))
@@ -376,7 +376,7 @@
             thaoTac += "</span>";
         }
         else if (MaTrangThai == '@((int)Entity.Enums.TrangThaiHoSo.BoSungHoSo)'
-            && account.roleId == 2) {
+            && account.roleId == @((int)Entity.Enums.RoleType.Sale)) {
             thaoTac += "<a title='@Global.Button_Edit' >";
             thaoTac += "<i class=\"ace-icon fa fa-pencil bigger-130\">";
             thaoTac += "</i>";

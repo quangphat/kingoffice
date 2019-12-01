@@ -21,7 +21,7 @@ namespace Repository.Classes
         {
             using (var con = GetConnection())
             {
-                var result = await con.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where RoleCode = '{role}'");
+                var result = await con.QueryAsync<UserRoleMenu>("sp_GetMenuByRoleCode", new { roleCode = role }, commandType: System.Data.CommandType.StoredProcedure);
                 return result.ToList();
             }
                 
@@ -30,7 +30,7 @@ namespace Repository.Classes
         {
             using (var con = GetConnection())
             {
-                var result = await con.QueryAsync<UserRoleMenu>($"select * from UserRoleMenu where RoleId = {roleId}");
+                var result = await con.QueryAsync<UserRoleMenu>("sp_GetMenuByRoleId",new { roleId = roleId}, commandType:System.Data.CommandType.StoredProcedure);
                 return result.ToList();
             }
                
