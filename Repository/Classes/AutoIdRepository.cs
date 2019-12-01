@@ -22,8 +22,12 @@ namespace Repository.Classes
         }
         public async Task<AutoIDModel> GetAutoId(int type)
         {
-            var result = await _connection.QueryFirstOrDefaultAsync<AutoIDModel>("sp_AUTOID_GetID", new { ID = type }, commandType: CommandType.StoredProcedure);
-            return result;
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryFirstOrDefaultAsync<AutoIDModel>("sp_AUTOID_GetID", new { ID = type }, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+                
         }
         public async Task<bool> Update(AutoIDModel model)
         {
@@ -32,9 +36,13 @@ namespace Repository.Classes
             p.Add("Prefix", model.Prefix);
             p.Add("Suffixes", model.Suffixes);
             p.Add("Value", model.Value);
-            await _connection.ExecuteAsync("sp_AUTOID_Update",
-                p, commandType: CommandType.StoredProcedure);
-            return true;
+            using (var con = GetConnection())
+            {
+                await con.ExecuteAsync("sp_AUTOID_Update",
+                    p, commandType: CommandType.StoredProcedure);
+                return true;
+            }
+                
         }
     }
 }

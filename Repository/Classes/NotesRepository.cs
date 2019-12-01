@@ -31,7 +31,7 @@ namespace Repository.Classes
             p.Add("CommentTime", model.CommentTime);
             using (var con = GetConnection())
             {
-                await _connection.ExecuteAsync("insert into Ghichu (UserId,Noidung,HosoId, CommentTime) values(@UserId,@Noidung,@HosoId,@CommentTime)"
+                await con.ExecuteAsync("insert into Ghichu (UserId,Noidung,HosoId, CommentTime) values(@UserId,@Noidung,@HosoId,@CommentTime)"
                    , p, commandType: CommandType.Text);
                 return true;
             }

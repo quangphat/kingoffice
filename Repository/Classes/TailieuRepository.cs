@@ -20,22 +20,30 @@ namespace Repository.Classes
         }
         public async Task<bool> RemoveAllTailieu(int hosoId)
         {
-            var p = new DynamicParameters();
-            p.Add("MaHS", hosoId);
-            await _connection.ExecuteAsync("sp_TAI_LIEU_HS_XoaTatCa", p,
-                commandType: CommandType.StoredProcedure);
-            return true;
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("MaHS", hosoId);
+                await con.ExecuteAsync("sp_TAI_LIEU_HS_XoaTatCa", p,
+                    commandType: CommandType.StoredProcedure);
+                return true;
+            }
+               
         }
         public async Task<bool> Add(TaiLieu model)
         {
-            var p = new DynamicParameters();
-            p.Add("Maloai", model.TypeId);
-            p.Add("DuongDan", model.FilePath);
-            p.Add("Ten", model.FileName);
-            p.Add("MaHS", model.HosoId);
-            await _connection.ExecuteAsync("sp_TAI_LIEU_HS_Them", p,
-                commandType: CommandType.StoredProcedure);
-            return true;
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("Maloai", model.TypeId);
+                p.Add("DuongDan", model.FilePath);
+                p.Add("Ten", model.FileName);
+                p.Add("MaHS", model.HosoId);
+                await con.ExecuteAsync("sp_TAI_LIEU_HS_Them", p,
+                    commandType: CommandType.StoredProcedure);
+                return true;
+            }
+                
         }
 
         public async Task<List<LoaiTaiLieuModel>> GetLoaiTailieuList()
@@ -49,12 +57,16 @@ namespace Repository.Classes
         }
         public async Task<List<FileUploadModel>> GetTailieuByHosoId(int hosoId)
         {
-            var p = new DynamicParameters();
-            p.Add("hosoId", hosoId);
-            
-            var result = await _connection.QueryAsync<FileUploadModel>("getTailieuByHosoId", p,
-                commandType: CommandType.StoredProcedure);
-            return result.ToList();
+            using (var con = GetConnection())
+            {
+                var p = new DynamicParameters();
+                p.Add("hosoId", hosoId);
+
+                var result = await con.QueryAsync<FileUploadModel>("getTailieuByHosoId", p,
+                    commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+                
         }
         public async Task<bool> RemoveTailieu(int hosoId, int tailieuId)
         {

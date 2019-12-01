@@ -9,18 +9,13 @@ namespace Repository.Classes
 {
     public abstract class BaseRepository
     {
-        protected IDbConnection _connection;
+        private IDbConnection _connection;
         protected readonly IConfiguration _configuration;
 
         public BaseRepository(IConfiguration configuration)
         {
             _configuration = configuration;
             _connection = new SqlConnection(configuration.GetConnectionString("kingoffice"));
-        }
-        protected void NewConnection()
-        {
-            if(_connection.State == ConnectionState.Closed)
-                _connection = new SqlConnection(_configuration.GetConnectionString("kingoffice"));
         }
         protected IDbConnection GetConnection()
         {

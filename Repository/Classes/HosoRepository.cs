@@ -237,9 +237,13 @@ namespace Repository.Classes
         {
             model.UpdatedDate = DateTime.Now;
             var p = generateHosoParameter(model);
-            await _connection.ExecuteAsync("sp_HO_SO_CapNhat", p,
-                commandType: CommandType.StoredProcedure);
-            return true;
+            using (var con = GetConnection())
+            {
+                await con.ExecuteAsync("sp_HO_SO_CapNhat", p,
+                   commandType: CommandType.StoredProcedure);
+                return true;
+            }
+               
         }
         public async Task<bool> CreateHosoDuyetXem(int hosoId)
         {
@@ -345,7 +349,7 @@ namespace Repository.Classes
         {
             using (var con = GetConnection())
             {
-                var result = await _connection.QueryAsync<HoSoQuanLyModel>("sp_HO_SO_TimHoSoQuanLy",
+                var result = await con.QueryAsync<HoSoQuanLyModel>("sp_HO_SO_TimHoSoQuanLy",
                    new
                    {
                        MaNVDangNhap = loginUserId,

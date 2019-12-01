@@ -67,13 +67,16 @@ namespace Repository.Classes
         }
         public async Task<List<ProductViewModel>> GetListByHosoId(int doitaId, int hosoId)
         {
-            NewConnection();
-            var result = await _connection.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new
+            using (var con = GetConnection())
             {
-                @MaHS = hosoId,
-                @MaDoiTac = doitaId
-            }, commandType: CommandType.StoredProcedure);
-            return result.ToList();
+                var result = await con.QueryAsync<ProductViewModel>("sp_SAN_PHAM_VAY_LayDSByID", new
+                {
+                    @MaHS = hosoId,
+                    @MaDoiTac = doitaId
+                }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+                
         }
         public async Task<bool> CheckIsInUse(int hosoId, int productId)
         {
@@ -99,7 +102,7 @@ namespace Repository.Classes
             p.Add("ID", hosoId);
             using (var con = GetConnection())
             {
-                await _connection.ExecuteAsync("sp_SAN_PHAM_VAY_CapNhatSuDung", p, commandType: CommandType.StoredProcedure);
+                await con.ExecuteAsync("sp_SAN_PHAM_VAY_CapNhatSuDung", p, commandType: CommandType.StoredProcedure);
                 return true;
             }
                 
@@ -115,7 +118,7 @@ namespace Repository.Classes
             p.Add("Loai", product.Type);
             using (var con = GetConnection())
             {
-                await _connection.ExecuteAsync("sp_SAN_PHAM_VAY_Them", p, commandType: CommandType.StoredProcedure);
+                await con.ExecuteAsync("sp_SAN_PHAM_VAY_Them", p, commandType: CommandType.StoredProcedure);
                 var result = p.Get<int>("ID");
                 return result;
             }
