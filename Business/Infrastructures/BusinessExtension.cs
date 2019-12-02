@@ -167,6 +167,20 @@ namespace Business.Infrastructures
         {
             string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_" + fileInputName.Trim().Replace(" ", "_");
             string root = System.IO.Path.Combine(webRootPath + "/Upload", "HoSo");
+            try
+            {
+                if (!Directory.Exists(root))
+                    Directory.CreateDirectory(root);
+            }
+           catch(Exception e)
+            {
+                return new FileModel
+                {
+                    FileUrl = "error",
+                    Name = e.Message,
+                    FullPath = "webroothpath = " + webRootPath
+                };
+            }
             string pathTemp = "";
             if (!Directory.Exists(root))
                 Directory.CreateDirectory(root);

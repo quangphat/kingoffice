@@ -36,6 +36,16 @@ namespace Business.Classes
             _appSettings = appSettings.Value;
             _rpNhanvien = nhanvienRepository;
         }
+        public async Task<List<Menu>> GetAllMenu()
+        {
+            return await _rpAccount.GetAllMenu();
+        }
+        public async Task<int> AddMenu(Menu model)
+        {
+            if (model == null)
+                return 0;
+            return await _rpAccount.AddMenu(model);
+        }
         public async Task<bool> InserUserRoleMenu(UserRoleMenu model)
         {
             if(model==null )
@@ -97,16 +107,22 @@ namespace Business.Classes
         }
         public async Task<Account> Login(string username, string password)
         {
+            //AddError($"connStr:{_rpAccount.ConnectStr}, username: {username}, password: {password}");
+            //return null;
+
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
+                //AddError($"connStr:{_rpAccount.ConnectStr}, username: {username}, password: {password}");
                 AddError(errors.username_or_password_must_not_be_empty);
                 return null;
             }
 
             var nhanvien = await _rpAccount.Login(username);
-
+            
             if (nhanvien == null)
             {
+                //AddError($"nhanvien = null,connStr:{_rpAccount.ConnectStr}");
+                //return null;
                 AddError(nameof(errors.invalid_username_or_pass));
                 return null;
             }

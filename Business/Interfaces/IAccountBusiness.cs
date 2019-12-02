@@ -9,6 +9,8 @@ namespace Business.Interfaces
 {
     public interface IAccountBusiness
     {
+        Task<List<Menu>> GetAllMenu();
+        Task<int> AddMenu(Menu model);
         Task<bool> InserUserRoleMenuForMultipleMenu(UserRoleMenuForMultipleMenu model);
         Task<bool> InserUserRoleMenu(UserRoleMenu model);
         Task<bool> ResetPassword(int id, string oldPass, string newPass, string confirmPass);

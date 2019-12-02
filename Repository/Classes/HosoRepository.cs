@@ -138,15 +138,22 @@ namespace Repository.Classes
         }
         public async Task<HoSoInfoModel> GetHosoById(int hosoId)
         {
-            using (var con = GetConnection())
+            try
             {
-                var result = await con.QueryFirstOrDefaultAsync<HoSoInfoModel>("sp_HO_SO_LayChiTiet",
-                   new
-                   {
-                       ID = hosoId
-                   },
-                   commandType: CommandType.StoredProcedure);
-                return result;
+                using (var con = GetConnection())
+                {
+                    var result = await con.QueryFirstOrDefaultAsync<HoSoInfoModel>("sp_HO_SO_LayChiTiet",
+                       new
+                       {
+                           ID = hosoId
+                       },
+                       commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch(Exception e)
+            {
+                return null;
             }
                
         }

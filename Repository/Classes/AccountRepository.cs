@@ -13,11 +13,38 @@ namespace Repository.Classes
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
+        public string connect = "";
+
+        public string ConnectStr => connect;
+
         public AccountRepository(IConfiguration configuration) : base(configuration)
         {
+            connect = GetConnection().ConnectionString;
+        }
+        public async Task<List<Menu>> GetAllMenu()
+        {
+            using (var con = GetConnection())
+            {
+                var result = await con.QueryAsync<Menu>("sp_GetAllMenu", commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
 
         }
-
+        public async Task<int> AddMenu(Menu model)
+        {
+            using (var con = GetConnection())
+            {
+                var p = AddOutputParam("id");
+                p.Add("name", model.Name);
+                p.Add("code", model.Code);
+                p.Add("value", model.Value);
+                p.Add("parentId", model.ParentId);
+                await con.ExecuteAsync("sp_InsertMenu",
+                    p, commandType: CommandType.StoredProcedure);
+                var result = p.Get<int>("id");
+                return result;
+            }
+        }
         public async Task<bool> InserUserRoleMenu(UserRoleMenu model)
         {
             using (var con = GetConnection())

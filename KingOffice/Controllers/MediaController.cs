@@ -28,18 +28,26 @@ namespace KingOffice.Controllers
         [HttpPost("uploadtemp/{key}/{fileId}")]
         public async Task<IActionResult> UploadFile(string key, int fileId)
         {
-            if (Request.Form != null && Request.Form.Files.Any())
+            try
             {
-                MediaUploadConfig result = null;
-                var file = Request.Form.Files.FirstOrDefault();
-                using (var stream = new MemoryStream())
+                if (Request.Form != null && Request.Form.Files.Any())
                 {
-                    await file.CopyToAsync(stream);
-                    result = await _bizMedia.UploadSingle(stream, key, fileId, file.FileName, _hosting.WebRootPath);
+                    MediaUploadConfig result = null;
+                    var file = Request.Form.Files.FirstOrDefault();
+                    using (var stream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(stream);
+                        result = await _bizMedia.UploadSingle(stream, key, fileId, file.FileName, _hosting.WebRootPath);
+                    }
+                    return Json(result);
                 }
-                return Json(result);
+                return ToResponse(string.Empty);
             }
-            return ToResponse(string.Empty);
+            catch(Exception e)
+            {
+                string host = _hosting == null ? "null" : _hosting.WebRootPath;
+                return ToResponse($"error: {e.Message}, webroot: {host}");
+            }
         }
         [Authorize]
         [HttpPost("Delete")]

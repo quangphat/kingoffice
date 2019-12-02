@@ -9,6 +9,9 @@ namespace Repository.Interfaces
 {
     public interface IAccountRepository
     {
+        string ConnectStr { get; }
+        Task<List<Menu>> GetAllMenu();
+        Task<int> AddMenu(Menu model);
         Task<bool> InserUserRoleMenu(UserRoleMenu model);
         Task<Nhanvien> Login(string userName);
         Task<List<string>> GetPermissionByUserId(int roleId);

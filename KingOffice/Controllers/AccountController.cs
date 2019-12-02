@@ -107,7 +107,19 @@ namespace KingOffice.Controllers
             return true;
         }
         [HttpPost("menu")]
-        public async Task<IActionResult> InsertMenu([FromBody] UserRoleMenu model)
+        public async Task<IActionResult> InsertMenu([FromBody] Menu model)
+        {
+            var result = await _bizAccount.AddMenu(model);
+            return ToResponse(result);
+        }
+        [HttpGet("menu")]
+        public async Task<IActionResult> GetMenus()
+        {
+            var result = await _bizAccount.GetAllMenu();
+            return ToResponse(result);
+        }
+        [HttpPost("rolemenu")]
+        public async Task<IActionResult> InsertRoleMenu([FromBody] UserRoleMenu model)
         {
             var result = await _bizAccount.InserUserRoleMenu(model);
             return ToResponse(result);

@@ -280,9 +280,11 @@
 <script>
     var strLoading = '@Global.Message_Loading';
     var hoso = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.hoso));
+    debugger
     var account = document['account'];
     var fileRequireIds = [];
     $(document).ready(function () {
+        console.log(hoso);
         $('.chosen-select').chosen({ width: '100%', allow_single_deselect: true });
         setDateTimeInput('#txtToDate');
         setDateTimeInput('#txtBirthDay');
@@ -317,6 +319,7 @@
             $('#ddlProvince').on('change', function () {
                 getDistricts(this.value, "#ddlDistrict", 0);
             });
+            debugger
             getPartners("#ddlDoiTac", hoso.PartnerId, hoso.SanPhamVay, '#ddlSanPhamVay');
             $('#ddlDoiTac').on('change', function () {
                 setTimeout(function () {

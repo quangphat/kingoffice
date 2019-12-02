@@ -353,61 +353,71 @@ namespace Business.Classes
         }
         public async Task<long> Save(HosoModel model, bool isDraft)
         {
-            if(model == null)
+            try
             {
-                AddError(errors.invalid_data);
-                return 0;
-            }
-            if (!string.IsNullOrWhiteSpace(model.Comment) && model.Comment.Length > 200)
-            {
-                AddError(errors.note_length_cannot_more_than_200);
-                return 0;
-            }
-            if (model.PartnerId <= 0)
-            {
-                AddError(errors.missing_partner);
-                return 0;
-            }
-            if (!isDraft)
-            {
-                var lstLoaiTailieu = await _rpTailieu.GetLoaiTailieuList();
-                if (lstLoaiTailieu != null)
+
+
+                if (model == null)
                 {
-                    var missingNames = BusinessExtension.GetFilesMissingV2(lstLoaiTailieu, model.FileRequireIds);
-                    if (!string.IsNullOrWhiteSpace(missingNames))
+                    AddError(errors.invalid_data);
+                    return 0;
+                }
+                if (!string.IsNullOrWhiteSpace(model.Comment) && model.Comment.Length > 200)
+                {
+                    AddError(errors.note_length_cannot_more_than_200);
+                    return 0;
+                }
+                if (model.PartnerId <= 0)
+                {
+                    AddError(errors.missing_partner);
+                    return 0;
+                }
+                if (!isDraft)
+                {
+                    var lstLoaiTailieu = await _rpTailieu.GetLoaiTailieuList();
+                    if (lstLoaiTailieu != null)
                     {
-                        AddError(missingNames);
-                        return 0;
+                        var missingNames = BusinessExtension.GetFilesMissingV2(lstLoaiTailieu, model.FileRequireIds);
+                        if (!string.IsNullOrWhiteSpace(missingNames))
+                        {
+                            AddError(missingNames);
+                            return 0;
+                        }
                     }
                 }
-            }
-            
-            model.Status = isDraft == true ? (int)TrangThaiHoSo.Nhap : (int)TrangThaiHoSo.NhapLieu;
-            model.Result = (int)KetQuaHoSo.Trong;
-            var hoso = _mapper.Map<HosoModel>(model);
-            var validate = validateHoso(hoso, isDraft);
 
-            if (validate.result == false)
+                model.Status = isDraft == true ? (int)TrangThaiHoSo.Nhap : (int)TrangThaiHoSo.NhapLieu;
+                model.Result = (int)KetQuaHoSo.Trong;
+                var hoso = _mapper.Map<HosoModel>(model);
+                var validate = validateHoso(hoso, isDraft);
+
+                if (validate.result == false)
+                {
+                    AddError(validate.message);
+                    return 0;
+                }
+
+                //update
+                if (model.Id > 0)
+                {
+                    model.UpdateBy = _process.User.Id;
+                    await Update(hoso);
+                    await AddNote(hoso.Id, model.Comment);
+                    return hoso.Id;
+                }
+                //create
+                var hosoId = await Create(hoso);
+                if (hosoId > 0)
+                {
+                    await AddNote(hosoId, model.Comment);
+                }
+                return hosoId;
+            }
+            catch (Exception e )
             {
-                AddError(validate.message);
+                AddError($"Lưu hồ sơ:{e.Message}");
                 return 0;
             }
-
-            //update
-            if (model.Id > 0)
-            {
-                model.UpdateBy = _process.User.Id;
-                await Update(hoso);
-                await AddNote(hoso.Id, model.Comment);
-                return hoso.Id;
-            }
-            //create
-            var hosoId =  await Create(hoso);
-            if (hosoId > 0)
-            {
-                await AddNote(hosoId, model.Comment);
-            }
-            return hosoId;
         }
         public async Task<int> Update(HosoModel hoso)
         {
@@ -645,6 +655,8 @@ namespace Business.Classes
             string trangthai = string.IsNullOrWhiteSpace(status) ? BusinessExtension.GetLimitStatusString() : status;
             maHs = string.IsNullOrWhiteSpace(maHs) ? "" : maHs;
             cmnd = string.IsNullOrWhiteSpace(cmnd) ? "" : cmnd;
+            if (userId <= 0)
+                userId = _process.User.Id;
             var totalRecord = await _rpHoso.CountDanhsachHoso(_process.User.Id, nhomId, userId, fDate, tDate, maHs, cmnd, trangthai, loaiNgay, freetext);
             var datas = await _rpHoso.GetDanhsachHoso(_process.User.Id, nhomId, userId, fDate, tDate, maHs, cmnd, trangthai, loaiNgay, freetext, page, limit);
             return (datas, totalRecord);
