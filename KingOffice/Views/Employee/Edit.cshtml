@@ -203,17 +203,18 @@
     var employee = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.employee));
     var account = @Html.Raw(KingOffice.Infrastructures.Utils.ToJson(ViewBag.account));
     $(document).ready(function e() {
-        if (!isNullOrUndefined(account)) {
-            if (account.Id != employee.Id) {
-                $("#tab_changePass").hide();
-            }
-            else {
+        $("#tab_changePass").hide();
+        //if (!isNullOrUndefined(account)) {
+        //    if (account.Id != employee.Id) {
+                
+        //    }
+        //    else {
 
-            }
-        }
-        else {
-            $("#tab_changePass").hide();
-        }
+        //    }
+        //}
+        //else {
+        //    $("#tab_changePass").hide();
+        //}
         $('#btn_reset_matkhau').click(function (evt) {
             $('#newPassword').val('');
             $('#oldPassword').val('');

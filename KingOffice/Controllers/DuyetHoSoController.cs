@@ -7,6 +7,7 @@ using Entity.F88;
 using Entity.Infrastructures;
 using KingOffice.Infrastructures;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KingOffice.Controllers
@@ -30,6 +31,7 @@ namespace KingOffice.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            //HttpContext.Session.SetString("dd", "The Doctor");
             ViewBag.formindex = LstRole[RouteData.Values["action"].ToString()]._formindex;
             ViewBag.account = _process.User;
             return View();
